@@ -1,5 +1,5 @@
-import { Profile} from '../../models/index.js'
-import { sendError, sendSuccess } from '../../utils/index.js'
+import { Profile} from '../../../models/index.js'
+import { sendError, sendSuccess } from '../../../utils/index.js'
 
 const getAdmin = async (req, res) => {
 

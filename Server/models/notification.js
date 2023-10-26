@@ -1,11 +1,11 @@
 import * as mongoose from 'mongoose'
 
-const transactionSchema = new mongoose.Schema({
-  transacType: {
+const notificationSchema = new mongoose.Schema({
+  Notiftype: {
     type: String,
     required: true
   },
-    formData:{
+    message:{
     type: String,
     required: true
   },
@@ -14,4 +14,4 @@ const transactionSchema = new mongoose.Schema({
   }
 })
 
-export default mongoose.model('Transaction', transactionSchema)
+export default mongoose.model('Notification', notificationSchema)

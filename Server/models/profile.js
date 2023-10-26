@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import * as mongoose from 'mongoose'
 
 const profileSchema = new mongoose.Schema({
   accountID: {
@@ -42,4 +42,4 @@ const profileSchema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('Profile', profileSchema)
+export default mongoose.model('Profile', profileSchema)

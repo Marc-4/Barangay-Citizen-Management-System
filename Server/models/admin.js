@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import * as mongoose from 'mongoose'
 
 const adminSchema = new mongoose.Schema({
   username: {
@@ -19,7 +19,7 @@ const adminSchema = new mongoose.Schema({
   },
   dateOfCreation: {
     type: Date,
-  },
+  }
 })
 
 export default mongoose.model('Admin', adminSchema)

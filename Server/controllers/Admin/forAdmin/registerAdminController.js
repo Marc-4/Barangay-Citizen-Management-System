@@ -1,5 +1,5 @@
-import Admin from '../../models/admin.js'
-import { sendError, sendSuccess } from '../../utils/index.js'
+import Admin from '../../../models/admin.js'
+import { sendError, sendSuccess } from '../../../utils/index.js'
 
 import bcrypt from 'bcrypt'
 
