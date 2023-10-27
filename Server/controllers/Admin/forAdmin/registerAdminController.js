@@ -3,17 +3,21 @@ import { sendError, sendSuccess } from '../../../utils/index.js'
 
 import bcrypt from 'bcrypt'
 
-const secret_code = 42069
+const admin_secret_code = 42069
 
 const registerAdmin = async (req, res) => {
   if (
-    req.body.username === undefined &&
-    req.body.password === undefined &&
+    req.body.username === undefined ||
+    req.body.password === undefined ||
     req.body.secret === undefined
-  )
+  ) {
     sendError('missing required fields', 404, res)
-
-  if (req.body.secret != secret_code) sendError('invalid secret!', 400, res)
+    return
+  }
+  if (req.body.secret != admin_secret_code) {
+    sendError('invalid secret!', 400, res)
+    return
+  }
 
   let admin
   try {
@@ -21,16 +25,21 @@ const registerAdmin = async (req, res) => {
   } catch (error) {
     console.log(error)
     sendError('Internal Server Error', 400, res)
+    return
   }
 
-  if (admin) sendError('username taken', 400, res)
+  if (admin) {
+    sendError('username taken', 400, res)
+    return
+  }
 
   let hashedPassword
   try {
     hashedPassword = await bcrypt.hash(req.body.password, 10)
   } catch (error) {
     console.log(error)
-    sendError('Internal Server Error', 400, res)
+    sendError('Internal Server Error', 500, res)
+    return
   }
 
   Admin.create({
@@ -44,6 +53,7 @@ const registerAdmin = async (req, res) => {
     message: 'Admin account created successfully',
   }
   sendSuccess(payload, 200, res)
+  return
 }
 
 export default registerAdmin

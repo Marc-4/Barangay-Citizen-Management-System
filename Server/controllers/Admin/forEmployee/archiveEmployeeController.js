@@ -1,6 +1,3 @@
-
-const archiveEmployee = (req, res) => {
-
-}
+const archiveEmployee = (req, res) => {}
 
 export default archiveEmployee

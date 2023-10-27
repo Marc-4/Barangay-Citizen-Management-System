@@ -4,4 +4,4 @@ import User from './user.js'
 import Employee from './employee.js'
 import Transaction from './transaction.js'
 
-export {Admin, Profile}
+export {Admin, Profile, User, Employee, Transaction}

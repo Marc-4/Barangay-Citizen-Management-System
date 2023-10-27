@@ -3,30 +3,30 @@ import { sendError, sendSuccess } from '../../../utils/index.js'
 
 const createAdminProfile = async (req, res) => {
   if (
-    req.body.firstName === undefined &&
-    req.body.lastName === undefined &&
-    req.body.middleName === undefined &&
-    req.body.dateOfBirth === undefined &&
-    req.body.sex === undefined &&
-    req.body.civilStatus === undefined &&
+    req.body.firstName === undefined ||
+    req.body.lastName === undefined ||
+    req.body.middleName === undefined ||
+    req.body.dateOfBirth === undefined ||
+    req.body.sex === undefined ||
+    req.body.civilStatus === undefined ||
     req.body.occupation === undefined
     // req.body.address === undefined
     // req.body.profilePhoto === undefined
   )
-    sendError('missing required fields', 404, res)
+    return sendError('missing required fields', 404, res)
 
     let profile
   try {
-    profile = await Profile.findOne({ userID: req.params.id })
+    profile = await Profile.findOne({ accountID: req.user.id })
   } catch (error) {
     console.log()
-    sendError('Internal Server Error', 400, res)
+    return sendError('Internal Server Error', 400, res)
   }
 
-  if (profile) sendError('profile already exists', 400, res)
+  if (profile) return sendError('profile already exists', 400, res)
 
   Profile.create({
-    accountID: req.params.id,
+    accountID: req.user.id,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     lastName: req.body.lastName,
@@ -39,9 +39,7 @@ const createAdminProfile = async (req, res) => {
   const payload = {
     message: 'Admin profile created successfully',
   }
-  sendSuccess(payload, 200, res)
+  return sendSuccess(payload, 200, res)
 }
 
 export default createAdminProfile
-
-//REVISIT WHEN IMPLEMENTED AUTH AND COOKIES

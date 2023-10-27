@@ -1,10 +1,8 @@
 const sendSuccess = (payload, statusCode, res) => {
-    res.status(statusCode)
-    res.json({
-        result: success,
-        payload: payload
-    })
-    return res.end()
+  res.status(statusCode).json({
+    result: 'OK',
+    payload: payload,
+  })
 }
 
 export default sendSuccess

@@ -1,34 +1,36 @@
 import { Router } from 'express'
 import * as Admin from '../controllers/Admin/index.js'
+import { authToken, authAdmin } from '../middlewares/index.js'
 
+const middlewares = [authToken, authAdmin]
 const router = Router()
 
 router.post('/account/register', Admin.registerAdminController)
-router.post('/account/create-profile', Admin.createAdminProfileController)
-router.get('/account', Admin.getAdminController)
+router.post('/account/create-profile', middlewares, Admin.createAdminProfileController)
+router.get('/account', middlewares, Admin.getAdminController)
 
-router.post('/user/register', Admin.registerUserController)
-router.post('/user/create-profile', Admin.createUserProfileController)
-router.get('/user/:id', Admin.getUserController)
-router.get('/user/all', Admin.getUsersController)
-router.get('user/search', Admin.searchUserController)
-router.get('/user/:id/transactions', Admin.getUserTransactionsController)
-router.patch('/user/:id/edit', Admin.editUserController)
-router.patch('/user/:id/archive', Admin.archiveUserController)
-router.delete('/user/:id/delete', Admin.deleteUserController)
+router.post('/user/register', middlewares,Admin.registerUserController)
+router.post('/user/create-profile', middlewares,Admin.createUserProfileController)
+router.get('/user/:id', middlewares, Admin.getUserController)
+router.get('/user/all', middlewares, Admin.getUsersController)
+router.get('user/search', middlewares, Admin.searchUserController)
+router.get('/user/:id/transactions', middlewares, Admin.getUserTransactionsController)
+router.patch('/user/:id/edit', middlewares, Admin.editUserController)
+router.patch('/user/:id/archive', middlewares, Admin.archiveUserController)
+router.delete('/user/:id/delete', middlewares, Admin.deleteUserController)
 
-router.post('/employee/register', Admin.registerEmployeeController)
-router.post('/employee/create-profile', Admin.createEmployeeController)
-router.get('/employee/:id', Admin.getEmployeeController)
-router.get('/employee/all', Admin.getEmployeesController)
-router.get('employee/search', Admin.searchEmployeeController)
-router.patch('/employee/:id/edit', Admin.editEmployeeController)
-router.patch('/employee/:id/archive', Admin.archiveEmployeeController)
-router.delete('/employee/:id/delete', Admin.deleteEmployeeController)
+router.post('/employee/register', middlewares, Admin.registerEmployeeController)
+router.post('/employee/create-profile', middlewares, Admin.createEmployeeController)
+router.get('/employee/:id', middlewares, Admin.getEmployeeController)
+router.get('/employee/all', middlewares, Admin.getEmployeesController)
+router.get('employee/search', middlewares, Admin.searchEmployeeController)
+router.patch('/employee/:id/edit', middlewares, Admin.editEmployeeController)
+router.patch('/employee/:id/archive', middlewares,Admin.archiveEmployeeController)
+router.delete('/employee/:id/delete', middlewares, Admin.deleteEmployeeController)
 
-router.get('/transaction/:id', Admin.getTransactionController)
-router.get('/transaction/search', Admin.searchTransactionController)
-router.get('/transaction/all', Admin.getAllTransactionsController)
-router.patch('/transaction/:id/edit', Admin.editTransactionController)
+router.get('/transaction/:id', middlewares, Admin.getTransactionController)
+router.get('/transaction/search', middlewares, Admin.searchTransactionController)
+router.get('/transaction/all', middlewares, Admin.getAllTransactionsController)
+router.patch('/transaction/:id/edit', middlewares, Admin.editTransactionController)
 
 export default router
