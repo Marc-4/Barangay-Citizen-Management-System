@@ -1,14 +1,9 @@
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
-  return (
-    <>
-      <div>
-        <Button colorScheme='blue'>but1</Button>
-        <p>hello</p>
-      </div>
-    </>
-  )
+  return <>
+    <p>app</p>
+  </>
 }
 
 export default App

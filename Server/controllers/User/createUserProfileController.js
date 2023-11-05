@@ -9,8 +9,11 @@ const createUserProfile = async (req, res) => {
     req.body.dateOfBirth === undefined ||
     req.body.sex === undefined ||
     req.body.civilStatus === undefined ||
-    req.body.occupation === undefined
-    // req.body.address === undefined
+    req.body.occupation === undefined ||
+    req.body.email === undefined ||
+    req.body.address.streetName === undefined ||
+    req.body.address.houseNumber === undefined ||
+    req.body.address.subdivision_Purok === undefined
     // req.body.profilePhoto === undefined
   )
     return sendError('missing required fields', 404, res)
@@ -25,6 +28,11 @@ const createUserProfile = async (req, res) => {
 
   if (profile) return sendError('profile already exists', 400, res)
 
+  const address = {
+    streetName: req.body.address.streetName,
+    houseNumber: req.body.address.houseNumber,
+    subdivision_Purok: req.body.address.subdivision_Purok
+  }
   Profile.create({
     accountID: req.user.id,
     firstName: req.body.firstName,
@@ -34,6 +42,8 @@ const createUserProfile = async (req, res) => {
     sex: req.body.sex,
     civilStatus: req.body.civilStatus,
     occupation: req.body.occupation,
+    email: req.body.email,
+    address: address
   })
 
   const payload = {

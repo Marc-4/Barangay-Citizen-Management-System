@@ -6,40 +6,43 @@ const profileSchema = new mongoose.Schema({
     required: true,
   },
   firstName: {
-    type: String
+    type: String,
   },
   lastName: {
-    type: String
+    type: String,
   },
   middleName: {
-    type: String
+    type: String,
   },
   dateOfBirth: {
-    type: Date
+    type: Date,
   },
   sex: {
-    type: String
+    type: String,
   },
   civilStatus: {
-    type: String
+    type: String,
   },
   occupation: {
-    type: String
+    type: String,
   },
   address: {
     streetName: {
-      type: String
+      type: String,
     },
     houseNumber: {
-      type: String
+      type: String,
     },
-    subdivision_purok:{
-      type: String
-    }
+    subdivisionPurok: {
+      type: String,
+    },
+  },
+  email: {
+    type: String,
   },
   profilePhoto: {
     type: Buffer,
-  }
+  },
 })
 
 export default mongoose.model('Profile', profileSchema)

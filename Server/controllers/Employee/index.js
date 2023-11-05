@@ -7,6 +7,8 @@ import createUserProfileController from './forUser/createUserProfileController.j
 import editUserController from './forUser/editUserController.js'
 import getUserController from './forUser/getUserController.js'
 import getUsersController from './forUser/getUsersController.js'
+import getUserProfileController from './forUser/getUserProfileController.js'
+import getUserProfilesController from './forUser/getUserProfilesController.js'
 import getUserTransactionsController from './forUser/getUserTransactionsController.js'
 import registerUserController from './forUser/registerUserController.js'
 import searchUserController from './forUser/searchUserController.js'
@@ -25,6 +27,8 @@ export {
   editUserController,
   getUserController,
   getUsersController,
+  getUserProfileController,
+  getUserProfilesController,
   getUserTransactionsController,
   registerUserController,
   searchUserController,

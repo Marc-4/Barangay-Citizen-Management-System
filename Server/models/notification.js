@@ -1,7 +1,11 @@
 import * as mongoose from 'mongoose'
 
 const notificationSchema = new mongoose.Schema({
-  Notiftype: {
+  accountID:{
+    type: String,
+    required: true
+  },
+  notifType: {
     type: String,
     required: true
   },

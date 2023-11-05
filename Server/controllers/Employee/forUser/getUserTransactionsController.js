@@ -1,6 +1,6 @@
 
-const getUserTransactions = (req, res) => {
+const getUserProfileTransactions = (req, res) => {
 
 }
 
-export default getUserTransactions
+export default getUserProfileTransactions

@@ -7,12 +7,12 @@ const router = Router()
 
 router.post('/account/register', User.registerUserController)
 router.post('/account/create-profile', middlewares, User.createUserProfileController)
-router.get('/account/', middlewares, User.getUserController)
+router.get('/account/', middlewares, User.getUserProfileController)
 
 router.patch('/account/edit', middlewares, User.requestEditUserController)
 router.patch('/account/archive', middlewares, User.requestEditUserController)
 
 router.post('/transaction/create', middlewares, User.createUserTransactionController)
-router.patch('/transaction/:id/edit', middlewares, User.editUserTransactionController)
+// router.patch('/transaction/:id/edit', middlewares, User.editUserTransactionController)
 
 export default router

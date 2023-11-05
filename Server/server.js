@@ -40,3 +40,5 @@ db.on('open', () => console.log('connected to DB'))
 app.listen(PORT, () => {
   console.log('API server is live at ' + PORT)
 })
+
+// export { db }
