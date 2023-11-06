@@ -5,13 +5,13 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom'
-import App from './App.jsx'
+import theme from './theme.js'
 import {
   Home,
   Register,
   Login,
   Profile,
-  Dashboard,
+  AdminDashboard,
   DefaultProfile,
   NotFound,
 } from './pages/index.js'
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard',
-        element: <Dashboard />,
+        element: <AdminDashboard />,
       },
       {
         path: '*',
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <RouterProvider router={router} />
     </ChakraProvider>
   </React.StrictMode>

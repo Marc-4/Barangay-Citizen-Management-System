@@ -3,16 +3,35 @@ import {
   Heading,
   VStack,
   Text,
+  IconButton,
+  Spacer,
+  Flex,
 } from '@chakra-ui/react'
+import { MdOutlineMenu } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
     <>
-      <Box bg='blue.500' minH={'100vh'}>
-        <Heading h={'75px'} display={'inline-block'} margin={'auto'}>
-          Sidebar
-        </Heading>
+      <Box bg='brand.300' minH={'100vh'} rounded={'5px'}>
+        <Flex
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          color={'brand.200'}
+        >
+          <Box display={'flex'} justifyContent={'center'} width={'100%'}>
+            <Heading display={'flex'} h={'75px'} alignItems={'center'}>
+              Sidebar
+            </Heading>
+          </Box>
+          <IconButton
+            variant={'unstyled'}
+            fontSize={'4xl'}
+            color={'brand.200'}
+            icon={<MdOutlineMenu />}
+            mr={'12px'}
+          ></IconButton>
+        </Flex>
         <hr
           style={{ border: '1px solid #DEDCFF', width: '90%', margin: 'auto' }}
         />

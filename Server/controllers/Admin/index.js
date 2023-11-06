@@ -30,6 +30,10 @@ import getAllTransactionsController from './forTransaction/getAllTransactionsCon
 import getTransactionController from './forTransaction/getTransactionController.js'
 import searchTransactionController from './forTransaction/searchTransactionController.js'
 
+import getUserRequestController from './forRequest/getUserRequestController.js'
+import getUserRequestsController from './forRequest/getUserRequestsController.js'
+import editUserRequestController from './forRequest/editUserRequestController.js'
+
 export {
   createAdminProfileController,
   getAdminController,
@@ -59,4 +63,7 @@ export {
   getAllTransactionsController,
   getTransactionController,
   searchTransactionController,
+  getUserRequestController,
+  getUserRequestsController,
+  editUserRequestController,
 }

@@ -6,13 +6,16 @@ const middlewares = [authToken, authUser]
 const router = Router()
 
 router.post('/account/register', User.registerUserController)
-router.post('/account/create-profile', middlewares, User.createUserProfileController)
+router.post('/account/create-profile', middlewares, User.requestCreateUserProfileController) //works?
 router.get('/account/', middlewares, User.getUserProfileController)
-
-router.patch('/account/edit', middlewares, User.requestEditUserController)
-router.patch('/account/archive', middlewares, User.requestEditUserController)
+router.patch('/account/edit', middlewares, User.requestEditUserProfileController)
+// router.patch('/account/archive', middlewares, User.requestArchiveUserController)
 
 router.post('/transaction/create', middlewares, User.createUserTransactionController)
+router.get('/transactions/', middlewares, User.getUserTransactionsController)
+router.get('/transactions/:id', middlewares, User.getUserTransactionController) //works
 // router.patch('/transaction/:id/edit', middlewares, User.editUserTransactionController)
+
+//notifications
 
 export default router

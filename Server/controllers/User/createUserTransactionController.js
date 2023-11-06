@@ -24,7 +24,7 @@ const createUserTransaction = async (req, res) => {
       transacType: req.body.transacType,
       formData: formData,
       timestamp: Date.now(),
-      status: 'pending',
+      status: 'PENDING',
     })
 
     const payload = transaction

@@ -12,6 +12,7 @@ import getUserProfilesController from './forUser/getUserProfilesController.js'
 import getUserTransactionsController from './forUser/getUserTransactionsController.js'
 import registerUserController from './forUser/registerUserController.js'
 import searchUserController from './forUser/searchUserController.js'
+import recoverUserController from './forUser/recoverUserController.js'
 
 import editTransactionController from './forTransaction/editTransactionController.js'
 import getAllTransactionsController from './forTransaction/getAllTransactionsController.js'
@@ -36,4 +37,5 @@ export {
   getAllTransactionsController,
   getTransactionController,
   searchTransactionController,
+  recoverUserController
 }

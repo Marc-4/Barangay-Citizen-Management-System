@@ -19,7 +19,7 @@ const Login = () => {
         </Heading>
         <Box>
           <Image></Image>
-          <Box p={'10px'} rounded={'10px'} bg={'gray.50'} padding={'50px'}>
+          <Box p={'10px'} rounded={'10px'} bg={'brand.400'} padding={'50px'}>
             <Stack alignItems={'center'}>
               <Input
 

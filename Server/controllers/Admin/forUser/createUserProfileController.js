@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { Profile, User } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 const createUserProfile = async (req, res) => {
-  // console.log(req.body.address)
+  
   if (
     req.body.accountID === undefined ||
     req.body.firstName === undefined ||

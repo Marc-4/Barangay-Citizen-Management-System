@@ -18,9 +18,9 @@ router.get('/user/Profiles/', middlewares, Admin.getUserProfilesController)
 // router.get('user/search', middlewares, Admin.searchUserController)
 router.get('/user/:id/transactions', middlewares, Admin.getUserTransactionsController)
 router.patch('/user/Profile/:id/edit', middlewares, Admin.editUserController)
-router.patch('/user/Profile/:id/archive', middlewares, Admin.archiveUserController) //test
-// router.patch('/user/Profile/:id/recover', middlewares, Admin.recoverUserController)
-router.delete('/user/Profile/:id/delete', middlewares, Admin.deleteUserController) //test
+// router.patch('/user/:id/archive', middlewares, Admin.archiveUserController) //test
+// router.patch('/user/:id/recover', middlewares, Admin.recoverUserController)
+// router.delete('/user/Profile/:id/delete', middlewares, Admin.deleteUserController) //test
 
 router.post('/employee/register', middlewares, Admin.registerEmployeeController)
 router.post('/employee/create-profile', middlewares, Admin.createEmployeeController)
@@ -30,15 +30,21 @@ router.get('/employee/Profiles/:id', middlewares, Admin.getEmployeeProfileContro
 router.get('/employee/Profiles', middlewares, Admin.getEmployeeProfilesController)
 // router.get('employee/search', middlewares, Admin.searchEmployeeController)
 router.patch('/employee/:id/edit', middlewares, Admin.editEmployeeController)
-router.patch('/employee/:id/archive', middlewares,Admin.archiveEmployeeController)
-router.delete('/employee/:id/delete', middlewares, Admin.deleteEmployeeController)
+// router.patch('/employee/:id/archive', middlewares,Admin.archiveEmployeeController)
+// router.patch('/user/:id/recover', middlewares, Admin.recoverEmployeeController)
+// router.delete('/employee/:id/delete', middlewares, Admin.deleteEmployeeController)
 
+//transactions
 router.get('/transactions/:id', middlewares, Admin.getTransactionController)
-// router.get('/transactions/search', middlewares, Admin.searchTransactionController)
 router.get('/transactions', middlewares, Admin.getAllTransactionsController)
+// router.get('/transactions/search', middlewares, Admin.searchTransactionController)
 router.patch('/transaction/:id/edit', middlewares, Admin.editTransactionController)
 
 //requests
+router.get('/requests', middlewares, Admin.getUserRequestsController)
+router.get('/requests/:id', middlewares, Admin.getUserRequestController)
+// router.get('/requests/search', middlewares, Admin.searchRequestController)
+router.patch('/request/:id/edit', middlewares, Admin.editUserRequestController)
 
 //notifications
 

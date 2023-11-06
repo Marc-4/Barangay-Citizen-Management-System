@@ -29,9 +29,7 @@ const getUserProfileTransactions = async (req, res) => {
     return sendError('Internal Server Error', 500, res)
   }
   let payload
-  if (transanctions) {
-    payload = transanctions
-  }
+  if (transanctions) payload = transanctions
 
   return sendSuccess(payload, 200, res)
 }

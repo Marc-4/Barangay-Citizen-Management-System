@@ -15,9 +15,10 @@ const Navbar = () => {
       <Flex
         as='nav'
         p={'10px'}
-        bg={'gray.200'}
+        bg={'brand.400'}
         alignItems={'center'}
         h={'75px'}
+        rounded={'5px'}
       >
         <Heading as={'h1'}>BRMS</Heading>
 

@@ -10,6 +10,15 @@ const requestSchema = new mongoose.Schema({
     required: true,
   },
   requestContent: {
+    firtName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    middleName: {
+      type: String,
+    },
     dateOfBirth: {
       type: Date,
     },
