@@ -4,8 +4,9 @@ import { Admin } from '../../models/index.js'
 import { sendError, sendSuccess } from '../../utils/index.js'
 
 const adminLogin = async (req, res) => {
+  console.log('admin logging in...');
   if (req.cookies.authorization) return sendError('already logged in', 400, res)
-  //input validation
+  //input validation  
   if (req.body.username === undefined || req.body.password === undefined)
     return sendError('missing required fields', 404, res)
 
@@ -18,7 +19,7 @@ const adminLogin = async (req, res) => {
     return sendError('Internal Server Error', 500, res)
   }
 
-  if (!admin) return sendError('account not found', 404, res)
+  if (!admin) return sendError('username or password incorrect', 404, res)
 
   const hashedPass = admin.password
 
@@ -38,10 +39,11 @@ const adminLogin = async (req, res) => {
       res.cookie('authorization', token)
       const payload = {
         token: token,
+        role: 'admin'
       }
       return sendSuccess(payload, 200, res)
     } else {
-      sendError('password incorrect', 400, res)
+      sendError('username or password incorrect', 400, res)
     }
   })
 }

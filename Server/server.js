@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { sendError } from './utils/index.js'
 import {
@@ -18,6 +19,10 @@ const app = express()
 //middlewares
 app.use(cookieParser())
 app.use(express.json())
+app.use(cors({
+  origin: 'http://localhost:5000',
+ credentials: true,
+}))
 
 //routers
 app.use('/api/admin', adminRouter)

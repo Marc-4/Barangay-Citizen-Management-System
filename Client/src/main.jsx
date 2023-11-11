@@ -1,21 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ChakraProvider } from '@chakra-ui/react'
-import {
-  RouterProvider,
-  createBrowserRouter,
-} from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import theme from './theme.js'
+import * as page from './pages/index.js'
 import {
-  Home,
-  Register,
-  Login,
-  Profile,
-  AdminDashboard,
-  DefaultProfile,
-  NotFound,
-} from './pages/index.js'
-import RootLayout from './layouts/RootLayout.jsx'
+  UserLayout,
+  AdminLayout,
+  RootLayout,
+  EmployeeLayout,
+} from './layouts/index.js'
 
 const router = createBrowserRouter([
   {
@@ -23,24 +17,98 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        path: '/register',
-        element: <Register />,
+        index: true,
+        element: <page.Home />,
       },
       {
-        path: '/login',
-        element: <Login />,
+        path: '/user',
+        element: <UserLayout />,
+        children: [
+          {
+            path: 'profile',
+            element: <page.UserProfile />,
+          },
+          {
+            path: 'transactions',
+            element: <page.UserTransactions />,
+          },
+          {
+            path: 'notifications',
+            element: <page.UserNotifications />,
+          },
+          {
+            path: 'about',
+            element: <page.UserAbout />,
+          },
+        ],
       },
       {
-        path: '/profile',
-        element: <Profile />,
+        path: '/employee',
+        element: <EmployeeLayout />,
+        children: [
+          {
+            path: 'dashboard',
+            element: <page.EmployeeDashboard />,
+          },
+          {
+            path: 'profile',
+            element: <page.EmployeeProfile />,
+          },
+          {
+            path: 'users',
+            element: <page.EmployeeUserAccounts />,
+          },
+          {
+            path: 'transactions',
+            element: <page.EmployeeTransactions />,
+          },
+          {
+            path: 'notifications',
+            element: <page.EmployeeNotifications />,
+          },
+          {
+            path: 'about',
+            element: <page.EmployeeAbout />,
+          },
+        ],
       },
       {
-        path: '/dashboard',
-        element: <AdminDashboard />,
+        path: '/admin',
+        element: <AdminLayout />,
+        children: [
+          {
+            path: 'dashboard',
+            element: <page.AdminDashboard />,
+          },
+          {
+            path: 'profile',
+            element: <page.AdminProfile />,
+          },
+          {
+            path: 'users',
+            element: <page.AdminUserAccounts />,
+          },
+          {
+            path: 'employees',
+            element: <page.AdminEmployeeAccounts />,
+          },
+          {
+            path: 'transactions',
+            element: <page.AdminTransactions />,
+          },
+          {
+            path: 'notifications',
+            element: <page.AdminNotifications />,
+          },
+          {
+            path: 'about',
+            element: <page.AdminAbout />,
+          },
+        ],
       },
       {
         path: '*',
-        element: <NotFound />,
+        element: <page.NotFound />,
       },
     ],
   },

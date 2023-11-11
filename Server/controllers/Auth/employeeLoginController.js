@@ -38,6 +38,7 @@ const employeeLogin = async (req, res) => {
       res.cookie('authorization', token)
       const payload = {
         token: token,
+        role: 'employee'
       }
       return sendSuccess(payload, 200, res)
     } else {
