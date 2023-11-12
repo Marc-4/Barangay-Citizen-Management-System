@@ -18,6 +18,8 @@ import {
   registerAdmin,
   registerEmployee,
 } from '../utils/register'
+import login from '../utils/login'
+import { useNavigate } from 'react-router-dom'
 
 function RegisterModal({ isOpen, onClose }) {
   const [username, setUsername] = useState('')
@@ -27,6 +29,7 @@ function RegisterModal({ isOpen, onClose }) {
   const [secret, setSecret] = useState('')
   const [isLoading, setIsLoading] = useState('')
 
+  const navigate = useNavigate()
   const [role, setRole] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -41,27 +44,29 @@ function RegisterModal({ isOpen, onClose }) {
     setIsLoading(true)
 
     let data
-    let route = ''
-    if (role === 'Admin') route = 'http://localhost:3000/api/auth/login/admin'
-    if (role === 'Employee')
-      route = 'http://localhost:3000/api/auth/login/employee'
-    if (role === 'User') route = 'http://localhost:3000/api/auth/login/user'
+    const route = 'hhtp://localhost:3000/api' + role + '/account/register'
 
     try {
       if (role === 'User') data = await registerUser(username, password, route)
-      if (role === 'Employee')
-        data = await registerEmployee(username, password, secret, route)
-      if (role === 'Admin')
-        data = await registerAdmin(username, password, secret, route)
+      if (role === 'Employee') data = await registerEmployee(username, password, secret, route)
+      if (role === 'Admin') data = await registerAdmin(username, password, secret, route)
 
       if (data.result === 'OK') {
         console.log('OK')
-        await new Promise((resolve) => setTimeout(resolve, 2000))
         setSuccess('Successfully Registered!')
-        navigate('/')
-        // if (role === 'Admin') navigate('/admin/profile')
-        // if (role === 'Employee') navigate('/employee/profile')
-        // if (role === 'User') navigate('/user/profile')
+
+        try {
+          await login(
+            username,
+            password,
+            'http://localhost:3000/api/auth/login/' + role
+          )
+          sessionStorage.setItem('userRole', role)
+
+          navigate('/' + role + '/profile')
+        } catch (error) {
+          console.log(error)
+        }
       } else {
         console.log('ERR')
         setError(data.payload.error)
@@ -118,6 +123,7 @@ function RegisterModal({ isOpen, onClose }) {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 ></Input>
                 <Select
+                  name='register-role-select'
                   maxW={'150px'}
                   isRequired={true}
                   onChange={(e) => setRole(e.target.value)}

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import theme from './theme.js'
+import PrivateRoute from './components/PrivateRoute.jsx'
 import * as page from './pages/index.js'
 import {
   UserLayout,
@@ -22,7 +23,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/user',
-        element: <UserLayout />,
+        element: (
+          <PrivateRoute roles={['user']}>
+            <UserLayout />
+          </PrivateRoute>
+        ),
         children: [
           {
             path: 'profile',
@@ -44,7 +49,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/employee',
-        element: <EmployeeLayout />,
+        element: (
+          <PrivateRoute roles={['employee']}>
+            <EmployeeLayout />
+          </PrivateRoute>
+        ),
         children: [
           {
             path: 'dashboard',
@@ -74,7 +83,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin',
-        element: <AdminLayout />,
+        element: (
+          <PrivateRoute roles={['admin']}>
+            <AdminLayout />
+          </PrivateRoute>
+        ),
         children: [
           {
             path: 'dashboard',
@@ -105,6 +118,10 @@ const router = createBrowserRouter([
             element: <page.AdminAbout />,
           },
         ],
+      },
+      {
+        path: '/unauthorized',
+        element: <page.unauthorized />
       },
       {
         path: '*',

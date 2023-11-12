@@ -2,6 +2,7 @@ import Register from './Register.jsx'
 import Home from './Home.jsx'
 import NotFound from './NotFound.jsx'
 import Login from './Home.jsx'
+import unauthorized from './Unauthorized.jsx'
 import DefaultProfile from './DefaultProfile.jsx'
 
 import AdminDashboard from './Admin/AdminDashboard.jsx'
@@ -30,6 +31,7 @@ export {
   DefaultProfile,
   Login,
   NotFound,
+  unauthorized,
   AdminDashboard,
   AdminProfile,
   AdminUserAccounts,

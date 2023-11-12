@@ -14,7 +14,7 @@ import {
 import RegisterModal from '../components/RegisterModal'
 import login from '../utils/login'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 
 const Home = () => {
@@ -26,20 +26,21 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState('')
   const [error, setError] = useState('')
 
-  const [isAuthenticated, setIsAuthenticated] = useState()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
     const user = Cookies.get('authorization')
     if (user && user !== undefined) setIsAuthenticated(true)
-  }, [])
+  }, [isLoading])
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/admin/dashboard')
-  }, [isAuthenticated, navigate])
+    if (isAuthenticated) navigate('/' + sessionStorage.getItem('userRole'))
+  }, [isAuthenticated])
 
   const handleLogin = async (e) => {
     e.preventDefault()
     setIsLoading(true)
+
     try {
       const data = await login(
         username,
@@ -49,15 +50,16 @@ const Home = () => {
 
       if (data.result === 'OK') {
         console.log('OK')
-        if (data.role === 'admin') {
+        console.log(data)
+        if (data.payload.role === 'admin') {
           navigate('/admin/dashboard')
           sessionStorage.setItem('userRole', 'admin')
         }
-        if (data.role === 'employee') {
+        if (data.payload.role === 'employee') {
           navigate('/employee/dashboard')
           sessionStorage.setItem('userRole', 'employee')
         }
-        if (data.role === 'user') {
+        if (data.payload.role === 'user') {
           navigate('/user/profile')
           sessionStorage.setItem('userRole', 'user')
         }
@@ -85,7 +87,6 @@ const Home = () => {
             p={'10px'}
             rounded={'10px'}
             bg={'brand.400'}
-            // w={'450px'}
             padding={'25px'}
           >
             <form onSubmit={(e) => handleLogin(e)}>
@@ -111,6 +112,7 @@ const Home = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 ></Input>
                 <Select
+                  name='login-role-select'
                   isRequired={true}
                   onChange={(e) => setRole(e.target.value)}
                   bg={'brand.200'}
