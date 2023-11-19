@@ -1,13 +1,16 @@
-import { ProfileRequest } from '../../../models/index.js'
+import { Profile, ProfileRequest } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 
 const getUserRequests = async (req, res) => {
-  if (req.body.entries === undefined)
+  if (req.query.entries === undefined)
     return sendError('Missing Required Fields', 404, res)
 
   let requests
   try {
-    requests = await ProfileRequest.find().limit(req.body.entries)
+    if (req.query.entries == 0) requests = await ProfileRequest.countDocuments()
+    else if (req.query.filter && req.query.filter == 'PENDING')
+      requests = await ProfileRequest.find({ status: 'PENDING' })
+    else requests = await ProfileRequest.find().limit(req.query.entries)
   } catch (error) {
     console.log(error)
     sendError('Internal Server Error', 500, res)

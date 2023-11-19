@@ -11,7 +11,7 @@ import {
   Divider,
   useDisclosure,
 } from '@chakra-ui/react'
-import RegisterModal from '../components/RegisterModal'
+import RegisterModal from '../components/modals/RegisterModal'
 import login from '../utils/login'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'

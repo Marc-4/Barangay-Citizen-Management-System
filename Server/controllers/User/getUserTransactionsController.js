@@ -2,12 +2,12 @@ import { Transaction } from '../../models/index.js'
 import { sendError, sendSuccess } from '../../utils/index.js'
 
 const getUserTransactions = async (req, res) => {
-  if (req.body.entries === undefined)
+  if (req.query.entries === undefined)
     return sendError('Missing required fields', 404, res)
 
   let transactions
   try {
-    transactions = await Transaction.findOne({ accountID: req.user.id })
+    transactions = await Transaction.find({ accountID: req.user.id }).limit(req.query.entries)
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Sidebar from '../components/UserSidebar'
+import Navbar from '../components/nav/Navbar'
+import Sidebar from '../components/nav/UserSidebar'
 import { Grid, GridItem } from '@chakra-ui/react'
 
 const UserLayout = () => {

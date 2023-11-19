@@ -9,6 +9,7 @@ import AdminDashboard from './Admin/AdminDashboard.jsx'
 import AdminProfile from './Admin/AdminProfile.jsx'
 import AdminUserAccounts from './Admin/AdminUserAccounts.jsx'
 import AdminTransactions from './Admin/AdminTransactions.jsx'
+import AdminRequests from './Admin/AdminRequests.jsx'
 import AdminNotifications from './Admin/AdminNotifications.jsx'
 import AdminEmployeeAccounts from './Admin/AdminEmployeeAccounts.jsx'
 import AdminAbout from './Admin/AdminAbout.jsx'
@@ -36,6 +37,7 @@ export {
   AdminProfile,
   AdminUserAccounts,
   AdminTransactions,
+  AdminRequests,
   AdminNotifications,
   AdminEmployeeAccounts,
   AdminAbout,

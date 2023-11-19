@@ -110,6 +110,10 @@ const router = createBrowserRouter([
             element: <page.AdminTransactions />,
           },
           {
+            path: 'requests',
+            element: <page.AdminRequests />,
+          },
+          {
             path: 'notifications',
             element: <page.AdminNotifications />,
           },

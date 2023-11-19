@@ -2,12 +2,21 @@ import { Transaction } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 
 const getAllTransactions = async (req, res) => {
-  if (req.body.entries === undefined)
+  console.log('admin accessing getAllTransactions..')
+  if (req.query.entries === undefined)
     return sendError('Missing Required Fields', 404, res)
 
   let transactions
   try {
-    transactions = await Transaction.find().limit(req.body.entries)
+    if (req.query.entries == 0)
+      transactions = await Transaction.countDocuments()
+    else if (req.query.filter && req.query.filter == 'PENDING')
+      transactions = await Transaction.find({ status: 'PENDING' })
+
+    else if (req.query.filter && req.query.filter == 'HISTORY')
+      transactions = await Transaction.find({ status: 'ACCEPTED' })
+    
+    else transactions = await Transaction.find().limit(req.query.entries)
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

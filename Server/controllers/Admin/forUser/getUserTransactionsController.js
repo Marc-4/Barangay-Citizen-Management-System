@@ -6,7 +6,7 @@ const getUserProfileTransactions = async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id))
     return sendError('Invalid User ID', 400, res)
 
-  if (req.body.entries === undefined)
+  if (req.query.entries === undefined)
     return sendError('Missing Required Parameters', 404, res)
 
   let user
@@ -22,7 +22,7 @@ const getUserProfileTransactions = async (req, res) => {
   let transanctions
   try {
     transanctions = await Transaction.find({ accountID: req.params.id }).limit(
-      req.body.entries
+      req.query.entries
     )
   } catch (error) {
     console.log(error)

@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Sidebar from '../components/AdminSidebar'
+import Navbar from '../components/nav/Navbar'
+import Sidebar from '../components/nav/AdminSidebar'
 import { Grid, GridItem } from '@chakra-ui/react'
 
 const AdminLayout = () => {

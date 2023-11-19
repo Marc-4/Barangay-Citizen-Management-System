@@ -3,6 +3,7 @@ import { sendError, sendSuccess } from '../../../utils/index.js'
 import mongoose from 'mongoose'
 
 const getUserProfile = async (req, res) => {
+  console.log('getting user profile..');
   if (!mongoose.isValidObjectId(req.params.id))
     return sendError('invalid user ID', 400, res)
   

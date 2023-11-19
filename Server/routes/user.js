@@ -13,9 +13,12 @@ router.patch('/account/edit', middlewares, User.requestEditUserProfileController
 
 router.post('/transaction/create', middlewares, User.createUserTransactionController)
 router.get('/transactions/', middlewares, User.getUserTransactionsController)
-router.get('/transactions/:id', middlewares, User.getUserTransactionController) //works
+router.get('/transaction/:id', middlewares, User.getUserTransactionController) //works
 // router.patch('/transaction/:id/edit', middlewares, User.editUserTransactionController)
 
 //notifications
+// router.get('/notifications/', middlewares, User.getUserNotificationsController)
+// router.get('/notification/:id', middlewares, User.getNotificationController)
+// router.patch('/notifications/:id/edit', middlewares, User.editUserNotificationController)
 
 export default router

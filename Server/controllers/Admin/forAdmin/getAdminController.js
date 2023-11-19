@@ -6,9 +6,7 @@ const getAdmin = async (req, res) => {
   const profile = await Profile.findOne({ accountID: req.user.id })
   if (!profile) return sendError('profile does not exist', 404, res)
 
-  const payload = {
-    profile: profile,
-  }
+  const payload = profile
   return sendSuccess(payload, 200, res)
 }
 

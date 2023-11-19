@@ -2,12 +2,13 @@ import { sendError, sendSuccess } from '../../../utils/index.js'
 import { Employee } from '../../../models/index.js'
 
 const getEmployees = async (req, res) => {
-  if (req.body.entries === undefined)
+  if (req.query.entries === undefined)
     return sendError('missing required parameters', 404, res)
 
   let employees
   try {
-    employees = await Employee.find().limit(10)
+    if (req.query.entries == 0) employees = await Employee.countDocuments()
+    else employees = await Employee.find({active: true}).limit(req.query.entries)
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

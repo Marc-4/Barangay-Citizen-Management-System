@@ -7,23 +7,34 @@ const profileSchema = new mongoose.Schema({
   },
   firstName: {
     type: String,
+    index: true,
   },
   lastName: {
     type: String,
+    index: true,
   },
   middleName: {
     type: String,
+    index: true,
   },
   dateOfBirth: {
     type: Date,
   },
+  placeOfBirth: {
+    type: Date,
+  },
   sex: {
     type: String,
+    index: true,
   },
   civilStatus: {
     type: String,
+    index: true,
   },
   occupation: {
+    type: String,
+  },
+  citizenship: {
     type: String,
   },
   address: {
@@ -42,6 +53,9 @@ const profileSchema = new mongoose.Schema({
   },
   profilePhoto: {
     type: Buffer,
+  },
+  active: {
+    type: Boolean,
   },
 })
 
