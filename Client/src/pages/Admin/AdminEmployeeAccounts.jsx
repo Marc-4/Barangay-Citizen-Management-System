@@ -9,19 +9,28 @@ import {
   Th,
   Thead,
   Tr,
+  Box,
+  Flex,
+  Tab,
+  Tabs,
+  TabList,
+  Link
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
+import Searchbar from '../../components/Searchbar'
+import { Link as rr_Link } from 'react-router-dom'
 
 const AdminEmployeeAccounts = () => {
   const [employees, setEmployees] = useState([])
   const [profiles, setProfiles] = useState([])
   const [error, setError] = useState()
   const [entries, setEntries] = useState(20)
+  const [filter, setFilter] = useState('ACTIVE')
 
   useEffect(() => {
     getEmployees()
-  }, [])
+  }, [filter])
 
   useEffect(() => {
     const fetchUserProfiles = async () => {
@@ -54,7 +63,7 @@ const AdminEmployeeAccounts = () => {
   const getEmployees = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/employees?entries=${entries}`
+    const route = `http://localhost:3000/api/admin/employees?entries=${entries}&filter=${filter}`
 
     let data
     try {
@@ -97,15 +106,21 @@ const AdminEmployeeAccounts = () => {
 
   return (
     <>
-      <Heading
-        display={'flex'}
-        mt={'25px'}
-        mb={'25px'}
-        justifyContent={'center'}
-      >
-        Employee Accounts
-      </Heading>
+      <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
+        <Flex flexDirection='row' alignItems='center' gap={'25px'}>
+          <Searchbar />
+          <Heading mt='25px' mb='25px' display='flex' justifyContent='center'>
+            Employee Accounts
+          </Heading>
+        </Flex>
+      </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
+      <Tabs margin={'auto'} w={'90%'} variant='line'>
+        <TabList mb='1em'>
+          <Tab onClick={() => setFilter('ACTIVE')}>Employee List</Tab>
+          <Tab onClick={() => setFilter('ARCHIVED')}>Archived Employees</Tab>
+        </TabList>
+      </Tabs>
       <Button colorScheme='blue'>Register Employee</Button>
       <TableContainer
         display={'flex'}
@@ -113,6 +128,7 @@ const AdminEmployeeAccounts = () => {
         alignContent={'center'}
         justifyContent={'center'}
         rounded='md'
+        minW={'100%'}
       >
         <Table
           w={'1200px'}
@@ -142,7 +158,11 @@ const AdminEmployeeAccounts = () => {
 
               return (
                 <Tr key={employee._id}>
-                  <Td textAlign='center'>{employee._id}</Td>
+                  <Td textAlign='center'>
+                    <Link as={rr_Link} color={'brand.500'} to={`${employee._id}`}>
+                      {employee._id}
+                    </Link>
+                  </Td>
                   <Td textAlign='center'>{profile?.lastName || 'N/A'}</Td>
                   <Td textAlign='center'>{profile?.firstName || 'N/A'}</Td>
                   <Td textAlign='center'>{profile?.middleName || 'N/A'}</Td>

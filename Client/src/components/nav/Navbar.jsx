@@ -20,7 +20,6 @@ const Navbar = () => {
         bg={'brand.400'}
         alignItems={'center'}
         h={'75px'}
-        rounded={'5px'}
       >
         <Heading as={'h1'}>BRMS</Heading>
 

@@ -25,7 +25,7 @@ const UserSidebar = () => {
           ></IconButton>
         </Flex>
         <hr
-          style={{ border: '1px solid #DEDCFF', width: '90%', margin: 'auto' }}
+          style={{ border: '1px solid ', width: '90%', margin: 'auto' }}
         />
         <VStack gap={'50px'} pt={'50px'} pb={'50px'}>
           <Link to={'/user/profile'}>

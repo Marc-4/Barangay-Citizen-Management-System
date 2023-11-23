@@ -6,12 +6,12 @@ import { Grid, GridItem } from '@chakra-ui/react'
 const AdminLayout = () => {
   return (
     <>
-      <Grid templateColumns={'repeat(5, 1fr)'}>
+      <Grid templateColumns={'repeat(6, 1fr)'}>
         <GridItem colSpan={1}>
           <Sidebar />
         </GridItem>
 
-        <GridItem colSpan={4} bg={'gray.50'}>
+        <GridItem colSpan={5} bg={'gray.50'}>
           <Navbar />
           <Outlet />
         </GridItem>

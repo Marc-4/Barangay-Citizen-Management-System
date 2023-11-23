@@ -9,12 +9,21 @@ import {
   Tr,
   Button,
   Divider,
-  Input,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
   useDisclosure,
+  Box,
+  Flex,
+  Link
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import RegisterUserModal from '../../components/modals/registerUserModal'
 import callAPI from '../../utils/callAPI'
+import Searchbar from '../../components/Searchbar'
+import { Link as rr_Link } from 'react-router-dom'
 
 const AdminUserAccounts = () => {
   const [users, setUsers] = useState([])
@@ -22,12 +31,12 @@ const AdminUserAccounts = () => {
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
   const [entries, setEntries] = useState(20)
-  const [query, setQuery] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [filter, setFilter] = useState('ACTIVE')
 
   useEffect(() => {
     getUsers()
-  }, [])
+  }, [filter])
 
   useEffect(() => {
     const fetchUserProfiles = async () => {
@@ -36,7 +45,6 @@ const AdminUserAccounts = () => {
           users.map(async (user) => {
             try {
               const profileData = await getUserProfile(user._id)
-              console.log(profileData.payload)
               return profileData.payload
             } catch (err) {
               console.log(err)
@@ -60,7 +68,7 @@ const AdminUserAccounts = () => {
   const getUsers = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?entries=${entries}`
+    const route = `http://localhost:3000/api/admin/users?entries=${entries}&filter=${filter}`
 
     let data
     try {
@@ -85,21 +93,6 @@ const AdminUserAccounts = () => {
     }
   }
 
-  const search = async () => {
-    const body = null
-    const method = 'GET'
-    const route = `http://localhost:3000/api/admin/user/search?entries=${entries}`
-
-    let data
-    try {
-      data = await callAPI(body, method, route)
-      setUsers(data.payload)
-    } catch (err) {
-      console.log(err)
-      setError(data.payload.error)
-    }
-  }
-
   function calculateAge(dateOfBirth) {
     const today = new Date()
     const birthDate = new Date(dateOfBirth)
@@ -119,32 +112,41 @@ const AdminUserAccounts = () => {
   return (
     <>
       <RegisterUserModal {...{ isOpen, onClose }} />
-      <Heading
-        display={'flex'}
-        mt={'25px'}
-        mb={'25px'}
-        justifyContent={'center'}
-      >
-        User Accounts
-      </Heading>
+      <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
+        <Flex flexDirection='row' alignItems='center' gap={'25px'}>
+          <Searchbar entries={entries} page={page} />
+          <Heading mt='25px' mb='25px' display='flex' justifyContent='center'>
+            User Accounts
+          </Heading>
+        </Flex>
+      </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
-
+      <Tabs margin={'auto'} w={'90%'} variant='line'>
+        <TabList mb='1em'>
+          <Tab onClick={() => setFilter('ACTIVE')}>User List</Tab>
+          <Tab onClick={() => setFilter('ARCHIVED')}>Archived Users</Tab>
+        </TabList>
+      </Tabs>
       <Button colorScheme='blue' onClick={onOpen}>
         Register User
       </Button>
-      <Button colorScheme='blue'>Search</Button>
-      <Input
-        w={'150px'}
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      ></Input>
 
-      <TableContainer margin={'10px'}>
+      <TableContainer
+        display={'flex'}
+        margin={'10px'}
+        alignContent={'center'}
+        justifyContent={'center'}
+        rounded='md'
+        // minW={'100%'}
+      >
         <Table
+          w={'1200px'}
+          p={'10px'}
+          rounded='md'
+          bg='brand.400'
           variant={'simple'}
           style={{ borderCollapse: 'separate' }}
-          borderRadius={'10px'}
-          borderColor={'brand.100'}
+          borderColor={'gray.400'}
           borderWidth={'1px'}
         >
           <Thead>
@@ -165,7 +167,9 @@ const AdminUserAccounts = () => {
 
               return (
                 <Tr key={user._id}>
-                  <Td textAlign='center'>{user._id}</Td>
+                  <Td textAlign='center'>
+                    <Link as={rr_Link} color={'brand.500'} to={`${user._id}`}>{user._id}</Link>
+                  </Td>
                   <Td textAlign='center'>{profile?.lastName || 'N/A'}</Td>
                   <Td textAlign='center'>{profile?.firstName || 'N/A'}</Td>
                   <Td textAlign='center'>{profile?.middleName || 'N/A'}</Td>

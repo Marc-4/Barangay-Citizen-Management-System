@@ -4,7 +4,8 @@ const adminSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    index: true
+    index: true,
+    unique: true
   },
   password: {
     type: String,

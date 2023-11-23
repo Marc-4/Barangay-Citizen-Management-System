@@ -18,7 +18,7 @@ router.get('/users/profiles/', middlewares, Admin.getUserProfilesController)
 router.get('user/search', middlewares, Admin.searchUserController)
 router.get('/user/:id/transactions/', middlewares, Admin.getUserTransactionsController)
 router.patch('/user/Profile/:id/edit', middlewares, Admin.editUserController)
-router.patch('/user/:id/archive', middlewares, Admin.archiveUserController) //test
+// router.patch('/user/:id/archive', middlewares, Admin.archiveUserController) //test
 // router.patch('/user/:id/recover', middlewares, Admin.recoverUserController)
 // router.delete('/user/Profile/:id/delete', middlewares, Admin.deleteUserController) //test
 
@@ -30,7 +30,7 @@ router.get('/employee/Profile/:id', middlewares, Admin.getEmployeeProfileControl
 router.get('/employees/Profiles/', middlewares, Admin.getEmployeeProfilesController)
 // router.get('employee/search', middlewares, Admin.searchEmployeeController)
 router.patch('/employee/:id/edit', middlewares, Admin.editEmployeeController)
-router.patch('/employee/:id/archive', middlewares,Admin.archiveEmployeeController)
+// router.patch('/employee/:id/archive', middlewares,Admin.archiveEmployeeController)
 // router.patch('/user/:id/recover', middlewares, Admin.recoverEmployeeController)
 // router.delete('/employee/:id/delete', middlewares, Admin.deleteEmployeeController)
 
@@ -47,9 +47,12 @@ router.get('/requests/', middlewares, Admin.getUserRequestsController)
 router.patch('/request/:id/edit', middlewares, Admin.editUserRequestController)
 
 //notifications
-// router.get('/notifications/', middlewares, Admin.getUserNotificationsController)
-// router.get('/notification/:id', middlewares, Admin.getNotificationController)
-// router.get('/notifications/search', middlewares, Admin.searchNotificationController)
-// router.patch('/notifications/:id/edit', middlewares, Admin.editUserNotificationController)
+router.post('/notification/create', middlewares, Admin.createNotificationController)
+router.get('/notifications/', middlewares, Admin.getNotificationsController)
+router.get('/notification/:id', middlewares, Admin.getNotificationController)
+router.get('/notifications/search', middlewares, Admin.searchNotificationController)
+router.patch('/notifications/:id/edit', middlewares, Admin.editNotificationController)
+router.delete('/notifications/:id/edit', middlewares, Admin.deleteNotificationController)
+
 
 export default router

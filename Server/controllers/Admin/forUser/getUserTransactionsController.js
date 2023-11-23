@@ -30,7 +30,7 @@ const getUserProfileTransactions = async (req, res) => {
   }
   let payload
   if (transanctions) payload = transanctions
-
+  console.log(payload);
   return sendSuccess(payload, 200, res)
 }
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Flex } from '@chakra-ui/react'
-import TransactionCard from './TransactionCard'
+import TransactionCard from './cards/TransactionCard'
 import callAPI from '../utils/callAPI'
 
 const UpcomingTransactions = () => {
@@ -30,20 +30,14 @@ const UpcomingTransactions = () => {
     <>
       <Flex
         flexDirection={'column'}
-        gap={'25px'}
         minW={'750px'}
         align={'center'}
       >
         {transactions.map((transaction) => {
           return (
             <TransactionCard
-              key={transaction._id}
-              id={transaction._id}
-              date={new Date(transaction.timestamp).toLocaleDateString()}
-              time={new Date(transaction.timestamp).toLocaleTimeString()}
-              name={'Marc Kenneth S. Verdugo'}
-              type={transaction.transacType}
-              status={transaction.status}
+              data={transaction}
+              basepath={'/admin/transactions'}
             ></TransactionCard>
           )
         })}

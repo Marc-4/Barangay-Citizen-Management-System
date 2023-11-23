@@ -7,6 +7,8 @@ import requestEditUserProfileController from './requestEditUserProfileController
 import getUserTransactionsController from './getUserTransactionsController.js'
 import getUserTransactionController from './getUserTransactionController.js'
 
+import createUserNotificationController from './createUserNotificationController.js'
+
 export {
   requestCreateUserProfileController,
   createUserTransactionController,
@@ -15,5 +17,7 @@ export {
   registerUserController,
   requestEditUserProfileController,
   getUserTransactionController,
-  getUserTransactionsController
+  getUserTransactionsController,
+
+  createUserNotificationController
 }

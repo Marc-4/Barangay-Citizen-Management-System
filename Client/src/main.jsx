@@ -11,6 +11,10 @@ import {
   RootLayout,
   EmployeeLayout,
 } from './layouts/index.js'
+import GenTransaction from './components/generated/GenTransaction.jsx'
+import GenRequest from './components/generated/GenRequest.jsx'
+import GenUser from './components/generated/GenUser.jsx'
+import GenEmployee from './components/generated/GenEmployee.jsx'
 
 const router = createBrowserRouter([
   {
@@ -102,21 +106,45 @@ const router = createBrowserRouter([
             element: <page.AdminUserAccounts />,
           },
           {
+            path: 'users/:id',
+            element: <GenUser />,
+          },
+          // {
+          //   path: 'users/:id/transactions',
+          //   element: <GenUserTransactions />,
+          // },
+          {
             path: 'employees',
             element: <page.AdminEmployeeAccounts />,
+          },
+          {
+            path: 'employees/:id',
+            element: <GenEmployee />,
           },
           {
             path: 'transactions',
             element: <page.AdminTransactions />,
           },
           {
+            path: 'transactions/:id',
+            element: <GenTransaction />,
+          },
+          {
             path: 'requests',
             element: <page.AdminRequests />,
+          },
+          {
+            path: 'requests/:id',
+            element: <GenRequest />,
           },
           {
             path: 'notifications',
             element: <page.AdminNotifications />,
           },
+          // {
+          //   path: 'notifications/:id',
+          //   element: <GenNotification />,
+          // },
           {
             path: 'about',
             element: <page.AdminAbout />,
@@ -125,7 +153,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/unauthorized',
-        element: <page.unauthorized />
+        element: <page.unauthorized />,
       },
       {
         path: '*',

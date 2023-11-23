@@ -34,7 +34,7 @@ const Home = () => {
   }, [isLoading])
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/' + sessionStorage.getItem('userRole'))
+    if (isAuthenticated) navigate('/admin')
   }, [isAuthenticated])
 
   const handleLogin = async (e) => {

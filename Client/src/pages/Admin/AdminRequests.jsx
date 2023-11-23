@@ -1,7 +1,20 @@
-import { Box, Heading, Center, Button, Divider, Text } from '@chakra-ui/react'
-import TransactionCard from '../../components/TransactionCard'
+import {
+  Heading,
+  Center,
+  Divider,
+  Text,
+  Tabs,
+  Tab,
+  TabPanels,
+  TabPanel,
+  TabList,
+  Flex,
+  Box,
+} from '@chakra-ui/react'
+import TransactionCard from '../../components/cards/TransactionCard'
 import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
+import Searchbar from '../../components/Searchbar'
 
 const AdminRequests = () => {
   const [Requests, setRequests] = useState([])
@@ -29,48 +42,30 @@ const AdminRequests = () => {
 
   return (
     <>
-      <Heading
-        display={'flex'}
-        mt={'25px'}
-        mb={'25px'}
-        justifyContent={'center'}
-      >
-        Requests Page
-      </Heading>
+      <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
+        <Flex flexDirection='row' alignItems='center' gap={'25px'}>
+          <Searchbar />
+          <Heading mt='25px' mb='25px' display='flex' justifyContent='center'>
+            Requests
+          </Heading>
+        </Flex>
+      </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
+      <Tabs margin={'auto'} w={'90%'} variant='line'>
+        <TabList mb='1em'>
+          <Tab onClick={() => setFilter('PENDING')}>Pending Requests</Tab>
+          <Tab onClick={() => setFilter('HISTORY')}>Request History</Tab>
+        </TabList>
+      </Tabs>
 
-      <Center margin={'10px'} p={'25px'} flexDirection={'column'} gap={'25px'}>
-        <Box>
-          <Button
-            mr={'12px'}
-            colorScheme='facebook'
-            size={'lg'}
-            onClick={() => setFilter('HISTORY')}
-          >
-            Request History
-          </Button>
-          <Button
-            ml={'12px'}
-            colorScheme='blue'
-            size={'lg'}
-            onClick={() => setFilter('PENDING')}
-          >
-            Pending Requests
-          </Button>
-        </Box>
-
+      <Center margin={'10px'} p={'25px'} pt={'0px'} flexDirection={'column'} gap={'25px'}>
         <Text display={error ? 'block' : 'none'}>{error}</Text>
 
-        {Requests.map((transaction) => {
+        {Requests.map((request) => {
           return (
             <TransactionCard
-              key={transaction._id}
-              id={transaction._id}
-              date={new Date(transaction.timestamp).toLocaleDateString()}
-              time={new Date(transaction.timestamp).toLocaleTimeString()}
-              name={'Marc Kenneth S. Verdugo'}
-              type={transaction.transacType}
-              status={transaction.status}
+              data={request}
+              basepath={'/admin/requests'}
             ></TransactionCard>
           )
         })}

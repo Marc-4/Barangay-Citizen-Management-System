@@ -7,7 +7,8 @@ const getUserRequests = async (req, res) => {
 
   let requests
   try {
-    if (req.query.entries == 0) requests = await ProfileRequest.countDocuments()
+    if (req.query.entries == 0)
+      requests = await ProfileRequest.countDocuments({ status: 'PENDING' })
     else if (req.query.filter && req.query.filter == 'PENDING')
       requests = await ProfileRequest.find({ status: 'PENDING' })
     else requests = await ProfileRequest.find().limit(req.query.entries)

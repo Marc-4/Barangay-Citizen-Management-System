@@ -50,9 +50,10 @@ const profileSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique: true
   },
   profilePhoto: {
-    type: Buffer,
+    type: String
   },
   active: {
     type: Boolean,

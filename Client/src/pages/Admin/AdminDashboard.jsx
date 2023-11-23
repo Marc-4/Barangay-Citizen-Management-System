@@ -138,7 +138,7 @@ const AdminDashboard = () => {
               display={'inline-block'}
               mr={'15px'}
             ></Icon>
-            <Heading display={'inline-block'}>{totalPendingRequests}</Heading>
+            <Heading display={'inline-block'}>{totalPendingRequests || '0'}</Heading>
           </CardHeader>
           <CardBody>
             <Text fontSize={'xl'} fontWeight={'semibold'}>

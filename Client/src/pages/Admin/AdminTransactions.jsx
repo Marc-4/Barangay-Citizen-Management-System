@@ -1,7 +1,18 @@
-import { Box, Heading, Center, Button, Divider, Text } from '@chakra-ui/react'
-import TransactionCard from '../../components/TransactionCard'
+import {
+  Box,
+  Heading,
+  Center,
+  Flex,
+  Divider,
+  Text,
+  Tabs,
+  Tab,
+  TabList,
+} from '@chakra-ui/react'
+import TransactionCard from '../../components/cards/TransactionCard'
 import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
+import Searchbar from '../../components/Searchbar'
 
 const AdminTransactions = () => {
   const [transactions, setTransactions] = useState([])
@@ -20,8 +31,10 @@ const AdminTransactions = () => {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
         setError(null)
+        console.log(data.payload);
         return setTransactions(data.payload)
-      } else return setError('Connection Error, refresh page to try again')
+      } 
+      else return setError('Connection Error, refresh page to try again')
     } catch (err) {
       return setError('Connection Error, refresh page to try again')
     }
@@ -29,48 +42,31 @@ const AdminTransactions = () => {
 
   return (
     <>
-      <Heading
-        display={'flex'}
-        mt={'25px'}
-        mb={'25px'}
-        justifyContent={'center'}
-      >
-        Transactions Page
-      </Heading>
+      <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
+        <Flex flexDirection='row' alignItems='center' gap={'25px'}>
+          <Searchbar />
+          <Heading mt='25px' mb='25px' display='flex' justifyContent='center'>
+            Transactions
+          </Heading>
+        </Flex>
+      </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
+      <Tabs margin={'auto'} w={'90%'} variant='line'>
+        <TabList mb='1em'>
+          <Tab onClick={() => setFilter('PENDING')}>Pending Transactions</Tab>
+          <Tab onClick={() => setFilter('HISTORY')}>Transaction History</Tab>
+        </TabList>
+      </Tabs>
 
-      <Center margin={'10px'} p={'25px'} flexDirection={'column'} gap={'25px'}>
-        <Box>
-          <Button
-            mr={'12px'}
-            colorScheme='facebook'
-            size={'lg'}
-            onClick={() => setFilter('HISTORY')}
-          >
-            Transaction History
-          </Button>
-          <Button
-            ml={'12px'}
-            colorScheme='blue'
-            size={'lg'}
-            onClick={() => setFilter('PENDING')}
-          >
-            Pending Transactions
-          </Button>
-        </Box>
-
+      <Center p={'25px'} pt={'0px'} flexDirection={'column'}  >
         <Text display={error ? 'block' : 'none'}>{error}</Text>
 
         {transactions.map((transaction) => {
           return (
             <TransactionCard
-              key={transaction._id}
-              id={transaction._id}
-              date={new Date(transaction.timestamp).toLocaleDateString()}
-              time={new Date(transaction.timestamp).toLocaleTimeString()}
-              name={'Marc Kenneth S. Verdugo'}
-              type={transaction.transacType}
-              status={transaction.status}
+            key={transaction._id}
+             data={transaction}
+              basepath={"/admin/transactions"}
             ></TransactionCard>
           )
         })}

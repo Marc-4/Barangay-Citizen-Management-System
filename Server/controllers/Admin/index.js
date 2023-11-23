@@ -33,6 +33,14 @@ import searchTransactionController from './forTransaction/searchTransactionContr
 import getUserRequestController from './forRequest/getUserRequestController.js'
 import getUserRequestsController from './forRequest/getUserRequestsController.js'
 import editUserRequestController from './forRequest/editUserRequestController.js'
+import searchUserRequestController from './forRequest/searchRequestController.js'
+
+import createNotificationController from './forNotification/createNotificationController.js'
+import getNotificationController from './forNotification/getNotificationController.js'
+import getNotificationsController from './forNotification/getAllNotificationsController.js'
+import editNotificationController from './forNotification/editNotificationController.js'
+import searchNotificationController from './forNotification/searchNotificationController.js'
+import deleteNotificationController from './forNotification/deleteNotificationController.js'
 
 export {
   createAdminProfileController,
@@ -66,4 +74,11 @@ export {
   getUserRequestController,
   getUserRequestsController,
   editUserRequestController,
+  searchUserRequestController,
+  createNotificationController,
+  getNotificationController,
+  getNotificationsController,
+  editNotificationController,
+  searchNotificationController,
+  deleteNotificationController
 }
