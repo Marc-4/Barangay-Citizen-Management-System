@@ -47,7 +47,6 @@ const createUserProfile = async (req, res) => {
     streetName: req.body.address.streetName,
     houseNumber: req.body.address.houseNumber,
   }
-  console.log(address);
   try {
     profile = await Profile.create({
       accountID: req.body.accountID,

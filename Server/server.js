@@ -19,10 +19,12 @@ const app = express()
 //middlewares
 app.use(cookieParser())
 app.use(express.json())
-app.use(cors({
-  origin: 'http://localhost:5000',
- credentials: true,
-}))
+app.use(
+  cors({
+    origin: 'http://localhost:5000',
+    credentials: true,
+  })
+)
 
 //routers
 app.use('/api/admin', adminRouter)
@@ -36,7 +38,7 @@ app.all('*', (req, res) => {
 })
 
 //db connection
-mongoose.connect(process.env.DB_URI, { useNewURLParser: true })
+mongoose.connect(process.env.DB_URI, { useNewURLParser: true, dbName: 'BRMS' })
 
 const db = mongoose.connection
 db.on('error', (error) => console.log(error))
@@ -45,5 +47,3 @@ db.on('open', () => console.log('connected to DB'))
 app.listen(PORT, () => {
   console.log('API server is live at ' + PORT)
 })
-
-// export { db }

@@ -16,12 +16,14 @@ import login from '../utils/login'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import { jwtDecode } from 'jwt-decode'
 
 const Home = () => {
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('')
+  const [cookieRole, setCookieRole] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState('')
   const [error, setError] = useState('')
@@ -29,12 +31,17 @@ const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
-    const user = Cookies.get('authorization')
-    if (user && user !== undefined) setIsAuthenticated(true)
+    const cookie = Cookies.get('authorization')
+
+    if (cookie) {
+      const decodedToken = jwtDecode(cookie)
+      setCookieRole(decodedToken.role)
+    }
+    if (cookie && cookie !== undefined) setIsAuthenticated(true)
   }, [isLoading])
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/admin')
+    if (isAuthenticated) navigate(`/${cookieRole}`)
   }, [isAuthenticated])
 
   const handleLogin = async (e) => {
@@ -42,6 +49,7 @@ const Home = () => {
     setIsLoading(true)
 
     try {
+      console.log(username)
       const data = await login(
         username,
         password,
@@ -50,18 +58,17 @@ const Home = () => {
 
       if (data.result === 'OK') {
         console.log('OK')
-        console.log(data)
-        if (data.payload.role === 'admin') {
+
+        const decodedToken = jwtDecode(data.payload)
+        setCookieRole(decodedToken.role)
+        if (decodedToken.role === 'admin') {
           navigate('/admin/dashboard')
-          sessionStorage.setItem('userRole', 'admin')
         }
-        if (data.payload.role === 'employee') {
+        if (decodedToken.role === 'employee') {
           navigate('/employee/dashboard')
-          sessionStorage.setItem('userRole', 'employee')
         }
-        if (data.payload.role === 'user') {
+        if (decodedToken.role === 'user') {
           navigate('/user/profile')
-          sessionStorage.setItem('userRole', 'user')
         }
       } else {
         console.log('ERR')

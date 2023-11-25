@@ -163,7 +163,13 @@ const ProfileCard = (profileData) => {
                 <Heading fontSize={'2xl'}>Place Of Birth</Heading>
                 <Text>
                   {profileData
-                    ? `${profileData.profileData?.placeOfBirth || 'N/A'}`
+                    ? `${
+                        profileData.profileData?.placeOfBirth.city +
+                          ' ' +
+                          profileData.profileData?.placeOfBirth.province +
+                          ', ' +
+                          profileData.profileData?.placeOfBirth.country || 'N/A'
+                      }`
                     : 'Loading...'}
                 </Text>
               </Box>
@@ -172,7 +178,9 @@ const ProfileCard = (profileData) => {
               <Box id='Sex' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>Gender</Heading>
                 <Text>
-                  {profileData ? `${profileData.profileData?.sex || 'N/A'}` : 'Loading...'}
+                  {profileData
+                    ? `${profileData.profileData?.sex || 'N/A'}`
+                    : 'Loading...'}
                 </Text>
               </Box>
               <Box id='civil_status' w={'200px'} marginBottom={'25px'}>
@@ -204,7 +212,9 @@ const ProfileCard = (profileData) => {
               <Box id='email' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>E-mail</Heading>
                 <Text>
-                  {profileData ? `${profileData.profileData?.email || 'N/A'}` : 'Loading...'}
+                  {profileData
+                    ? `${profileData.profileData?.email || 'N/A'}`
+                    : 'Loading...'}
                 </Text>
               </Box>
               <Box id='residency' w={'250px'} marginBottom={'25px'}>
@@ -247,7 +257,10 @@ const ProfileCard = (profileData) => {
                 </Heading>
                 <Text display={'inline-block'}>
                   {profileData
-                    ? `${profileData.profileData.address?.subdivisionPurok || 'N/A'}`
+                    ? `${
+                        profileData.profileData.address?.subdivisionPurok ||
+                        'N/A'
+                      }`
                     : 'Loading...'}
                 </Text>{' '}
                 <br />

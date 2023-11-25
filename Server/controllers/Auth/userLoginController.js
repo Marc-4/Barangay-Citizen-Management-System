@@ -32,14 +32,9 @@ const userLogin = async (req, res) => {
       //token signing
       const id = { id: user._id }
 
-      const token = JWT.sign(id, process.env.JWT_SECRET, {
-        expiresIn: '48h',
-      })
+      const token = JWT.sign({ id: id, role: 'user' }, process.env.JWT_SECRET)
       res.cookie('authorization', token)
-      const payload = {
-        token: token,
-        role: 'user'
-      }
+      const payload = token
       return sendSuccess(payload, 200, res)
     } else {
       sendError('password incorrect', 400, res)

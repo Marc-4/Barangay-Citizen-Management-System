@@ -15,15 +15,14 @@ const GenEmployee = () => {
   const getAccount = async () => {
     try {
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/employee/profile/${id}`
+      const route = `http://localhost:3000/api/admin/employee/${id}`
       const response = await callAPI(null, method, route)
 
-    //   console.log(response);
+      //   console.log(response);
       if (response.result === 'OK') {
         setError(null)
-        setProfile(response.payload)
-      }
-      else setError(response.payload.error)
+        setProfile(response.payload.profile)
+      } else setError(response.payload.error)
     } catch (err) {
       console.log(err)
       setError('Error fetching Profile Data')
@@ -41,7 +40,11 @@ const GenEmployee = () => {
       >
         {error}
       </Text>
-      {profile && <ProfileCard profileData={profile} />}
+      {profile ? (
+        <ProfileCard profileData={profile} />
+      ) : (
+        <Text fontSize={'2xl'}>This user has no profile.</Text>
+      )}
     </>
   )
 }

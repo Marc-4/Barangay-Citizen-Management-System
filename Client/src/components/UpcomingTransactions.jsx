@@ -36,6 +36,7 @@ const UpcomingTransactions = () => {
         {transactions.map((transaction) => {
           return (
             <TransactionCard
+              key={transaction._id}
               data={transaction}
               basepath={'/admin/transactions'}
             ></TransactionCard>

@@ -19,10 +19,10 @@ const TransactionCard = ({ data, basepath }) => {
   }, [])
   const getUser = async () => {
     try {
-      const route = `http://localhost:3000/api/admin/user/profile/${data.accountID}`
+      const route = `http://localhost:3000/api/admin/user/${data._id}`
       const response = await callAPI(null, 'GET', route)
 
-      if (response.result === 'OK') setProfile(response.payload)
+      if (response.result === 'OK') setProfile(response.payload.profile)
       console.log(profile)
     } catch (error) {
       console.log(error)

@@ -21,7 +21,15 @@ const profileSchema = new mongoose.Schema({
     type: Date,
   },
   placeOfBirth: {
-    type: Date,
+    city: {
+      type: String,
+    },
+    province: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
   },
   sex: {
     type: String,
@@ -50,10 +58,10 @@ const profileSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    unique: true
+    unique: true,
   },
   profilePhoto: {
-    type: String
+    type: String,
   },
   active: {
     type: Boolean,

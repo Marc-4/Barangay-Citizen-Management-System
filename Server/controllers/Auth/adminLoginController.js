@@ -19,7 +19,7 @@ const adminLogin = async (req, res) => {
     return sendError('Internal Server Error', 500, res)
   }
 
-  if (!admin) return sendError('username or password incorrect', 404, res)
+  if (!admin) return sendError('username incorrect', 404, res)
 
   const hashedPass = admin.password
 
@@ -33,15 +33,13 @@ const adminLogin = async (req, res) => {
       //token signing
       const id = { id: admin._id }
 
-      const token = JWT.sign(id, process.env.JWT_SECRET)
+      const token = JWT.sign({ id: id, role: 'admin' }, process.env.JWT_SECRET)
       res.cookie('authorization', token)
-      const payload = {
-        token: token,
-        role: 'admin',
-      }
+      
+      const payload = token
       return sendSuccess(payload, 200, res)
     } else {
-      sendError('username or password incorrect', 400, res)
+      return sendError('password incorrect', 400, res)
     }
   })
 }
