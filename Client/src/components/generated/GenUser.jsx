@@ -7,9 +7,9 @@ import TransactionCard from '../cards/TransactionCard'
 
 const GenUser = () => {
   const { id } = useParams()
-  const [profile, setProfile] = useState()
+  const [account, setAccount] = useState()
   const [transactions, setTransactions] = useState([])
-  const [profileError, setProfileError] = useState(null)
+  const [accountError, setAccountError] = useState(null)
   const [transactionError, setTransactionError] = useState(null)
   const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState(null)
@@ -26,13 +26,14 @@ const GenUser = () => {
       const response = await callAPI(null, method, route)
 
       if (response.result === 'OK') {
-        setProfileError(null)
-        setProfile(response.payload.profile)
+        setAccountError(null)
+        setAccount(response.payload)
+        console.log(response.payload)
       }
-      // else setProfileError(response.payload.error)
+      // else setAccountError(response.payload.error)
     } catch (err) {
       console.log(err)
-      setProfileError('Error fetching Profile Data')
+      setAccountError('Error fetching Profile Data')
     }
   }
 
@@ -45,6 +46,7 @@ const GenUser = () => {
       if (response.result === 'OK') {
         setTransactionError(null)
         setTransactions(response.payload)
+        // console.log(response)
       } else setTransactionError(response.payload.error)
     } catch (err) {
       console.log(err)
@@ -63,15 +65,15 @@ const GenUser = () => {
           <TabPanel>
             <Text
               fontSize={'2xl'}
-              display={profileError ? 'block' : 'none'}
+              display={accountError ? 'block' : 'none'}
               color={'tomato'}
               fontWeight={'semibold'}
               textAlign={'center'}
             >
-              {profileError}
+              {accountError}
             </Text>
-            {profile ? (
-              <ProfileCard profileData={profile} />
+            {account ? (
+              <ProfileCard data={account}/>
             ) : (
               <Text fontSize={'2xl'}>This user has no Profile.</Text>
             )}

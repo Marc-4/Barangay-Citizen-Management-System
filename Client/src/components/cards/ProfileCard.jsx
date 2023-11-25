@@ -1,6 +1,16 @@
-import { Box, Container, Heading, Image, Flex, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Container,
+  Heading,
+  Image,
+  Flex,
+  Text,
+  Stack,
+  Spacer,
+} from '@chakra-ui/react'
 
-const ProfileCard = (profileData) => {
+const ProfileCard = (data, username) => {
+  console.log(data)
   return (
     <>
       <Container
@@ -21,13 +31,22 @@ const ProfileCard = (profileData) => {
           p={'20px'}
         >
           <Image w={'250px'} h={'250px'} display={'block'} />
-          <Text fontSize={'3xl'} fontWeight={'semibold'}>
-            {profileData
-              ? `${profileData.profileData.lastName || ''}, ${
-                  profileData.profileData.firstName || ''
-                } ${profileData.profileData.middleName || ''}`
-              : 'Loading...'}
-          </Text>
+          <Stack>
+            <Text fontSize={'3xl'} fontWeight={'semibold'}>
+              {data
+                ? `${data.data.profile?.lastName || ''}, ${
+                    data.data.profile?.firstName || ''
+                  } ${data.data.profile?.middleName || ''}`
+                : 'Loading...'}
+            </Text>
+            <Text fontSize={'xl'}>Username: {data.data.username}</Text>
+            <Text color={'brand.400'}>#{data.data._id}</Text>
+            <Spacer mt={'50px'} mb={'45px'} />
+            <Text fontSize={'xl'}>
+              Registered On:{' '}
+              {new Date(data.data.dateOfCreation).toLocaleDateString()}
+            </Text>
+          </Stack>
         </Box>
 
         <Box
@@ -53,8 +72,8 @@ const ProfileCard = (profileData) => {
                     First Name:
                   </Heading>
                   <Text display={'inline-block'}>
-                    {profileData
-                      ? `${profileData.profileData.firstName || ''}`
+                    {data
+                      ? `${data.data.profile?.firstName || ''}`
                       : 'Loading...'}
                   </Text>
                 </div>
@@ -68,8 +87,8 @@ const ProfileCard = (profileData) => {
                     Last Name:
                   </Heading>
                   <Text display={'inline-block'}>
-                    {profileData
-                      ? `${profileData.profileData.lastName || ''}`
+                    {data
+                      ? `${data.data.profile?.lastName || ''}`
                       : 'Loading...'}
                   </Text>
                 </div>
@@ -83,8 +102,8 @@ const ProfileCard = (profileData) => {
                     Middle Name:
                   </Heading>
                   <Text display={'inline-block'}>
-                    {profileData
-                      ? `${profileData.profileData.middleName || 'N/A'}`
+                    {data
+                      ? `${data.data.profile?.middleName || 'N/A'}`
                       : 'Loading...'}
                   </Text>
                 </div>
@@ -100,11 +119,11 @@ const ProfileCard = (profileData) => {
                   Month:
                 </Heading>
                 <Text display={'inline-block'}>
-                  {profileData
+                  {data
                     ? `${
-                        profileData.profileData?.dateOfBirth
+                        data.data.profile?.dateOfBirth
                           ? new Date(
-                              profileData.profileData?.dateOfBirth
+                              data.data.profile?.dateOfBirth
                             ).toLocaleDateString('en-US', {
                               month: 'long',
                             }) || ''
@@ -123,11 +142,11 @@ const ProfileCard = (profileData) => {
                 </Heading>
                 <Text display={'inline-block'}>
                   {' '}
-                  {profileData
+                  {data
                     ? `${
-                        profileData.profileData?.dateOfBirth
+                        data.data.profile?.dateOfBirth
                           ? new Date(
-                              profileData.profileData?.dateOfBirth
+                              data.data.profile?.dateOfBirth
                             ).toLocaleDateString('en-US', {
                               day: '2-digit',
                             }) || ''
@@ -146,11 +165,11 @@ const ProfileCard = (profileData) => {
                 </Heading>
                 <Text display={'inline-block'}>
                   {' '}
-                  {profileData
+                  {data
                     ? `${
-                        profileData.profileData?.dateOfBirth
+                        data.data.profile?.dateOfBirth
                           ? new Date(
-                              profileData.profileData?.dateOfBirth
+                              data.data.profile?.dateOfBirth
                             ).toLocaleDateString('en-US', {
                               year: 'numeric',
                             }) || ''
@@ -162,8 +181,14 @@ const ProfileCard = (profileData) => {
               <Box id='place_of_birth' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>Place Of Birth</Heading>
                 <Text>
-                  {profileData
-                    ? `${profileData.profileData?.placeOfBirth || 'N/A'}`
+                  {data
+                    ? `${
+                        data.data.profile?.placeOfBirth.city +
+                          ' ' +
+                          data.data.profile?.placeOfBirth.province +
+                          ', ' +
+                          data.data.profile?.placeOfBirth.country || 'N/A'
+                      }`
                     : 'Loading...'}
                 </Text>
               </Box>
@@ -172,30 +197,30 @@ const ProfileCard = (profileData) => {
               <Box id='Sex' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>Gender</Heading>
                 <Text>
-                  {profileData ? `${profileData.profileData?.sex || 'N/A'}` : 'Loading...'}
+                  {data ? `${data.data.profile?.sex || 'N/A'}` : 'Loading...'}
                 </Text>
               </Box>
               <Box id='civil_status' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>Civil Status</Heading>
                 <Text>
-                  {profileData
-                    ? `${profileData.profileData?.civilStatus || 'N/A'}`
+                  {data
+                    ? `${data.data.profile?.civilStatus || 'N/A'}`
                     : 'Loading...'}
                 </Text>
               </Box>
               <Box id='occupation' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>Occupation</Heading>
                 <Text>
-                  {profileData
-                    ? `${profileData.profileData?.occupation || 'N/A'}`
+                  {data
+                    ? `${data.data.profile?.occupation || 'N/A'}`
                     : 'Loading...'}
                 </Text>
               </Box>
               <Box id='citizenship' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>Citizenship</Heading>
                 <Text>
-                  {profileData
-                    ? `${profileData.profileData?.citizenship || 'N/A'}`
+                  {data
+                    ? `${data.data.profile?.citizenship || 'N/A'}`
                     : 'Loading...'}
                 </Text>
               </Box>
@@ -204,7 +229,7 @@ const ProfileCard = (profileData) => {
               <Box id='email' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>E-mail</Heading>
                 <Text>
-                  {profileData ? `${profileData.profileData?.email || 'N/A'}` : 'Loading...'}
+                  {data ? `${data.data.profile?.email || 'N/A'}` : 'Loading...'}
                 </Text>
               </Box>
               <Box id='residency' w={'250px'} marginBottom={'25px'}>
@@ -218,8 +243,8 @@ const ProfileCard = (profileData) => {
                   House Number:
                 </Heading>
                 <Text display={'inline-block'}>
-                  {profileData
-                    ? `${profileData.profileData.address?.houseNumber || 'N/A'}`
+                  {data
+                    ? `${data.data.profile?.address.houseNumber || 'N/A'}`
                     : 'Loading...'}
                 </Text>{' '}
                 <br />
@@ -232,8 +257,8 @@ const ProfileCard = (profileData) => {
                   Street:
                 </Heading>
                 <Text display={'inline-block'}>
-                  {profileData
-                    ? `${profileData.profileData.address?.streetName || 'N/A'}`
+                  {data
+                    ? `${data.data.profile?.address.streetName || 'N/A'}`
                     : 'Loading...'}
                 </Text>{' '}
                 <br />
@@ -246,8 +271,8 @@ const ProfileCard = (profileData) => {
                   Subdivision/Purok:
                 </Heading>
                 <Text display={'inline-block'}>
-                  {profileData
-                    ? `${profileData.profileData.address?.subdivisionPurok || 'N/A'}`
+                  {data
+                    ? `${data.data.profile?.address.subdivisionPurok || 'N/A'}`
                     : 'Loading...'}
                 </Text>{' '}
                 <br />
