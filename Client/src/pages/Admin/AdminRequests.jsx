@@ -30,6 +30,7 @@ const AdminRequests = () => {
     const method = 'GET'
     const route = `http://localhost:3000/api/admin/Requests?entries=20&filter=${filter}`
     try {
+      console.log('calling API..');
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
         setError(null)

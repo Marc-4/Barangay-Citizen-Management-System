@@ -32,34 +32,6 @@ const AdminEmployeeAccounts = () => {
     getEmployees()
   }, [filter])
 
-  useEffect(() => {
-    const fetchUserProfiles = async () => {
-      try {
-        const profilesArray = await Promise.all(
-          employees.map(async (employee) => {
-            try {
-              const profileData = await getEmployeeProfile(employee._id)
-              console.log(profileData.payload)
-              return profileData.payload
-            } catch (err) {
-              console.log(err)
-              setError('Error fetching user profile')
-              return null
-            }
-          })
-        )
-        setProfiles(profilesArray)
-      } catch (error) {
-        console.log(error)
-        setError('Error fetching user profiles')
-      }
-    }
-
-    if (employees.length > 0) {
-      fetchUserProfiles()
-    }
-  }, [employees])
-
   const getEmployees = async () => {
     const body = null
     const method = 'GET'
@@ -154,7 +126,7 @@ const AdminEmployeeAccounts = () => {
           </Thead>
           <Tbody>
             {employees.map((employee) => {
-              const profile = profiles.find((p) => p.accountID === employee._id)
+              const profile = employee.profile
 
               return (
                 <Tr key={employee._id}>

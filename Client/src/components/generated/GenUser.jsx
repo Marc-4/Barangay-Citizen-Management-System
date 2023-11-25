@@ -22,12 +22,12 @@ const GenUser = () => {
   const getProfile = async () => {
     try {
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/user/profile/${id}`
+      const route = `http://localhost:3000/api/admin/user/${id}`
       const response = await callAPI(null, method, route)
 
       if (response.result === 'OK') {
         setProfileError(null)
-        setProfile(response.payload)
+        setProfile(response.payload.profile)
       }
       // else setProfileError(response.payload.error)
     } catch (err) {

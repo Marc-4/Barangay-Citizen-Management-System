@@ -12,12 +12,10 @@ import {
   Tabs,
   TabList,
   Tab,
-  TabPanel,
-  TabPanels,
   useDisclosure,
   Box,
   Flex,
-  Link
+  Link,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import RegisterUserModal from '../../components/modals/registerUserModal'
@@ -27,7 +25,7 @@ import { Link as rr_Link } from 'react-router-dom'
 
 const AdminUserAccounts = () => {
   const [users, setUsers] = useState([])
-  const [profiles, setProfiles] = useState([])
+  // const [profiles, setProfiles] = useState([])
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
   const [entries, setEntries] = useState(20)
@@ -37,33 +35,6 @@ const AdminUserAccounts = () => {
   useEffect(() => {
     getUsers()
   }, [filter])
-
-  useEffect(() => {
-    const fetchUserProfiles = async () => {
-      try {
-        const profilesArray = await Promise.all(
-          users.map(async (user) => {
-            try {
-              const profileData = await getUserProfile(user._id)
-              return profileData.payload
-            } catch (err) {
-              console.log(err)
-              setError('Error fetching user profile')
-              return null
-            }
-          })
-        )
-        setProfiles(profilesArray)
-      } catch (error) {
-        console.log(error)
-        setError('Error fetching user profiles')
-      }
-    }
-
-    if (users.length > 0) {
-      fetchUserProfiles()
-    }
-  }, [users])
 
   const getUsers = async () => {
     const body = null
@@ -137,7 +108,6 @@ const AdminUserAccounts = () => {
         alignContent={'center'}
         justifyContent={'center'}
         rounded='md'
-        // minW={'100%'}
       >
         <Table
           w={'1200px'}
@@ -163,12 +133,14 @@ const AdminUserAccounts = () => {
           </Thead>
           <Tbody>
             {users.map((user) => {
-              const profile = profiles.find((p) => p.accountID === user._id)
+              const profile = user.profile
 
               return (
                 <Tr key={user._id}>
                   <Td textAlign='center'>
-                    <Link as={rr_Link} color={'brand.500'} to={`${user._id}`}>{user._id}</Link>
+                    <Link as={rr_Link} color={'brand.500'} to={`${user._id}`}>
+                      {user._id}
+                    </Link>
                   </Td>
                   <Td textAlign='center'>{profile?.lastName || 'N/A'}</Td>
                   <Td textAlign='center'>{profile?.firstName || 'N/A'}</Td>
