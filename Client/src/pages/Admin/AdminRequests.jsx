@@ -28,9 +28,9 @@ const AdminRequests = () => {
   const getRequests = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/Requests?entries=20&filter=${filter}`
+    const route = `http://localhost:3000/api/admin/requests?entries=20&filter=${filter}`
     try {
-      console.log('calling API..');
+      console.log('calling API..')
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
         setError(null)
@@ -59,12 +59,19 @@ const AdminRequests = () => {
         </TabList>
       </Tabs>
 
-      <Center margin={'10px'} p={'25px'} pt={'0px'} flexDirection={'column'} gap={'25px'}>
+      <Center
+        margin={'10px'}
+        p={'25px'}
+        pt={'0px'}
+        flexDirection={'column'}
+        gap={'25px'}
+      >
         <Text display={error ? 'block' : 'none'}>{error}</Text>
 
         {Requests.map((request) => {
           return (
             <TransactionCard
+              key={request._id}
               data={request}
               basepath={'/admin/requests'}
             ></TransactionCard>

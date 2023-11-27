@@ -114,7 +114,7 @@ const AdminUserAccounts = () => {
           isOpen: isRegisterOpen,
           onClose: onRegisterClose,
           onUpdate: handeUpdate,
-          role: 'user'
+          role: 'user',
         }}
       />
       <EditAccountModal
@@ -123,7 +123,7 @@ const AdminUserAccounts = () => {
           onClose: handleEditClose,
           user: selectedUser,
           onUpdate: handeUpdate,
-          role: 'user'
+          role: 'user',
         }}
       />
       <DeleteAccountAlert
@@ -133,7 +133,7 @@ const AdminUserAccounts = () => {
           cancelRef: cancelRef,
           user: selectedUser,
           onUpdate: handeUpdate,
-          role: 'user'
+          role: 'user',
         }}
       />
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
@@ -207,90 +207,88 @@ const AdminUserAccounts = () => {
             {users.map((user) => {
               const profile = user.profile
               return (
-                <>
-                  <Tr key={user._id}>
-                    <Td
-                      p={'12px'}
-                      textAlign='center'
-                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                    >
-                      <Link as={rr_Link} color={'brand.500'} to={`${user._id}`}>
-                        {user._id}
-                      </Link>
-                    </Td>
-                    <Td
-                      p={'12px'}
-                      fontWeight={'semibold1'}
-                      textAlign='center '
-                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                    >
-                      {user?.username || 'N/A'}
-                    </Td>
-                    <Td
-                      p={'12px'}
-                      textAlign='center'
-                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                    >
-                      {profile?.lastName || 'N/A'}
-                    </Td>
-                    <Td
-                      p={'12px'}
-                      textAlign='center'
-                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                    >
-                      {profile?.firstName || 'N/A'}
-                    </Td>
-                    <Td
-                      p={'12px'}
-                      textAlign='center'
-                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                    >
-                      {profile?.middleName || 'N/A'}
-                    </Td>
-                    <Td
-                      p={'12px'}
-                      textAlign='center'
-                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                    >
-                      {profile?.sex || 'N/A'}
-                    </Td>
-                    {/* <Td
+                <Tr key={user._id}>
+                  <Td
+                    p={'12px'}
+                    textAlign='center'
+                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                  >
+                    <Link as={rr_Link} color={'brand.500'} to={`${user._id}`}>
+                      {user._id}
+                    </Link>
+                  </Td>
+                  <Td
+                    p={'12px'}
+                    fontWeight={'semibold1'}
+                    textAlign='center '
+                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                  >
+                    {user?.username || 'N/A'}
+                  </Td>
+                  <Td
+                    p={'12px'}
+                    textAlign='center'
+                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                  >
+                    {profile?.lastName || 'N/A'}
+                  </Td>
+                  <Td
+                    p={'12px'}
+                    textAlign='center'
+                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                  >
+                    {profile?.firstName || 'N/A'}
+                  </Td>
+                  <Td
+                    p={'12px'}
+                    textAlign='center'
+                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                  >
+                    {profile?.middleName || 'N/A'}
+                  </Td>
+                  <Td
+                    p={'12px'}
+                    textAlign='center'
+                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                  >
+                    {profile?.sex || 'N/A'}
+                  </Td>
+                  {/* <Td
                       textAlign='center'
                       style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
                     >
                       {calculateAge(profile?.dateOfBirth) || 'N/A'}
                     </Td> */}
-                    <Td
-                      p={'12px'}
-                      textAlign='center'
-                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                  <Td
+                    p={'12px'}
+                    textAlign='center'
+                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                  >
+                    {new Date(user.dateOfCreation).toLocaleDateString()}
+                  </Td>
+                  <Td
+                    p={'12px'}
+                    textAlign='center'
+                    justifyContent={'center'}
+                    display={'flex'}
+                    gap={'10px'}
+                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                  >
+                    <Button
+                      onClick={() => handleEditOpen(user)}
+                      colorScheme='green'
                     >
-                      {new Date(user.dateOfCreation).toLocaleDateString()}
-                    </Td>
-                    <Td
-                      p={'12px'}
-                      textAlign='center'
-                      justifyContent={'center'}
-                      display={'flex'}
-                      gap={'10px'}
-                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                      Edit
+                    </Button>
+                    <Button colorScheme='orange'>Archive</Button>
+                    <Button
+                      onClick={() => handleDeleteOpen(user)}
+                      colorScheme='red'
                     >
-                      <Button
-                        onClick={() => handleEditOpen(user)}
-                        colorScheme='green'
-                      >
-                        Edit
-                      </Button>
-                      <Button colorScheme='orange'>Archive</Button>
-                      <Button
-                        onClick={() => handleDeleteOpen(user)}
-                        colorScheme='red'
-                      >
-                        Delete
-                      </Button>
-                    </Td>
-                  </Tr>
-                </>
+                      Delete
+                    </Button>
+                  </Td>
+                </Tr>
               )
             })}
           </Tbody>
