@@ -9,8 +9,7 @@ import {
   Spacer,
 } from '@chakra-ui/react'
 
-const ProfileCard = (data, username) => {
-  console.log(data)
+const ProfileCard = (data) => {
   return (
     <>
       <Container
@@ -34,9 +33,9 @@ const ProfileCard = (data, username) => {
           <Stack>
             <Text fontSize={'3xl'} fontWeight={'semibold'}>
               {data
-                ? `${data.data.profile?.lastName || ''}, ${
+                ? data.data.profile ? `${data.data.profile?.lastName || ''}, ${
                     data.data.profile?.firstName || ''
-                  } ${data.data.profile?.middleName || ''}`
+                  } ${data.data.profile?.middleName || ''}`: 'N/A'
                 : 'Loading...'}
             </Text>
             <Text fontSize={'xl'}>Username: {data.data.username}</Text>
@@ -73,7 +72,7 @@ const ProfileCard = (data, username) => {
                   </Heading>
                   <Text display={'inline-block'}>
                     {data
-                      ? `${data.data.profile?.firstName || ''}`
+                      ? `${data.data.profile?.firstName || 'N/A'}`
                       : 'Loading...'}
                   </Text>
                 </div>
@@ -88,7 +87,7 @@ const ProfileCard = (data, username) => {
                   </Heading>
                   <Text display={'inline-block'}>
                     {data
-                      ? `${data.data.profile?.lastName || ''}`
+                      ? `${data.data.profile?.lastName || 'N/A'}`
                       : 'Loading...'}
                   </Text>
                 </div>
@@ -127,7 +126,7 @@ const ProfileCard = (data, username) => {
                             ).toLocaleDateString('en-US', {
                               month: 'long',
                             }) || ''
-                          : ''
+                          : 'N/A'
                       }`
                     : 'Loading...'}
                 </Text>
@@ -149,8 +148,8 @@ const ProfileCard = (data, username) => {
                               data.data.profile?.dateOfBirth
                             ).toLocaleDateString('en-US', {
                               day: '2-digit',
-                            }) || ''
-                          : ''
+                            }) || 'N/A'
+                          : 'N/A'
                       }`
                     : 'Loading...'}
                 </Text>{' '}
@@ -172,8 +171,8 @@ const ProfileCard = (data, username) => {
                               data.data.profile?.dateOfBirth
                             ).toLocaleDateString('en-US', {
                               year: 'numeric',
-                            }) || ''
-                          : ''
+                            }) || 'N/A'
+                          : 'N/A'
                       }`
                     : 'Loading...'}
                 </Text>
@@ -182,13 +181,13 @@ const ProfileCard = (data, username) => {
                 <Heading fontSize={'2xl'}>Place Of Birth</Heading>
                 <Text>
                   {data
-                    ? `${
+                    ? data.data.profile ?`${
                         data.data.profile?.placeOfBirth.city +
                           ' ' +
                           data.data.profile?.placeOfBirth.province +
                           ', ' +
-                          data.data.profile?.placeOfBirth.country || 'N/A'
-                      }`
+                          data.data.profile?.placeOfBirth.country
+                      }` : 'N/A'
                     : 'Loading...'}
                 </Text>
               </Box>

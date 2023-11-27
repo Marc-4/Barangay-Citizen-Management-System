@@ -23,7 +23,6 @@ const TransactionCard = ({ data, basepath }) => {
       const response = await callAPI(null, 'GET', route)
 
       if (response.result === 'OK') setProfile(response.payload)
-      console.log(profile)
     } catch (error) {
       console.log(error)
     }

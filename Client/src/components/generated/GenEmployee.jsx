@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { Text } from '@chakra-ui/react'
 const GenEmployee = () => {
   const { id } = useParams()
-  const [profile, setProfile] = useState()
+  const [account, setAccount] = useState()
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -21,11 +21,13 @@ const GenEmployee = () => {
       //   console.log(response);
       if (response.result === 'OK') {
         setError(null)
-        setProfile(response.payload.profile)
-      } else setError(response.payload.error)
+        setAccount(response.payload)
+        console.log(response.payload);
+      } 
+      // else setError(response.payload.error)
     } catch (err) {
       console.log(err)
-      setError('Error fetching Profile Data')
+      setError('Error fetching Account Data')
     }
   }
 
@@ -40,8 +42,8 @@ const GenEmployee = () => {
       >
         {error}
       </Text>
-      {profile ? (
-        <ProfileCard profileData={profile} />
+      {account ? (
+        <ProfileCard data={account} />
       ) : (
         <Text fontSize={'2xl'}>This user has no profile.</Text>
       )}

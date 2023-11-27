@@ -33,7 +33,7 @@ const GenUser = () => {
       // else setAccountError(response.payload.error)
     } catch (err) {
       console.log(err)
-      setAccountError('Error fetching Profile Data')
+      setAccountError('Error fetching Account Data')
     }
   }
 

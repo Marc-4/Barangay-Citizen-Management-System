@@ -5,7 +5,7 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: true,
     index: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
@@ -21,7 +21,64 @@ const adminSchema = new mongoose.Schema({
   },
   dateOfCreation: {
     type: Date,
-  }
+  },
+  profile: {
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    middleName: {
+      type: String,
+    },
+    dateOfBirth: {
+      type: Date,
+    },
+    placeOfBirth: {
+      city: {
+        type: String,
+      },
+      province: {
+        type: String,
+      },
+      country: {
+        type: String,
+      },
+    },
+    sex: {
+      type: String,
+    },
+    civilStatus: {
+      type: String,
+    },
+    occupation: {
+      type: String,
+    },
+    citizenship: {
+      type: String,
+    },
+    address: {
+      streetName: {
+        type: String,
+      },
+      houseNumber: {
+        type: String,
+      },
+      subdivisionPurok: {
+        type: String,
+      },
+    },
+    email: {
+      type: String,
+    },
+    profilePhoto: {
+      type: String,
+    },
+    active: {
+      type: Boolean,
+    },
+  },
 })
 
 export default mongoose.model('Admin', adminSchema)

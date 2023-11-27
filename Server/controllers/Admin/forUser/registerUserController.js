@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt'
 
 const registerUser = async (req, res) => {
   console.log('registering a user...')
-
   try {
     if (
       req.body.username === undefined ||
@@ -29,9 +28,7 @@ const registerUser = async (req, res) => {
 
     // Check if username exists in db
     let user = await User.findOne({ username: req.body.username })
-    if (user) {
-      return sendError('Username Taken', 400, res)
-    }
+    if (user) return sendError('Username Taken', 400, res)
 
     const encryptedPass = await bcrypt.hash(req.body.password, 10)
 
@@ -48,7 +45,6 @@ const registerUser = async (req, res) => {
       email: req.body.email,
       address: req.body.address,
     }
-    console.log(profile)
     let newUser = await User.create({
       username: req.body.username,
       password: encryptedPass,
@@ -59,7 +55,7 @@ const registerUser = async (req, res) => {
     })
 
     const payload = newUser
-    sendSuccess(payload, 200, res)
+    return sendSuccess(payload, 200, res)
   } catch (error) {
     console.error(error)
     return sendError('Internal Server Error', 500, res)

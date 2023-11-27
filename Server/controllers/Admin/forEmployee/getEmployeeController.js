@@ -8,7 +8,7 @@ const getEmployee = async (req, res) => {
 
   let employee
   try {
-    employee = await Employee.findById(req.params.id)
+    employee = await Employee.findById(req.params.id).select('-password')
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

@@ -1,9 +1,7 @@
 import mongoose from 'mongoose'
 import {
   User,
-  ArchivedAccount,
   Profile,
-  ArchivedProfile,
 } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 
@@ -31,12 +29,6 @@ const deleteUser = async (req, res) => {
 
   let payload = {
     'deleted account': user,
-  }
-
-  if (profile) {
-    profile.deleteOne()
-    // payload = Object.assign({}, payload, {'deleted user profile': profile})
-    payload = {...payload, 'deleted user profile': profile}
   }
   user.deleteOne()
 

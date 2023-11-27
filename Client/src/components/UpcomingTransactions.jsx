@@ -16,8 +16,7 @@ const UpcomingTransactions = () => {
   const getTransactionsData = async () => {
     const body = null
     const method = 'GET'
-    const route =
-      `http://localhost:3000/api/admin/transactions?entries=${entries}&filter=${filter}`
+    const route = `http://localhost:3000/api/admin/transactions?entries=${entries}&filter=${filter}`
     try {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') setTransactions(data.payload)
@@ -28,14 +27,11 @@ const UpcomingTransactions = () => {
 
   return (
     <>
-      <Flex
-        flexDirection={'column'}
-        minW={'750px'}
-        align={'center'}
-      >
+      <Flex flexDirection={'column'} minW={'750px'} align={'center'}>
         {transactions.map((transaction) => {
           return (
             <TransactionCard
+              key={transaction._id}
               data={transaction}
               basepath={'/admin/transactions'}
             ></TransactionCard>

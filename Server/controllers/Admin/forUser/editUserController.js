@@ -1,10 +1,11 @@
-import { Profile } from '../../../models/index.js'
+import { User } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 import mongoose from 'mongoose'
 
 const editUser = async (req, res) => {
+  console.log('editing user...');
   if (!mongoose.isValidObjectId(req.params.id))
-    return sendError('invalid profile ID', 400, res)
+    return sendError('invalid user ID', 400, res)
 
   //check input use &&
   if (
@@ -12,9 +13,13 @@ const editUser = async (req, res) => {
     req.body.lastName === undefined &&
     req.body.middleName === undefined &&
     req.body.dateOfBirth === undefined &&
+    req.body.placeOfBirth.city === undefined &&
+    req.body.placeOfBirth.province === undefined &&
+    req.body.placeOfBirth.country === undefined &&
     req.body.sex === undefined &&
     req.body.civilStatus === undefined &&
     req.body.occupation === undefined &&
+    req.body.citizenship === undefined &&
     req.body.email === undefined &&
     req.body.address?.streetName === undefined &&
     req.body.address?.houseNumber === undefined &&
@@ -24,15 +29,15 @@ const editUser = async (req, res) => {
     return sendError('Mising Required Fields', 404, res)
 
   //check if user profile exists
-  let profile
+  let user
   try {
-    profile = await Profile.findById(req.params.id)
+    user = await User.findById(req.params.id)
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)
   }
 
-  if (!profile) return sendError('Profile not found', 404, res)
+  if (!user) return sendError('user not found', 404, res)
 
   //destructure
   const {
@@ -40,35 +45,41 @@ const editUser = async (req, res) => {
     lastName,
     middleName,
     dateOfBirth,
+    placeOfBirth,
     sex,
     civilStatus,
     occupation,
+    citizenship,
     email,
     address,
     //profilePhoto,
   } = req.body
 
-  if (firstName) profile.firstName = req.body.firstName
-  if (lastName) profile.lastName = req.body.lastName
-  if (middleName) profile.middleName = req.body.middleName
-  if (dateOfBirth) profile.dateOfBirth = req.body.dateOfBirth
-  if (sex) profile.sex = req.body.sex
-  if (civilStatus) profile.civilStatus = req.body.civilStatus
-  if (occupation) profile.occupation = req.body.occupation
-  if (email) profile.email = req.body.email
-  if (address.streetName) profile.address.streetName = req.body.address.streetName
-  if (address.houseNumber) profile.address.houseNumber = req.body.address.houseNumber
-  if (address.subdivisionPurok) profile.address.subdivisionPurok = req.body.address.subdivisionPurok
-  //   if(profilePhoto) profile.profilePhoto = req.body.profilePhoto
+  if (firstName) user.profile.firstName = req.body.firstName
+  if (lastName) user.profile.lastName = req.body.lastName
+  if (middleName) user.profile.middleName = req.body.middleName
+  if (dateOfBirth) user.profile.dateOfBirth = req.body.dateOfBirth
+  if (placeOfBirth.city) user.profile.placeOfBirth.city = req.body.placeOfBirth.city
+  if (placeOfBirth.province) user.profile.placeOfBirth.province = req.body.placeOfBirth.province
+  if (placeOfBirth.country) user.profile.placeOfBirth.country = req.body.placeOfBirth.country
+  if (sex) user.profile.sex = req.body.sex
+  if (civilStatus) user.profile.civilStatus = req.body.civilStatus
+  if (occupation) user.profile.occupation = req.body.occupation
+  if (citizenship) user.profile.citizenship = req.body.citizenship
+  if (email) user.profile.email = req.body.email
+  if (address.streetName) user.profile.address.streetName = req.body.address.streetName
+  if (address.houseNumber) user.profile.address.houseNumber = req.body.address.houseNumber
+  if (address.subdivisionPurok) user.profile.address.subdivisionPurok = req.body.address.subdivisionPurok
+  //   if(profilePhoto) user.profile.profilePhoto = req.body.profilePhoto
 
   try {
-    await profile.save()
+    await user.save()
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 400, res)
   }
 
-  const payload = profile
+  const payload = user
 
   return sendSuccess(payload, 200, res)
 }

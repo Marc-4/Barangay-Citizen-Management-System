@@ -17,20 +17,38 @@ import {
   Flex,
   Link,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import RegisterUserModal from '../../components/modals/registerUserModal'
+import { useEffect, useState, useRef } from 'react'
 import callAPI from '../../utils/callAPI'
 import Searchbar from '../../components/Searchbar'
 import { Link as rr_Link } from 'react-router-dom'
+import RegisterAccountModal from '../../components/modals/RegisterAccountModal'
+import EditAccountModal from '../../components/modals/EditAccountModal'
+import DeleteAccountAlert from '../../components/popups/DeleteAccountAlert'
 
 const AdminUserAccounts = () => {
   const [users, setUsers] = useState([])
-  // const [profiles, setProfiles] = useState([])
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
   const [entries, setEntries] = useState(20)
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [filter, setFilter] = useState('ACTIVE')
+  const [selectedUser, setSelectedUser] = useState(null)
+  const cancelRef = useRef()
+
+  const {
+    isOpen: isRegisterOpen,
+    onOpen: onRegisterOpen,
+    onClose: onRegisterClose,
+  } = useDisclosure()
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure()
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure()
 
   useEffect(() => {
     getUsers()
@@ -51,19 +69,6 @@ const AdminUserAccounts = () => {
     }
   }
 
-  const getUserProfile = async (id) => {
-    const body = null
-    const method = 'GET'
-    const route = `http://localhost:3000/api/admin/user/Profile/${id}`
-    try {
-      const data = await callAPI(body, method, route)
-      return data
-    } catch (err) {
-      console.log(err)
-      throw err
-    }
-  }
-
   function calculateAge(dateOfBirth) {
     const today = new Date()
     const birthDate = new Date(dateOfBirth)
@@ -80,9 +85,57 @@ const AdminUserAccounts = () => {
     return age
   }
 
+  const handeUpdate = () => {
+    getUsers()
+  }
+
+  const handleEditOpen = (user) => {
+    setSelectedUser(user)
+    onEditOpen()
+  }
+
+  const handleEditClose = () => {
+    setSelectedUser(null)
+    onEditClose()
+  }
+  const handleDeleteOpen = (user) => {
+    setSelectedUser(user)
+    onDeleteOpen()
+  }
+
+  const handleDeleteClose = () => {
+    setSelectedUser(null)
+    onDeleteClose()
+  }
   return (
     <>
-      <RegisterUserModal {...{ isOpen, onClose }} />
+      <RegisterAccountModal
+        {...{
+          isOpen: isRegisterOpen,
+          onClose: onRegisterClose,
+          onUpdate: handeUpdate,
+          role: 'user'
+        }}
+      />
+      <EditAccountModal
+        {...{
+          isOpen: isEditOpen,
+          onClose: handleEditClose,
+          user: selectedUser,
+          onUpdate: handeUpdate,
+          role: 'user'
+        }}
+      />
+      <DeleteAccountAlert
+        {...{
+          isOpen: isDeleteOpen,
+          onClose: handleDeleteClose,
+          cancelRef: cancelRef,
+          user: selectedUser,
+          onUpdate: handeUpdate,
+          role: 'user'
+        }}
+      />
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex flexDirection='row' alignItems='center' gap={'25px'}>
           <Searchbar entries={entries} page={page} />
@@ -98,7 +151,7 @@ const AdminUserAccounts = () => {
           <Tab onClick={() => setFilter('ARCHIVED')}>Archived Users</Tab>
         </TabList>
       </Tabs>
-      <Button colorScheme='blue' onClick={onOpen}>
+      <Button colorScheme='blue' onClick={onRegisterOpen}>
         Register User
       </Button>
 
@@ -110,59 +163,134 @@ const AdminUserAccounts = () => {
         rounded='md'
       >
         <Table
-          w={'1200px'}
+          w={'90%'}
           p={'10px'}
           rounded='md'
           bg='brand.400'
           variant={'simple'}
-          style={{ borderCollapse: 'separate' }}
+          style={{ borderCollapse: 'separate', tableLayout: 'fixed' }}
           borderColor={'gray.400'}
           borderWidth={'1px'}
         >
           <Thead>
             <Tr>
-              <Th textAlign='center'>User ID</Th>
-              <Th textAlign='center'>Last Name</Th>
-              <Th textAlign='center'>First Name</Th>
-              <Th textAlign='center'>Middle Name</Th>
-              <Th textAlign='center'>Gender</Th>
-              <Th textAlign='center'>Age</Th>
-              <Th textAlign='center'>Date of Registration</Th>
-              <Th textAlign='center'>Actions</Th>
+              <Th p={'12px'} textAlign='center' w={'17%'}>
+                User ID
+              </Th>
+              <Th p={'12px'} textAlign='center'>
+                Username
+              </Th>
+              <Th p={'12px'} textAlign='center'>
+                Last Name
+              </Th>
+              <Th p={'12px'} textAlign='center'>
+                First Name
+              </Th>
+              <Th p={'12px'} textAlign='center'>
+                Middle Name
+              </Th>
+              <Th p={'12px'} textAlign='center' w={'7%'}>
+                Gender
+              </Th>
+              {/* <Th textAlign='center' w={'6%'}>
+                Age
+              </Th> */}
+              <Th p={'12px'} textAlign='center'>
+                Date of Registration
+              </Th>
+              <Th p={'12px'} textAlign='center' w={'15%'}>
+                Actions
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
             {users.map((user) => {
               const profile = user.profile
-
               return (
-                <Tr key={user._id}>
-                  <Td textAlign='center'>
-                    <Link as={rr_Link} color={'brand.500'} to={`${user._id}`}>
-                      {user._id}
-                    </Link>
-                  </Td>
-                  <Td textAlign='center'>{profile?.lastName || 'N/A'}</Td>
-                  <Td textAlign='center'>{profile?.firstName || 'N/A'}</Td>
-                  <Td textAlign='center'>{profile?.middleName || 'N/A'}</Td>
-                  <Td textAlign='center'>{profile?.sex || 'N/A'}</Td>
-                  <Td textAlign='center'>
-                    {calculateAge(profile?.dateOfBirth) || 'N/A'}
-                  </Td>
-                  <Td textAlign='center'>
-                    {new Date(user.dateOfCreation).toLocaleDateString()}
-                  </Td>
-                  <Td
-                    textAlign='center'
-                    justifyContent={'center'}
-                    display={'flex'}
-                    gap={'10px'}
-                  >
-                    <Button colorScheme='green'>Edit</Button>
-                    <Button colorScheme='orange'>Archive</Button>
-                    <Button colorScheme='red'>Delete</Button>
-                  </Td>
-                </Tr>
+                <>
+                  <Tr key={user._id}>
+                    <Td
+                      p={'12px'}
+                      textAlign='center'
+                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                    >
+                      <Link as={rr_Link} color={'brand.500'} to={`${user._id}`}>
+                        {user._id}
+                      </Link>
+                    </Td>
+                    <Td
+                      p={'12px'}
+                      fontWeight={'semibold1'}
+                      textAlign='center '
+                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                    >
+                      {user?.username || 'N/A'}
+                    </Td>
+                    <Td
+                      p={'12px'}
+                      textAlign='center'
+                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                    >
+                      {profile?.lastName || 'N/A'}
+                    </Td>
+                    <Td
+                      p={'12px'}
+                      textAlign='center'
+                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                    >
+                      {profile?.firstName || 'N/A'}
+                    </Td>
+                    <Td
+                      p={'12px'}
+                      textAlign='center'
+                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                    >
+                      {profile?.middleName || 'N/A'}
+                    </Td>
+                    <Td
+                      p={'12px'}
+                      textAlign='center'
+                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                    >
+                      {profile?.sex || 'N/A'}
+                    </Td>
+                    {/* <Td
+                      textAlign='center'
+                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                    >
+                      {calculateAge(profile?.dateOfBirth) || 'N/A'}
+                    </Td> */}
+                    <Td
+                      p={'12px'}
+                      textAlign='center'
+                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                    >
+                      {new Date(user.dateOfCreation).toLocaleDateString()}
+                    </Td>
+                    <Td
+                      p={'12px'}
+                      textAlign='center'
+                      justifyContent={'center'}
+                      display={'flex'}
+                      gap={'10px'}
+                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+                    >
+                      <Button
+                        onClick={() => handleEditOpen(user)}
+                        colorScheme='green'
+                      >
+                        Edit
+                      </Button>
+                      <Button colorScheme='orange'>Archive</Button>
+                      <Button
+                        onClick={() => handleDeleteOpen(user)}
+                        colorScheme='red'
+                      >
+                        Delete
+                      </Button>
+                    </Td>
+                  </Tr>
+                </>
               )
             })}
           </Tbody>

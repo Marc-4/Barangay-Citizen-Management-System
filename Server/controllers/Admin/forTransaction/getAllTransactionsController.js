@@ -25,6 +25,7 @@ const getAllTransactions = async (req, res) => {
   if (!transactions) return sendError('No Transactions Found', 404, res)
 
   const payload = transactions
+  console.log(payload);
   return sendSuccess(payload, 200, res)
 }
 

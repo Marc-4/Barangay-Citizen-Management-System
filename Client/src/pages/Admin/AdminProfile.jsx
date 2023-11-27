@@ -35,8 +35,6 @@ const AdminProfile = () => {
       <Heading mt={'25px'} textAlign={'center'}>
         Profile Page
       </Heading>
-      <Button colorScheme='blue'>Profile</Button>
-      <Button colorScheme='facebook'>Transaction History</Button>
       <Text
         fontSize={'2xl'}
         display={error ? 'block' : 'none'}
@@ -46,7 +44,7 @@ const AdminProfile = () => {
       >
         {error}
       </Text>
-      {profileData &&<ProfileCard profileData={profileData} />}
+      {profileData &&<ProfileCard data={profileData} />}
     </>
   )
 }
