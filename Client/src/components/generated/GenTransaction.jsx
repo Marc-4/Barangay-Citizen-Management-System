@@ -1,23 +1,38 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Text, Box, HStack, Button } from '@chakra-ui/react'
+import { Text, Box, HStack, Button, useDisclosure } from '@chakra-ui/react'
 import callAPI from '../../utils/callAPI'
 import TransactionDetailCard from '../cards/TransactionDetailCard'
 import TransactionContentCard from '../cards/TransactionContentCard'
+import TransactionModal from '../modals/TransactionModal'
 
 const GenTransaction = () => {
   const { id } = useParams()
   const [transactionData, setTransactionData] = useState(null)
   const [ownerAccount, setOwnerAccount] = useState(null)
   const [error, setError] = useState(null)
+  const {
+    isOpen: isAcceptOpen,
+    onOpen: onAcceptOpen,
+    onClose: onAcceptClose,
+  } = useDisclosure()
+  const {
+    isOpen: isRejectOpen,
+    onOpen: onRejectOpen,
+    onClose: onRejectClose,
+  } = useDisclosure()
+
 
   useEffect(() => {
-    fetchTransactionData()
-  }, [id])
+    fetchTransactionData();
+    console.log('fetching transaction..');
 
+  }, [id]);
+  
   useEffect(() => {
-    fetchTransactionOwner()
-  }, [transactionData])
+    fetchTransactionOwner();
+    console.log('fetching owner..');
+  }, [transactionData]);
 
   const fetchTransactionData = async () => {
     try {
@@ -52,47 +67,75 @@ const GenTransaction = () => {
     }
   }
 
+  const handleUpdate = () =>{
+    fetchTransactionData()
+  }
+
   return (
-    <Box borderRadius={'10px'} maxW={'1000px'} padding={'25px'} m={'auto'}>
-      {error && (
-        <Text
-          fontSize={'2xl'}
-          color={'tomato'}
-          fontWeight={'semibold'}
-          textAlign={'center'}
-        >
-          {error}
-        </Text>
-      )}
-      {transactionData && (
-        <>
-          <HStack spacing={4} align='start'>
-            <TransactionDetailCard
-              title='Transaction Details'
-              data={transactionData}
-              name={
-                ownerAccount?.profile?.firstName +
-                ', ' +
-                ownerAccount?.profile?.lastName
-              }
-            />
-            <TransactionContentCard
-              title='Form Data'
-              data={{ ...transactionData.formData }}
-              profile={ownerAccount?.profile}
-            />
-          </HStack>
-          {transactionData.status === 'PENDING' ? (
-            <Box display={'flex'} justifyContent={'center'} gap={'10px'}>
-              <Button colorScheme='green'>Accept</Button>
-              <Button colorScheme='red'>Reject</Button>
-            </Box>
-          ) : (
-            ''
-          )}
-        </>
-      )}
-    </Box>
+    <>
+      <TransactionModal
+        {...{
+          isOpen: isAcceptOpen,
+          onClose: onAcceptClose,
+          transaction: transactionData,
+          onUpdate: handleUpdate,
+          user: ownerAccount,
+          status: 'ACCEPTED'
+        }}
+      />
+      <TransactionModal
+        {...{
+          isOpen: isRejectOpen,
+          onClose: onRejectClose,
+          transaction: transactionData,
+          onUpdate: handleUpdate,
+          user: ownerAccount,
+          status: 'REJECTED'
+        }}
+      />
+      <Box borderRadius={'10px'} maxW={'1000px'} padding={'25px'} m={'auto'}>
+        {error && (
+          <Text
+            fontSize={'2xl'}
+            color={'tomato'}
+            fontWeight={'semibold'}
+            textAlign={'center'}
+          >
+            {error}
+          </Text>
+        )}
+        {transactionData && (
+          <>
+            <HStack spacing={4} align='start'>
+              <TransactionDetailCard
+                title='Transaction Details'
+                data={transactionData}
+                name={
+                  ownerAccount?.profile?.firstName +
+                  ', ' +
+                  ownerAccount?.profile?.lastName
+                }
+              />
+              <TransactionContentCard
+                title='Form Data'
+                data={{ ...transactionData.formData }}
+                profile={ownerAccount?.profile}
+              />
+            </HStack>
+            {transactionData.status === 'PENDING' ? (
+              <Box display={'flex'} justifyContent={'center'} gap={'10px'}>
+                <Button onClick={() => onAcceptOpen()} colorScheme='green'>
+                  Accept
+                </Button>
+                <Button onClick={()=> onRejectOpen()} colorScheme='red'>Reject</Button>
+              </Box>
+            ) : (
+              ''
+            )}
+          </>
+        )}
+      </Box>
+    </>
   )
 }
 

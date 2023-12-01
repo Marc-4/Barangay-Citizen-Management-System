@@ -83,6 +83,7 @@ const UserNotifications = () => {
             <NotificationCard
               data={notification}
               key={notification._id}
+              account_type='user'
             ></NotificationCard>
           ))
         )}

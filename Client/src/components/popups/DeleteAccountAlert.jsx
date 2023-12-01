@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react'
 
 const DeleteAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }) => {
-  console.log(user);
   // const [error, setError] = useState(null)
   // const [success, setSuccess] = useState('')
   const [submitting, setSubmitting] = useState(false)

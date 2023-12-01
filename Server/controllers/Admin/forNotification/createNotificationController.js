@@ -1,10 +1,12 @@
 import { Notification } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 const createNotification = async (req, res) => {
+  console.log(req.body)
   if (
     req.body.notifType === undefined ||
     req.body.message === undefined ||
-    req.body.linkID === undefined
+    req.body.linkID === undefined ||
+    req.body.recipient === undefined
   )
     return sendError('Missing Required Fields', 404, res)
 

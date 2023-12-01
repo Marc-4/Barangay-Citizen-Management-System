@@ -31,7 +31,6 @@ const AdminTransactions = () => {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
         setError(null)
-        console.log(data.payload)
         return setTransactions(data.payload)
       } else return setError('Connection Error, refresh page to try again')
     } catch (err) {
