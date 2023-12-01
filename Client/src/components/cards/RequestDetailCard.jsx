@@ -21,13 +21,15 @@ const TransactionDetailCard = ({ title, data, name }) => {
         <Divider w='100%' borderColor={'brand.100'} marginBottom={'25px'} />
         <Box>
           <Text fontWeight='bold'>ID:</Text>
-          <Link color={'brand.500'} as={rr_Link} to={`/admin/users/${data.accountID}`}>
-            <Text >{data._id}</Text>
-          </Link>
+          <Text>{data._id}</Text>
         </Box>
         <Box>
           <Text fontWeight='bold'>Requestor:</Text>
-          <Link color={'brand.500'} as={rr_Link} to={`/admin/users/${data.accountID}`}>
+          <Link
+            color={'brand.500'}
+            as={rr_Link}
+            to={`/admin/users/${data.accountID}`}
+          >
             <Text>{name}</Text>
           </Link>
         </Box>

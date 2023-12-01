@@ -25,6 +25,13 @@ import UserProfile from './User/UserProfile.jsx'
 import UserTransactions from './User/UserTransactions.jsx'
 import UserNotifications from './User/UserNotifications.jsx'
 import UserAbout from './User/UserAbout.jsx'
+import UserBookTransaction from './User/BookTransaction.jsx'
+import UserBarangayCertification from './User/transactions/BarangayCertification.jsx'
+import UserBarangayClearance from './User/transactions/BarangayClearance.jsx'
+import UserBarangayRecords from './User/transactions/BarangayRecords.jsx'
+import UserBusinessClearance from './User/transactions/BusinessClearance.jsx'
+import UserCertificateOfResidency from './User/transactions/CertificateOfResidency.jsx'
+import UserCommunityTaxCertificate from './User/transactions/CommunityTaxCertificate.jsx'
 
 export {
   Home,
@@ -51,4 +58,11 @@ export {
   UserTransactions,
   UserNotifications,
   UserAbout,
+  UserBookTransaction,
+  UserBarangayCertification,
+  UserBarangayClearance,
+  UserBarangayRecords,
+  UserBusinessClearance,
+  UserCertificateOfResidency,
+  UserCommunityTaxCertificate,
 }

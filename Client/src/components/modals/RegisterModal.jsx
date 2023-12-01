@@ -1,78 +1,127 @@
 import {
   Modal,
-  Button,
-  Text,
   ModalOverlay,
+  ModalBody,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
   ModalFooter,
-  ModalBody,
-  Stack,
-  Input,
+  Text,
+  Heading,
+  Divider,
+  Center,
 } from '@chakra-ui/react'
+import { object, string, date } from 'yup'
 import { useEffect, useState } from 'react'
-import { register } from '../../utils/register'
+import callAPI from '../../utils/callAPI'
 import login from '../../utils/login'
 import { useNavigate } from 'react-router-dom'
+import RegisterForm from '../forms/RegisterForm'
 
 function RegisterModal({ isOpen, onClose }) {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [isLoading, setIsLoading] = useState('')
-
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  const handleRegister = async (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsLoading(true)
+  const validationSchema = object({
+    username: string().required('required'),
+    password: string().required('required').min(8),
+    firstName: string()
+      .required('required')
+      .matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols'),
+    middleName: string().matches(
+      /^[A-Za-z\s.'-]+$/,
+      'Middle Name must not contain symbols'
+    ),
+    lastName: string()
+      .required('required')
+      .matches(/^[A-Za-z\s.'-]+$/, 'Last Name must not contain symbols'),
+    dateOfBirth: date()
+      .required('required')
+      .max(new Date(), 'Date of Birth cannot be in the future')
+      .min(new Date('1900-01-01'), 'Date of Birth cannot be before 1900'),
+    placeOfBirth_City: string().required('required'),
+    placeOfBirth_Province: string().required('required'),
+    placeOfBirth_Country: string().required('required'),
+    sex: string().required('required'),
+    civilStatus: string().required('required'),
+    occupation: string().required('required'),
+    citizenship: string().required('required'),
+    email: string().email(),
+    address_streetName: string().required('required'),
+    address_houseNumber: string().required('required'),
+    address_subdivisionPurok: string().required('required'),
+  })
 
-    if (!checkConfirmPassword()) {
-      setIsLoading(false)
-      return setError('passwords does not match')
-    }
-
-    let data
-    const route = 'hhtp://localhost:3000/api/user/account/register'
-
+  const handleRegister = async (values, setSubmitting) => {
+    // e.preventDefault()
+    // e.stopPropagation()
+    setSubmitting(true)
     try {
-      data = await register(username, password, route)
+      const body = {
+        username: values.username,
+        password: values.password,
+        firstName: values.firstName,
+        middleName: values.middleName,
+        lastName: values.lastName,
+        dateOfBirth: values.dateOfBirth,
+        placeOfBirth: {
+          city: values.placeOfBirth_City,
+          province: values.placeOfBirth_Province,
+          country: values.placeOfBirth_Country,
+        },
+        sex: values.sex,
+        civilStatus: values.civilStatus,
+        occupation: values.occupation,
+        citizenship: values.citizenship,
+        email: values.email,
+        address: {
+          streetName: values.address_streetName,
+          houseNumber: values.address_houseNumber,
+          subdivisionPurok: values.address_subdivisionPurok,
+        },
+      }
 
-      if (data.result === 'OK') {
-        console.log('OK')
+      const route = 'http://localhost:3000/api/user/account/register'
+      const response = await callAPI(body, 'POST', route)
+
+      if (response.result === 'OK') {
+        console.log(response.payload)
+        setError(null)
         setSuccess('Successfully Registered!')
 
-        try {
-          await login(
-            username,
-            password,
-            'http://localhost:3000/api/auth/login/user'
-          )
-          sessionStorage.setItem('userRole', 'user')
+        setTimeout(() => {
+          setSuccess('Logging in..')
+        }, 500)
 
-          navigate('/user/profile')
-        } catch (error) {
-          console.log(error)
-        }
-      } else {
-        console.log('ERR')
-        setError(data.payload.error)
-      }
+        setTimeout(() => {
+          setSuccess('')
+          handleLogin(values.username, values.password)
+        }, 1200)
+      } else setError(response.payload.error)
     } catch (error) {
       console.log(error)
-      setError('connection error')
+      setError('Registration Error')
     }
-    setIsLoading(false)
   }
 
-  const checkConfirmPassword = () => {
-    if (password !== confirmPassword) return false
+  const handleLogin = async (username, password) => {
+    try {
+      const response = await login(
+        username,
+        password,
+        'http://localhost:3000/api/auth/login/user'
+      )
 
-    return true
+      if (response.result === 'OK') {
+        setError(null)
+        sessionStorage.setItem('userRole', 'user')
+        navigate('/user/profile')
+      } else setError(response.payload.error)
+    } catch (error) {
+      console.log(error)
+      setError('Login Error')
+    }
   }
 
   return (
@@ -89,56 +138,53 @@ function RegisterModal({ isOpen, onClose }) {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={(e) => handleRegister(e)}>
-              <Stack alignItems={'center'}>
-                <Input
-                  isRequired={true}
-                  name='username'
-                  variant={'filled'}
-                  maxW={'250px'}
-                  placeholder='Username'
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                ></Input>
-                <Input
-                  isRequired={true}
-                  name='password'
-                  colorScheme={'blue'}
-                  variant={'filled'}
-                  maxW={'250px'}
-                  placeholder='Password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                ></Input>
-                <Input
-                  isRequired={true}
-                  name='confirm-password'
-                  colorScheme={'blue'}
-                  variant={'filled'}
-                  maxW={'250px'}
-                  placeholder='Confirm Password'
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                ></Input>
-                <Button
-                  isDisabled={isLoading}
-                  w={'250px'}
-                  colorScheme='green'
-                  type='submit'
-                >
-                  Register
-                </Button>
-                <Text color={'tomato'} fontSize={'xl'} fontWeight={'semibold'}>
-                  {error}
-                </Text>
-                <Text color={'green'} fontSize={'xl'} fontWeight={'semibold'}>
-                  {success}
-                </Text>
-              </Stack>
-            </form>
+            <RegisterForm
+              onSubmit={async (values, { setSubmitting }) => {
+                await handleRegister(values, setSubmitting)
+                setSubmitting(false)
+              }}
+              validationSchema={validationSchema}
+              initialValues={{
+                username: '',
+                password: '',
+                firstName: '',
+                middleName: '',
+                lastName: '',
+                dateOfBirth: '',
+                placeOfBirth_City: '',
+                placeOfBirth_Province: '',
+                placeOfBirth_Country: '',
+                sex: '',
+                civilStatus: '',
+                occupation: '',
+                citizenship: '',
+                email: '',
+                address_streetName: '',
+                address_houseNumber: '',
+                address_subdivisionPurok: '',
+              }}
+            />
           </ModalBody>
-
-          <ModalFooter></ModalFooter>
+          <ModalFooter>
+            <Text
+              textAlign={'center'}
+              color={'tomato'}
+              fontSize={'2xl'}
+              fontWeight={'semibold'}
+              display={error ? 'block' : 'none'}
+            >
+              {error}
+            </Text>
+            <Text
+              textAlign={'center'}
+              fontSize={'2xl'}
+              color={'green'}
+              fontWeight={'semibold'}
+              display={success ? 'block' : 'none'}
+            >
+              {success}
+            </Text>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

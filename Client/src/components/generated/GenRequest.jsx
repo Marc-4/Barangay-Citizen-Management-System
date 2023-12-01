@@ -9,7 +9,7 @@ import RequestContentCard from '../cards/RequestContentCard'
 const GenRequest = () => {
   const { id } = useParams()
   const [requestData, setRequestData] = useState(null)
-  const [ownerProfile, setOwnerProfile] = useState(null)
+  const [account, setAccount] = useState(null)
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -40,12 +40,12 @@ const GenRequest = () => {
   const fetchRequestOwner = async () => {
     try {
       if (requestData) {
-        const route = `http://localhost:3000/api/admin/user/profile/${requestData.accountID}`
+        const route = `http://localhost:3000/api/admin/user/${requestData.accountID}`
         const data = await callAPI(null, 'GET', route)
         if (data && data.result === 'OK') {
           setError(null)
-          setOwnerProfile(data.payload)
-          console.log(ownerProfile)
+          setAccount(data.payload)
+          console.log(account)
         }
       }
     } catch (error) {
@@ -72,15 +72,23 @@ const GenRequest = () => {
             <RequestDetailCard
               title='Request Details'
               data={requestData}
-              name={ownerProfile?.firstName + ', ' + ownerProfile?.lastName}
+              name={
+                account?.profile.firstName + ', ' + account?.profile.lastName
+              }
             />
-            <OwnerProfileCard title='Owner Profile' data={ownerProfile} />
-            {requestData.requestType == 'edit' && <RequestContentCard
-              title='Changing To'
-              data={{ ...requestData.requestContent }}
-              profile={ownerProfile}
-            />}
+            <OwnerProfileCard title='Owner Profile' data={account?.profile} />
+            {requestData.requestType == 'EDIT' && (
+              <RequestContentCard
+                title='Changing To'
+                data={{ ...requestData.requestContent }}
+                profile={account?.profile}
+              />
+            )}
           </HStack>
+          <Box justifyContent={'center'} display={'flex'} gap={'10px'}>
+            <Button colorScheme='green'>Accept</Button>
+            <Button colorScheme='red'>Reject</Button>
+          </Box>
         </>
       )}
     </Box>

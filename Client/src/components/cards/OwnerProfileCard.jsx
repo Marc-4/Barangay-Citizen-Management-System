@@ -56,15 +56,15 @@ const OwnerProfileCard = ({ title, data }) => {
           <Text ml={'10px'} fontWeight='bold'>
             House Number:
           </Text>
-          <Text ml={'10px'}>{data?.address.houseNumber || 'N/A'}</Text>
+          <Text ml={'10px'}>{data?.address?.houseNumber || 'N/A'}</Text>
           <Text ml={'10px'} fontWeight='bold'>
             Street Name:
           </Text>
-          <Text ml={'10px'}>{data?.address.streetName || 'N/A'}</Text>
+          <Text ml={'10px'}>{data?.address?.streetName || 'N/A'}</Text>
           <Text ml={'10px'} fontWeight='bold'>
             Subdivision/Purok:
           </Text>
-          <Text ml={'10px'}>{data?.address.subdivisionPurok || 'N/A'}</Text>
+          <Text ml={'10px'}>{data?.address?.subdivisionPurok || 'N/A'}</Text>
         </Box>
       </Box>
     </VStack>

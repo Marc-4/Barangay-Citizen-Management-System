@@ -8,14 +8,13 @@ import {
   Divider,
   Link as ChakraLink,
 } from '@chakra-ui/react'
-import { useEffect } from 'react'
 import { MdOutlineMenu } from 'react-icons/md'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const AdminSidebar = () => {
   return (
     <>
-      <Box bg='brand.400' minH={'100vh'}>
+      <Box bg='brand.400' minH={'100%'}>
         <Flex
           minW={'250px'}
           justifyContent={'space-between'}

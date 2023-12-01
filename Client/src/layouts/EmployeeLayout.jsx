@@ -11,7 +11,7 @@ const EmployeeLayout = () => {
           <Sidebar />
         </GridItem>
 
-        <GridItem colSpan={4} bg={'gray.50'}>
+        <GridItem colSpan={4} bg={'brand.200'}>
           <Navbar />
           <Outlet />
         </GridItem>

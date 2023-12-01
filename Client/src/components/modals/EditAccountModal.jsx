@@ -12,11 +12,12 @@ import {
 import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
 import { object, string, date } from 'yup'
-import EditForm from '../forms/editForm'
+import EditForm from '../forms/EditForm'
 
 const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const accountRole = sessionStorage.getItem('userRole')
 
   const validationSchema = object({
     firstName: string()
@@ -77,19 +78,45 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
           subdivisionPurok: values.address_subdivisionPurok,
         },
       }
-      const route = `http://localhost:3000/api/admin/${role}/profile/${user._id}/edit`
+      console.log(body)
+      let route
+      if (accountRole === 'admin')
+        route = `http://localhost:3000/api/admin/${role}/profile/${user._id}/edit`
+      if (accountRole === 'user')
+        route = `http://localhost:3000/api/user/account/edit`
+
       const response = await callAPI(body, 'PATCH', route)
 
       if (response.result === 'OK') {
         setError(null)
-        setSuccess('Successfully Updated User!')
+        if (accountRole === 'admin') setSuccess('Successfully Updated User!')
+        if (accountRole === 'user')
+          setSuccess('Successfuly Requested Profile Update!')
+
+        createNotification(response.payload.request)
         if (onUpdate) {
-          onUpdate();
+          onUpdate()
         }
       } else setError(response.payload.error || 'Connection Error')
     } catch (error) {
       console.log(error)
       setError('Connection Error')
+    }
+  }
+
+  const createNotification = async (request) => {
+    try {
+      const body = {
+        notifType: 'REQUEST',
+        message: `${user.profile.firstName} ${user.profile.lastName} is requesting a Profile update.`,
+        linkID: request._id
+      }
+      const route = `http://localhost:3000/api/${role}/notification/create`
+      const response = await callAPI(body, 'POST', route)
+      if (response === 'OK') setError(null)
+    } catch (error) {
+      console.log(error)
+      setError('Error creating notification')
     }
   }
 
@@ -104,7 +131,7 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <Heading>Edit Account</Heading>
+            <Heading>Update Profile</Heading>
           </ModalHeader>
           <ModalCloseButton />
           <Divider m={'auto'} borderColor={'brand.100'} w={'90%'} />

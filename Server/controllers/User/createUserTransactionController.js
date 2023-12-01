@@ -1,12 +1,11 @@
-import { Transaction } from '../../models/index.js'
+import { Transaction, User } from '../../models/index.js'
 import { sendError, sendSuccess } from '../../utils/index.js'
 const createUserTransaction = async (req, res) => {
   if (
     req.body.transacType === undefined ||
     req.body.formData.purpose === undefined ||
     req.body.formData.income === undefined ||
-    req.body.formData.cost === undefined ||
-    req.body.formData.numberOfCopies === undefined
+    req.body.formData.cost === undefined
   )
     return sendError('Missing Required Fields', 404, res)
 
@@ -14,8 +13,18 @@ const createUserTransaction = async (req, res) => {
     purpose: req.body.formData.purpose,
     income: req.body.formData.income,
     cost: req.body.formData.cost,
-    numberOfCopies: req.body.formData.numberOfCopies,
   }
+
+  // const user = await User.findById(req.user.id)
+  console.log(req.body);
+  if (
+    await Transaction.findOne({
+      accountID: req.user.id,
+      transacType: req.body.transacType,
+      status: 'PENDING',
+    })
+  )
+    return sendError('Similar Transaction is still pending', 400, res)
 
   let transaction
   try {

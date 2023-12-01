@@ -18,11 +18,7 @@ const transactionSchema = new mongoose.Schema({
       type: Number,
     },
     cost: {
-      type: Number,
-    },
-    numberOfCopies: {
-      type: Number,
-      required: true,
+      type: String,
     },
   },
   timestamp: {

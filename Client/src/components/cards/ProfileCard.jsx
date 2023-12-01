@@ -50,8 +50,6 @@ const ProfileCard = (data) => {
 
         <Box
           id='profile_details'
-          marginTop={'25px'}
-          marginBottom={'25px'}
           pl={'10px'}
           p={'25px'}
           rounded={'10px'}

@@ -68,15 +68,19 @@ const AdminRequests = () => {
       >
         <Text display={error ? 'block' : 'none'}>{error}</Text>
 
-        {Requests.map((request) => {
-          return (
-            <TransactionCard
-              key={request._id}
-              data={request}
-              basepath={'/admin/requests'}
-            ></TransactionCard>
-          )
-        })}
+        {Requests.length === 0 ? (
+          <Text fontWeight={'semibold'} fontSize={'2xl'}>No Requests</Text>
+        ) : (
+          Requests.map((request) => {
+            return (
+              <TransactionCard
+                key={request._id}
+                data={request}
+                basepath={'/admin/requests'}
+              ></TransactionCard>
+            )
+          })
+        )}
       </Center>
     </>
   )

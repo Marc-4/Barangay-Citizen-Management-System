@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 const EmployeeSidebar = () => {
   return (
     <>
-      <Box bg='brand.300' minH={'100vh'} rounded={'5px'}>
+      <Box bg='brand.300' minH={'100%'} rounded={'5px'}>
         <Flex
           justifyContent={'space-between'}
           alignItems={'center'}

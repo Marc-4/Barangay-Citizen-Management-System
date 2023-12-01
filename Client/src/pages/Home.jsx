@@ -25,6 +25,7 @@ const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState('')
   const [error, setError] = useState('')
+  const sessionRole = sessionStorage.getItem('userRole')
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
@@ -34,7 +35,7 @@ const Home = () => {
   }, [isLoading])
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/admin')
+    if (isAuthenticated) navigate(`${sessionRole}`)
   }, [isAuthenticated])
 
   const handleLogin = async (e) => {

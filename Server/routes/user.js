@@ -18,7 +18,7 @@ router.get('/transaction/:id', middlewares, User.getUserTransactionController) /
 
 //notifications
 router.post('/notification/create', middlewares, User.createUserNotificationController)
-// router.get('/notifications/', middlewares, User.getUserNotificationsController)
+router.get('/notifications/', middlewares, User.getUserNotificationsController)
 // router.get('/notification/:id', middlewares, User.getNotificationController)
 // router.patch('/notifications/:id/edit', middlewares, User.editUserNotificationController)
 

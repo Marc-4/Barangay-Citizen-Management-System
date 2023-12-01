@@ -32,7 +32,7 @@ const AdminNotifications = () => {
       if (response.result === 'OK') {
         setError(null)
         setNotifications(response.payload)
-        console.log(notifications);
+        console.log(response.payload);
       } else setError(response.payload.error)
     } catch (err) {
       console.log(err)

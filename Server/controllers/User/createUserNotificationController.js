@@ -1,6 +1,7 @@
 import { Admin, Employee, Notification, User } from '../../models/index.js'
 import { sendError, sendSuccess } from '../../utils/index.js'
 const createUserNotification = async (req, res) => {
+  console.log(req.body);
   if (
     req.body.notifType === undefined ||
     req.body.message === undefined ||
@@ -11,11 +12,11 @@ const createUserNotification = async (req, res) => {
   try {
     const adminAccounts = await Admin.find()
     const employeeAccounts = await Employee.find()
-    const user = await User.findOne({ _id: req.user.id })
+    // const user = await User.findOne({ _id: req.user.id })
 
     for (const admin of adminAccounts) {
       await Notification.create({
-        accountID: user._id,
+        accountID: req.user.id,
         notifType: req.body.notifType,
         linkID: req.body.linkID,
         message: req.body.message,
@@ -27,7 +28,7 @@ const createUserNotification = async (req, res) => {
 
     for (const employee of employeeAccounts) {
       await Notification.create({
-        accountID: user._id,
+        accountID: req.user.id,
         notifType: req.body.notifType,
         linkID: req.body.linkID,
         message: req.body.message,

@@ -9,9 +9,25 @@ import {
   Text,
   Link,
 } from '@chakra-ui/react'
-import { Link as rr_link } from 'react-router-dom'
+import { Link as rr_link, useNavigate } from 'react-router-dom'
+import callAPI from '../../utils/callAPI'
 
 const Navbar = () => {
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    const route = `http://localhost:3000/api/auth/logout`
+
+    try {
+      const response = await callAPI(null, 'POST', route)
+      if (response.result === 'OK') {
+        sessionStorage.clear()
+        navigate('/')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <>
       <Flex
@@ -31,7 +47,9 @@ const Navbar = () => {
             <Text>Username</Text>
           </Link>
           <Box>
-            <Button colorScheme='blue'>Logout</Button>{' '}
+            <Button onClick={handleLogout} colorScheme='blue'>
+              Logout
+            </Button>
           </Box>
         </HStack>
       </Flex>

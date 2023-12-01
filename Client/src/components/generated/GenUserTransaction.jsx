@@ -5,7 +5,7 @@ import callAPI from '../../utils/callAPI'
 import TransactionDetailCard from '../cards/TransactionDetailCard'
 import TransactionContentCard from '../cards/TransactionContentCard'
 
-const GenTransaction = () => {
+const GenUserTransaction = () => {
   const { id } = useParams()
   const [transactionData, setTransactionData] = useState(null)
   const [ownerAccount, setOwnerAccount] = useState(null)
@@ -15,14 +15,10 @@ const GenTransaction = () => {
     fetchTransactionData()
   }, [id])
 
-  useEffect(() => {
-    fetchTransactionOwner()
-  }, [transactionData])
-
   const fetchTransactionData = async () => {
     try {
       let route
-      route = `http://localhost:3000/api/admin/transaction/${id}`
+        route = `http://localhost:3000/api/user/transaction/${id}`
       const data = await callAPI(null, 'GET', route)
 
       if (data && data.result === 'OK') {
@@ -33,22 +29,6 @@ const GenTransaction = () => {
       }
     } catch (error) {
       setError('Error fetching transaction data')
-    }
-  }
-
-  const fetchTransactionOwner = async () => {
-    try {
-      if (transactionData) {
-        const route = `http://localhost:3000/api/admin/user/${transactionData.accountID}`
-        const data = await callAPI(null, 'GET', route)
-        if (data && data.result === 'OK') {
-          setError(null)
-          setOwnerAccount(data.payload)
-        }
-      }
-    } catch (error) {
-      console.log(error)
-      setError('Error fetching transaction Owner')
     }
   }
 
@@ -70,11 +50,6 @@ const GenTransaction = () => {
             <TransactionDetailCard
               title='Transaction Details'
               data={transactionData}
-              name={
-                ownerAccount?.profile?.firstName +
-                ', ' +
-                ownerAccount?.profile?.lastName
-              }
             />
             <TransactionContentCard
               title='Form Data'
@@ -82,18 +57,10 @@ const GenTransaction = () => {
               profile={ownerAccount?.profile}
             />
           </HStack>
-          {transactionData.status === 'PENDING' ? (
-            <Box display={'flex'} justifyContent={'center'} gap={'10px'}>
-              <Button colorScheme='green'>Accept</Button>
-              <Button colorScheme='red'>Reject</Button>
-            </Box>
-          ) : (
-            ''
-          )}
         </>
       )}
     </Box>
   )
 }
 
-export default GenTransaction
+export default GenUserTransaction

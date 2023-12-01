@@ -15,6 +15,7 @@ import GenTransaction from './components/generated/GenTransaction.jsx'
 import GenRequest from './components/generated/GenRequest.jsx'
 import GenUser from './components/generated/GenUser.jsx'
 import GenEmployee from './components/generated/GenEmployee.jsx'
+import GenUserTransaction from './components/generated/GenUserTransaction.jsx'
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,38 @@ const router = createBrowserRouter([
           {
             path: 'transactions',
             element: <page.UserTransactions />,
+          },
+          {
+            path: 'transactions/:id',
+            element: <GenUserTransaction />,
+          },
+          {
+            path: 'book',
+            element: <page.UserBookTransaction />,
+          },
+          {
+            path: 'book/barangay_certification',
+            element: <page.UserBarangayCertification />,
+          },
+          {
+            path: 'book/barangay_clearance',
+            element: <page.UserBarangayClearance />,
+          },
+          {
+            path: 'book/community_tax_certificate',
+            element: <page.UserCommunityTaxCertificate />,
+          },
+          {
+            path: 'book/barangay_records',
+            element: <page.UserBarangayRecords />,
+          },
+          {
+            path: 'book/certificate_of_residency',
+            element: <page.UserCertificateOfResidency />,
+          },
+          {
+            path: 'book/business_clearance',
+            element: <page.UserBusinessClearance />,
           },
           {
             path: 'notifications',

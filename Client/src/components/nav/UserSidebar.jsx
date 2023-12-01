@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const UserSidebar = () => {
   return (
     <>
-      <Box bg='brand.300' minH={'100vh'} rounded={'5px'}>
+      <Box bg='brand.300' minH={'100%'} rounded={'5px'}>
         <Flex
           justifyContent={'space-between'}
           alignItems={'center'}
@@ -24,9 +24,7 @@ const UserSidebar = () => {
             mr={'12px'}
           ></IconButton>
         </Flex>
-        <hr
-          style={{ border: '1px solid ', width: '90%', margin: 'auto' }}
-        />
+        <hr style={{ border: '1px solid ', width: '90%', margin: 'auto' }} />
         <VStack gap={'50px'} pt={'50px'} pb={'50px'}>
           <Link to={'/user/profile'}>
             <Text fontWeight={'semibold'} fontSize={'3xl'} color={'white'}>
@@ -41,6 +39,11 @@ const UserSidebar = () => {
           <Link to={'/user/transactions'}>
             <Text fontWeight={'semibold'} fontSize={'3xl'} color={'white'}>
               Transactions
+            </Text>
+          </Link>
+          <Link to={'/user/book'}>
+            <Text fontWeight={'semibold'} fontSize={'3xl'} color={'white'}>
+              Book Transaction
             </Text>
           </Link>
           <Link to={'/user/about'}>

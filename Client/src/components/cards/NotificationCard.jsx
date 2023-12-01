@@ -3,7 +3,7 @@ import { Link as rr_Link } from 'react-router-dom'
 
 const NotificationCard = ({ data }) => {
   return (
-    <Link as={rr_Link} to={`/admin/${data.notifType.toLowerCase() + 's'}/${data?._id}`}>
+    <Link as={rr_Link} to={`/admin/${data.notifType.toLowerCase() + 's'}/${data?.linkID}`}>
       <Card
         direction='row'
         overflow='hidden'

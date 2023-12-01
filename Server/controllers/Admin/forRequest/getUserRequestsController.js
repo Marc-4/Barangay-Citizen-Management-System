@@ -10,8 +10,13 @@ const getUserRequests = async (req, res) => {
     if (req.query.entries == 0)
       requests = await ProfileRequest.countDocuments({ status: 'PENDING' })
     else if (req.query.filter && req.query.filter == 'PENDING')
-      requests = await ProfileRequest.find({ status: 'PENDING' })
-    else requests = await ProfileRequest.find().limit(req.query.entries)
+      requests = await ProfileRequest.find({ status: 'PENDING' }).limit(
+        req.query.entries
+      )
+    else
+      requests = await ProfileRequest.find({
+        status: { $ne: 'PENDING' },
+      }).limit(req.query.entries)
   } catch (error) {
     console.log(error)
     sendError('Internal Server Error', 500, res)

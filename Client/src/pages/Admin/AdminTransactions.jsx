@@ -31,10 +31,9 @@ const AdminTransactions = () => {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
         setError(null)
-        console.log(data.payload);
+        console.log(data.payload)
         return setTransactions(data.payload)
-      } 
-      else return setError('Connection Error, refresh page to try again')
+      } else return setError('Connection Error, refresh page to try again')
     } catch (err) {
       return setError('Connection Error, refresh page to try again')
     }
@@ -58,18 +57,20 @@ const AdminTransactions = () => {
         </TabList>
       </Tabs>
 
-      <Center p={'25px'} pt={'0px'} flexDirection={'column'}  >
+      <Center p={'25px'} pt={'0px'} flexDirection={'column'}>
         <Text display={error ? 'block' : 'none'}>{error}</Text>
 
-        {transactions.map((transaction) => {
-          return (
+        {transactions.length === 0 ? (
+          <Text fontWeight={'semibold'} fontSize={'2xl'}>No Transactions</Text>
+        ) : (
+          transactions.map((transaction) => (
             <TransactionCard
-            key={transaction._id}
-             data={transaction}
-              basepath={"/admin/transactions"}
-            ></TransactionCard>
-          )
-        })}
+              key={transaction._id}
+              data={transaction}
+              basepath={'/admin/transactions'}
+            />
+          ))
+        )}
       </Center>
     </>
   )

@@ -7,7 +7,7 @@ const UpcomingTransactions = () => {
   const [transactions, setTransactions] = useState([])
   const [filter, setFilter] = useState('PENDING')
 
-  const [entries, setEntries] = useState(20)
+  const [entries, setEntries] = useState(3)
 
   useEffect(() => {
     getTransactionsData()

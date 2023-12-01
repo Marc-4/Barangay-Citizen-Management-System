@@ -12,17 +12,22 @@ import callAPI from '../../utils/callAPI'
 import { useEffect, useState } from 'react'
 
 const TransactionCard = ({ data, basepath }) => {
-  const [profile, setProfile] = useState()
+  const [account, setAccount] = useState()
+  const accountRole = sessionStorage.getItem('userRole')
 
   useEffect(() => {
     getUser()
   }, [])
   const getUser = async () => {
     try {
-      const route = `http://localhost:3000/api/admin/user/profile/${data.accountID}`
+      let route
+      if (accountRole === 'admin')
+        route = `http://localhost:3000/api/admin/user/${data.accountID}`
+      if (accountRole === 'user')
+        route = `http://localhost:3000/api/user/account`
       const response = await callAPI(null, 'GET', route)
-
-      if (response.result === 'OK') setProfile(response.payload)
+      if (response.result === 'OK') setAccount(response.payload)
+      
     } catch (error) {
       console.log(error)
     }
@@ -58,14 +63,16 @@ const TransactionCard = ({ data, basepath }) => {
               #{data._id}
             </Text>
             <Box ml={'auto'} display={'flex'} gap={'5px'}>
-              <Text id='date'> {data?.date} </Text>-
-              <Text id='time'>{data?.time}</Text>
+              <Text id='date'> {new Date(data?.timestamp).toLocaleDateString()} </Text>-
+              <Text id='time'>{new Date(data?.timestamp).toLocaleTimeString()}</Text>
             </Box>
           </CardHeader>
           <CardBody textAlign={'left'} pt={'0'} pb={'0'}>
             <Text id='name'>
-              Requestor:{' '}
-              {profile ? profile?.firstName + ' ' + profile.lastName : 'N/A'}
+              Requestor:
+              {account
+                ?' ' + account?.profile.firstName + ' ' + account.profile.lastName
+                : ' ' + 'N/A'}
             </Text>
             <Text id='type'>
               Type: {data?.transacType ? data.transacType : data.requestType}

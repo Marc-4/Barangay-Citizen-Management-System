@@ -6,16 +6,22 @@ import { Grid, GridItem } from '@chakra-ui/react'
 const AdminLayout = () => {
   return (
     <>
-      <Grid templateColumns={'repeat(6, 1fr)'}>
-        <GridItem colSpan={1}>
-          <Sidebar />
-        </GridItem>
+      <div style={{ display: 'flex', minHeight: '100vh' }}>
+        <Grid templateColumns={'repeat(6, 1fr)'} style={{ flex: 1 }}>
+          <GridItem
+            id='sidebar'
+            colSpan={1}
+            style={{ position: 'sticky', top: 0 }}
+          >
+            <Sidebar />
+          </GridItem>
 
-        <GridItem colSpan={5} bg={'gray.50'}>
-          <Navbar />
-          <Outlet />
-        </GridItem>
-      </Grid>
+          <GridItem id='content' colSpan={5} bg={'brand.200'}>
+            <Navbar />
+            <Outlet />
+          </GridItem>
+        </Grid>
+      </div>
     </>
   )
 }

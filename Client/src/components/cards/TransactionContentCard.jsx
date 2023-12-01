@@ -20,8 +20,24 @@ const TransactionContentCard = ({ title, data, profile }) => {
           </Heading>
           <Divider w='100%' borderColor={'brand.100'} marginBottom={'25px'} />
           <Box>
-            <Text fontWeight='bold'>First Name:</Text>
-            <Text>{data?.firstName || profile?.firstName}</Text>
+            <Text fontWeight='bold'>Purpose:</Text>
+            <Text>{data?.purpose}</Text>
+          </Box>
+          <Box>
+            {data?.income ? (
+              <Box>
+                <Text fontWeight='bold'>Income:</Text>
+                <Text>{data?.income}</Text>
+              </Box>
+            ) : (
+              ''
+            )}
+            <Text fontWeight='bold'>Cost:</Text>
+            <Text>{data?.cost}</Text>
+          </Box>
+          <Box>
+            <Text fontWeight='bold'>Attachments:</Text>
+            <Text>{data?.attachment ? data?.attachment : 'No attachment'}</Text>
           </Box>
         </Box>
       </VStack>
