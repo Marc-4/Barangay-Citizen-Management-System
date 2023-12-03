@@ -2,6 +2,7 @@
 import { VStack, Box, Heading, Divider, Text } from '@chakra-ui/react'
 
 const ContentCard = ({ title, data, profile }) => {
+  console.log(data)
   return (
     <>
       <VStack spacing={4} align='start'>
@@ -21,42 +22,87 @@ const ContentCard = ({ title, data, profile }) => {
           </Heading>
           <Divider w='100%' borderColor={'brand.100'} marginBottom={'25px'} />
           <Box>
-            <Text fontWeight='bold'>First Name:</Text>
+            <Text
+              color={data?.firstName ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              First Name:
+            </Text>
             <Text>{data?.firstName || profile?.firstName}</Text>
           </Box>
           <Box>
-            <Text fontWeight='bold'>Middle Name:</Text>
+            <Text
+              color={data?.middleName ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              Middle Name:
+            </Text>
             <Text>{data?.middleName || profile?.middleName}</Text>
           </Box>
           <Box>
-            <Text fontWeight='bold'>Last Name:</Text>
+            <Text
+              color={data?.lastName ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              Last Name:
+            </Text>
             <Text>{data?.lastName || profile?.lastName}</Text>
           </Box>
           <Box>
-            <Text fontWeight='bold'>Email:</Text>
+            <Text
+              color={data?.email ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              Email:
+            </Text>
             <Text>{data?.email || profile?.email}</Text>
           </Box>
           <Box>
-            <Text fontWeight='bold'>Gender:</Text>
+            <Text
+              color={data?.sex ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              Gender:
+            </Text>
             <Text>{data?.sex || profile?.sex}</Text>
           </Box>
           <Box>
-            <Text fontWeight='bold'>Occupation:</Text>
+            <Text
+              color={data?.occupation ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              Occupation:
+            </Text>
             <Text>{data?.occupation || profile?.occupation}</Text>
           </Box>
           <Box>
-            <Text fontWeight='bold'>Date of Birth:</Text>
+            <Text
+              color={data?.dateOfBirth ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              Date of Birth:
+            </Text>
             <Text>
               {new Date(data?.dateOfBirth).toLocaleDateString() ||
                 new Date(profile?.dateOfBirth).toLocaleDateString()}
             </Text>
           </Box>
           <Box>
-            <Text fontWeight='bold'>Civil Status:</Text>
+            <Text
+              color={data?.civilStatus ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              Civil Status:
+            </Text>
             <Text>{data?.civilStatus || profile?.civilStatus}</Text>
           </Box>
           <Box>
-            <Text fontWeight='bold'>Address:</Text>
+            <Text
+              color={data?.address ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              Address:
+            </Text>
             <Text ml={'10px'} fontWeight='bold'>
               House Number:
             </Text>
@@ -73,7 +119,7 @@ const ContentCard = ({ title, data, profile }) => {
               Subdivision/Purok:
             </Text>
             <Text ml={'10px'}>
-              {data?.address.subdivisionPurok ||
+              {data?.address.subdivision_purok ||
                 profile?.address.subdivisionPurok}
             </Text>
           </Box>

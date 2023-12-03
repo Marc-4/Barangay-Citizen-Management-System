@@ -16,6 +16,8 @@ import {
   Box,
   Flex,
   Link,
+  Spinner,
+  Text,
 } from '@chakra-ui/react'
 import { useEffect, useState, useRef } from 'react'
 import callAPI from '../../utils/callAPI'
@@ -32,6 +34,7 @@ const AdminUserAccounts = () => {
   const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
+  const [isLoading, setIsLoading] = useState()
   const cancelRef = useRef()
 
   const {
@@ -55,6 +58,7 @@ const AdminUserAccounts = () => {
   }, [filter])
 
   const getUsers = async () => {
+    setIsLoading(true)
     const body = null
     const method = 'GET'
     const route = `http://localhost:3000/api/admin/users?entries=${entries}&filter=${filter}`
@@ -62,10 +66,15 @@ const AdminUserAccounts = () => {
     let data
     try {
       data = await callAPI(body, method, route)
-      setUsers(data.payload)
+      if (data.result === 'OK') {
+        setUsers(data.payload)
+        setError(null)
+      } else setError(data.payload.errro)
     } catch (err) {
       console.log(err)
-      setError(data.payload.error)
+      setError('Connection Error')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -278,6 +287,21 @@ const AdminUserAccounts = () => {
           </Tbody>
         </Table>
       </TableContainer>
+      <Text
+        fontSize={'2xl'}
+        fontWeight={'semibold'}
+        color={'tomato'}
+        display={error ? 'block' : 'none'}
+        textAlign={'center'}
+      >
+        {error}
+      </Text>
+      <Spinner
+        display={isLoading ? 'block' : 'none'}
+        m={'auto'}
+        size={'xl'}
+        mt={'25px'}
+      />
     </>
   )
 }

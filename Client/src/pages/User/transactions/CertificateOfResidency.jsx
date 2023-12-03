@@ -82,7 +82,7 @@ const CertificateOfResidency = () => {
     console.log(transaction)
     try {
       const body = {
-        notifType: 'REQUEST',
+        notifType: 'TRANSACTION',
         message: `${account.profile.firstName} ${account.profile.lastName} booked a Certificate of Residency Transaction.`,
         linkID: transaction._id,
       }

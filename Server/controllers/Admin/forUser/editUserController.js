@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 
 const editUser = async (req, res) => {
   console.log('editing user...');
+  console.log(req.body);
   if (!mongoose.isValidObjectId(req.params.id))
     return sendError('invalid user ID', 400, res)
 

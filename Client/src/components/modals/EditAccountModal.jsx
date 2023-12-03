@@ -57,28 +57,53 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
 
   const editProfile = async (values, resetForm) => {
     try {
-      const body = {
+      const initialProfile = user?.profile
+      const valuesObject = {
         firstName: values.firstName,
         middleName: values.middleName,
         lastName: values.lastName,
-        dateOfBirth: values.dateOfBirth,
-        placeOfBirth: {
-          city: values.placeOfBirth_City,
-          province: values.placeOfBirth_Province,
-          country: values.placeOfBirth_Country,
-        },
         sex: values.sex,
-        civilStatus: values.civilStatus,
         occupation: values.occupation,
         citizenship: values.citizenship,
+        civilStatus: values.civilStatus,
         email: values.email,
+        placeOfBirth: {
+          city: values.placeOfBirth_City,
+          country: values.placeOfBirth_Country,
+          province: values.placeOfBirth_Province,
+        },
         address: {
-          streetName: values.address_streetName,
           houseNumber: values.address_houseNumber,
+          streetName: values.address_streetName,
           subdivisionPurok: values.address_subdivisionPurok,
         },
       }
-      console.log(body)
+      const changedValues = Object.entries(valuesObject).reduce(
+        (acc, [key, value]) => {
+          if (key === 'dateOfBirth') {
+            const dateValue = new Date(value)
+            if (
+              dateValue.getTime() !== new Date(initialProfile[key])?.getTime()
+            ) {
+              acc[key] = dateValue
+            }
+          } else if (!areObjectsEqual(value, initialProfile[key])) {
+            acc[key] = value
+          }
+          return acc
+        },
+        {}
+      )
+
+      if (Object.keys(changedValues).length === 0) {
+        setError('No values to be updated')
+        return
+      }
+      // console.log('initial profile: ' + JSON.stringify(initialProfile, null, 2))
+      // console.log('values in form: ' + JSON.stringify(valuesObject, null, 2))
+      // console.log('changed values: ' + JSON.stringify(changedValues, null, 2))
+      const body = { ...changedValues }
+
       let route
       if (accountRole === 'admin')
         route = `http://localhost:3000/api/admin/${role}/profile/${user._id}/edit`
@@ -109,7 +134,7 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
       const body = {
         notifType: 'REQUEST',
         message: `${user.profile.firstName} ${user.profile.lastName} is requesting a Profile update.`,
-        linkID: request._id
+        linkID: request._id,
       }
       const route = `http://localhost:3000/api/${role}/notification/create`
       const response = await callAPI(body, 'POST', route)
@@ -118,6 +143,30 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
       console.log(error)
       setError('Error creating notification')
     }
+  }
+
+  const areObjectsEqual = (obj1, obj2) => {
+    const keys1 = Object.keys(obj1)
+    const keys2 = Object.keys(obj2)
+
+    if (keys1.length !== keys2.length) {
+      return false
+    }
+
+    for (const key of keys1) {
+      const val1 = obj1[key]
+      const val2 = obj2[key]
+
+      if (typeof val1 === 'object' && typeof val2 === 'object') {
+        if (!areObjectsEqual(val1, val2)) {
+          return false
+        }
+      } else if (val1 !== val2) {
+        return false
+      }
+    }
+
+    return true
   }
 
   return (

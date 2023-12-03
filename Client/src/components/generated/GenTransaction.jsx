@@ -79,7 +79,6 @@ const GenTransaction = () => {
           onClose: onAcceptClose,
           transaction: transactionData,
           onUpdate: handleUpdate,
-          user: ownerAccount,
           status: 'ACCEPTED'
         }}
       />
@@ -89,7 +88,6 @@ const GenTransaction = () => {
           onClose: onRejectClose,
           transaction: transactionData,
           onUpdate: handleUpdate,
-          user: ownerAccount,
           status: 'REJECTED'
         }}
       />

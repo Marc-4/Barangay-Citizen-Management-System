@@ -2,24 +2,29 @@ import { Card, CardBody, Text, Link } from '@chakra-ui/react'
 import { Link as rr_Link } from 'react-router-dom'
 
 const NotificationCard = ({ data, account_type }) => {
+  console.log(data)
   const to =
     account_type === 'user'
-      ? `/user/transactions/${data?.linkID}`
+      ? data.notifType === 'RQ_ACCEPT' || data.notifType === 'RQ_REJECT'
+        ? '/user/profile'
+        : `/user/transactions/${data?.linkID}`
       : `/admin/${data.notifType.toLowerCase() + 's'}/${data?.linkID}`
   return (
-    <Link
-      as={rr_Link}
-      to={to}
-    >
+    <Link as={rr_Link} to={to} _hover={{ textDecor: 'none' }}>
       <Card
         direction='row'
         overflow='hidden'
         display={'flex'}
         fontSize={'xl'}
-        minW={'1000px'}
-        maxW={'1000px'}
+        w={'1000px'}
         minH={'100px'}
-        boxShadow={'md'}
+        bg={'white'}
+        h={'125px'}
+        shadow={'none'}
+        borderBottom={'2px'}
+        borderColor={'brand.400'}
+        transition='all 0.2s'
+        _hover={{ shadow: 'md', zIndex: '1' }}
       >
         <CardBody flexDirection={'row'} alignItems={'center'}>
           <Text fontWeight={'semibold'} id='notif_type'>

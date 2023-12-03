@@ -7,9 +7,9 @@ const requestEditUserProfile = async (req, res) => {
     req.body.firstName === undefined &&
     req.body.lastName === undefined &&
     req.body.middleName === undefined &&
-    req.body.placeOfBirth.city === undefined &&
-    req.body.placeOfBirth.province === undefined &&
-    req.body.placeOfBirth.country === undefined &&
+    req.body.placeOfBirth?.city === undefined &&
+    req.body.placeOfBirth?.province === undefined &&
+    req.body.placeOfBirth?.country === undefined &&
     req.body.dateOfBirth === undefined &&
     req.body.sex === undefined &&
     req.body.civilStatus === undefined &&
@@ -18,7 +18,7 @@ const requestEditUserProfile = async (req, res) => {
     req.body.email === undefined &&
     req.body.address?.streetName === undefined &&
     req.body.address?.houseNumber === undefined &&
-    req.body.address?.subdivision_Purok === undefined
+    req.body.address?.subdivisionPurok === undefined
     // req.body.profilePhoto === undefined
   )
     return sendError('missing required fields', 404, res)
@@ -27,7 +27,6 @@ const requestEditUserProfile = async (req, res) => {
   try {
     user = await User.findById(req.user.id)
   } catch (error) {
-    console.log()
     return sendError('Internal Server Error', 400, res)
   }
 
@@ -78,7 +77,7 @@ const requestEditUserProfile = async (req, res) => {
     address: {
       streetName: '',
       houseNumber: '',
-      subdivision_Purok: ''
+      subdivision_purok: ''
     },
   }
 
@@ -98,7 +97,7 @@ const requestEditUserProfile = async (req, res) => {
     if (email) requestContent.email = email
     if (address?.streetName) requestContent.address.streetName = address.streetName
     if (address?.houseNumber) requestContent.address.houseNumber = address.houseNumber
-    if (address?.subdivision_Purok) requestContent.address.subdivision_Purok = address.subdivision_Purok
+    if (address?.subdivisionPurok) requestContent.address.subdivision_purok = address.subdivisionPurok
 
     request = await ProfileRequest.create({
       accountID: req.user.id,

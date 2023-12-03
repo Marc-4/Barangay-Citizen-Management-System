@@ -82,7 +82,7 @@ const BarangayRecords = () => {
     console.log(transaction);
     try {
       const body = {
-        notifType: 'REQUEST',
+        notifType: 'TRANSACTION',
         message: `${account.profile.firstName} ${account.profile.lastName} booked a Baragay Record Transaction.`,
         linkID: transaction._id,
       }

@@ -49,9 +49,9 @@ const UserProfile = () => {
     }
   }
 
-  const handeUpdate = () => {
-    getProfile()
-  }
+  // const handeUpdate = () => {
+  //   getProfile()
+  // }
 
   return (
     <>
@@ -59,7 +59,7 @@ const UserProfile = () => {
         {...{
           isOpen: isProfileOpen,
           onClose: onProfileClose,
-          onUpdate: handeUpdate,
+          // onUpdate: handeUpdate,
           user: account,
           role: 'user',
         }}
@@ -69,7 +69,7 @@ const UserProfile = () => {
           isOpen: isCredentialsOpen,
           onClose: onCredentialsClose,
           user: account,
-          onUpdate: handeUpdate,
+          // onUpdate: handeUpdate,
           role: 'user',
         }}
       />

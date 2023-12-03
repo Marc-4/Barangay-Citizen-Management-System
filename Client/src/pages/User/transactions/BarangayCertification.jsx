@@ -82,7 +82,7 @@ const BarangayCertification = () => {
     console.log(transaction);
     try {
       const body = {
-        notifType: 'REQUEST',
+        notifType: 'TRANSACTION',
         message: `${account.profile.firstName} ${account.profile.lastName} booked a Barangay Certification Transaction.`,
         linkID: transaction._id,
       }

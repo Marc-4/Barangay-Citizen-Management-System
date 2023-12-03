@@ -44,7 +44,7 @@ const TransactionCard = ({ data, basepath }) => {
           overflow='hidden'
           display={'flex'}
           fontSize={'md'}
-          bg={'brand.200'}
+          bg={'white'}
           minW={'100%'}
           h={'125px'}
           shadow={'none'}

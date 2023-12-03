@@ -3,6 +3,7 @@ import { sendError, sendSuccess } from '../../../utils/index.js'
 import { ProfileRequest } from '../../../models/index.js'
 
 const editUserRequest = async (req, res) => {
+  console.log(req.body)
   if (!mongoose.isValidObjectId(req.params.id))
     sendError('Invalid Request ID', 400, res)
   if (req.body.status === undefined)

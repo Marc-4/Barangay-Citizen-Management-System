@@ -10,7 +10,7 @@ const requestSchema = new mongoose.Schema({
     required: true,
   },
   requestContent: {
-    firtName: {
+    firstName: {
       type: String,
     },
     lastName: {
@@ -22,10 +22,24 @@ const requestSchema = new mongoose.Schema({
     dateOfBirth: {
       type: Date,
     },
+    placeOfBirth: {
+      city: {
+        type: String,
+      },
+      province: {
+        type: String,
+      },
+      country: {
+        type: String,
+      },
+    },
     sex: {
       type: String,
     },
     civilStatus: {
+      type: String,
+    },
+    citizenship: {
       type: String,
     },
     occupation: {

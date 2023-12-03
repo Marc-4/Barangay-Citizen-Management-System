@@ -15,22 +15,16 @@ import { useState } from 'react'
 import callAPI from '../../utils/callAPI'
 import { useParams } from 'react-router-dom'
 
-const TransactionModal = ({
-  isOpen,
-  onClose,
-  transaction,
-  onUpdate,
-  status,
-}) => {
+const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
   const { id } = useParams()
   const [error, setError] = useState()
   const [success, setSuccess] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
-  const editTransaction = async () => {
+  const editRequest = async () => {
     setIsLoading(true)
     try {
-      const route = `http://localhost:3000/api/admin/transaction/${id}/edit`
+      const route = `http://localhost:3000/api/admin/request/${id}/edit`
       const body = { status: status }
 
       const response = await callAPI(body, 'PATCH', route)
@@ -38,10 +32,11 @@ const TransactionModal = ({
         setError(null)
         {
           status === 'ACCEPTED'
-            ? setSuccess('Successfully Accepted Transaction!')
-            : setSuccess('Rejected Transaction!')
+            ? setSuccess('Successfully Accepted Request!')
+            : setSuccess('Rejected Request!')
         }
-        createNotification(response.payload)
+        await editUser(response.payload)
+        await createNotification(response.payload)
         if (onUpdate) {
           onUpdate()
         }
@@ -58,16 +53,32 @@ const TransactionModal = ({
     }
   }
 
-  const createNotification = async (transaction) => {
+  const editUser = async (request) => {
+    setIsLoading(true)
+    try { 
+      const body = request.requestContent
+      const route = `http://localhost:3000/api/admin/user/profile/${request.accountID}/edit`
+      const response = await callAPI(body, 'PATCH', route)
+
+      if(response.result === 'OK')
+        setSuccess(response.payload.message)
+      else setError(response.payload.error)
+    } catch (error) {
+      console.log(error)
+      setError('Connection Error')
+    }finally{setIsLoading(false)}
+  }
+
+  const createNotification = async (request) => {
     try {
       const body = {
-        notifType: status === 'ACCEPTED' ? 'TR_ACCEPT' : 'TR_REJECT',
+        notifType: status === 'ACCEPTED' ? 'RQ_ACCEPT' : 'RQ_REJECT',
         message:
           status === 'ACCEPTED'
-            ? `Your transaction has been Accepted!`
-            : `Your transaction has been Rejected.`,
-        linkID: transaction._id,
-        recipient: transaction.accountID,
+            ? `Your request has been Accepted!`
+            : `Your request has been Rejected.`,
+        linkID: request._id,
+        recipient: request.accountID,
       }
       const route = `http://localhost:3000/api/admin/notification/create`
       const response = await callAPI(body, 'POST', route)
@@ -79,41 +90,43 @@ const TransactionModal = ({
 
   return (
     <>
-      <Modal size={'xl'} isOpen={isOpen} onClose={onClose}>
+      <Modal size={'md'} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader
-          pb={0}
+            pb={'0px'}
             textAlign={'center'}
             fontSize={'3xl'}
             fontWeight={'bold'}
           >
             {status === 'ACCEPTED'
-              ? 'Accept User Transaction'
-              : 'Reject User Transaction'}
+              ? 'Accept User Request'
+              : 'Reject User Request'}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack alignItems={'center'}>
-              <Box>
-                {status === 'ACCEPTED' ? (
-                  <Text>Approval Message:</Text>
-                ) : (
-                  <Text>Reason for rejection:</Text>
-                )}
-              </Box>
-              <Textarea
-                height={'100px'}
-                defaultValue={
-                  status === 'ACCEPTED'
-                    ? `Go to the barangay hall to get your requested document(s). Prepare a sum of P${transaction?.formData?.cost} to pay to the treasurer.`
-                    : `Invalid requirements.`
-                }
-              ></Textarea>
+              {status === 'ACCEPTED' ? (
+                // ''
+                <Box mb={'10px'}>
+                  <Text>Confirm User request to edit profile:</Text>
+                </Box>
+              ) : (
+                <>
+                  <Box>
+                    <Text>Reason for rejection:</Text>
+                  </Box>
+                  <Textarea
+                    height={'100px'}
+                    defaultValue={`Invalid request.`}
+                  ></Textarea>
+                </>
+              )}
+
               {status === 'ACCEPTED' ? (
                 <Button
                   isDisabled={isLoading}
-                  onClick={() => editTransaction()}
+                  onClick={() => editRequest()}
                   colorScheme='blue'
                   type='submit'
                 >
@@ -122,7 +135,7 @@ const TransactionModal = ({
               ) : (
                 <Button
                   isDisabled={isLoading}
-                  onClick={() => editTransaction()}
+                  onClick={() => editRequest()}
                   colorScheme='red'
                   type='submit'
                 >
@@ -154,4 +167,4 @@ const TransactionModal = ({
   )
 }
 
-export default TransactionModal
+export default RequestModal

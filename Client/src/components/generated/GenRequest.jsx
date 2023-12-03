@@ -1,16 +1,27 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Text, Box, HStack, VStack, Button, Center } from '@chakra-ui/react'
+import { Text, Box, HStack, Button, useDisclosure } from '@chakra-ui/react'
 import callAPI from '../../utils/callAPI'
 import RequestDetailCard from '../cards/RequestDetailCard'
 import OwnerProfileCard from '../cards/OwnerProfileCard'
 import RequestContentCard from '../cards/RequestContentCard'
-
+import RequestModal from '../modals/RequestModal'
 const GenRequest = () => {
   const { id } = useParams()
   const [requestData, setRequestData] = useState(null)
   const [account, setAccount] = useState(null)
   const [error, setError] = useState(null)
+
+  const {
+    isOpen: isAcceptOpen,
+    onOpen: onAcceptOpen,
+    onClose: onAcceptClose,
+  } = useDisclosure()
+  const {
+    isOpen: isRejectOpen,
+    onOpen: onRejectOpen,
+    onClose: onRejectClose,
+  } = useDisclosure()
 
   useEffect(() => {
     fetchRequestData()
@@ -54,44 +65,76 @@ const GenRequest = () => {
     }
   }
 
+  const handleUpdate = () => {
+    fetchTransactionData()
+  }
+
   return (
-    <Box borderRadius={'10px'} maxW={'1000px'} padding={'25px'} m={'auto'}>
-      {error && (
-        <Text
-          fontSize={'2xl'}
-          color={'tomato'}
-          fontWeight={'semibold'}
-          textAlign={'center'}
-        >
-          {error}
-        </Text>
-      )}
-      {requestData && (
-        <>
-          <HStack spacing={4} align='start'>
-            <RequestDetailCard
-              title='Request Details'
-              data={requestData}
-              name={
-                account?.profile.firstName + ', ' + account?.profile.lastName
-              }
-            />
-            <OwnerProfileCard title='Owner Profile' data={account?.profile} />
-            {requestData.requestType == 'EDIT' && (
-              <RequestContentCard
-                title='Changing To'
-                data={{ ...requestData.requestContent }}
-                profile={account?.profile}
+    <>
+      <RequestModal
+        {...{
+          isOpen: isAcceptOpen,
+          onClose: onAcceptClose,
+          request: requestData,
+          onUpdate: handleUpdate,
+          status: 'ACCEPTED',
+        }}
+      />
+      <RequestModal
+        {...{
+          isOpen: isRejectOpen,
+          onClose: onRejectClose,
+          request: requestData,
+          onUpdate: handleUpdate,
+          status: 'REJECTED',
+        }}
+      />
+      <Box borderRadius={'10px'} maxW={'1000px'} padding={'25px'} m={'auto'}>
+        {error && (
+          <Text
+            fontSize={'2xl'}
+            color={'tomato'}
+            fontWeight={'semibold'}
+            textAlign={'center'}
+          >
+            {error}
+          </Text>
+        )}
+        {requestData && (
+          <>
+            <HStack spacing={4} align='start'>
+              <RequestDetailCard
+                title='Request Details'
+                data={requestData}
+                name={
+                  account?.profile.firstName + ', ' + account?.profile.lastName
+                }
               />
+              <OwnerProfileCard title='Owner Profile' data={account?.profile} />
+              {requestData.requestType == 'EDIT' && (
+                <RequestContentCard
+                  title='Changing To'
+                  data={{ ...requestData.requestContent }}
+                  profile={account?.profile}
+                />
+              )}
+            </HStack>
+            {requestData.status === 'PENDING' ? (
+              <Box justifyContent={'center'} display={'flex'} gap={'10px'}>
+                <Button onClick={() => onAcceptOpen()} colorScheme='green'>
+                  Accept
+                </Button>
+                <Button onClick={() => onRejectOpen()} colorScheme='red'>
+                  Reject
+                </Button>
+              </Box>
+            ) : (
+              ''
             )}
-          </HStack>
-          <Box justifyContent={'center'} display={'flex'} gap={'10px'}>
-            <Button colorScheme='green'>Accept</Button>
-            <Button colorScheme='red'>Reject</Button>
-          </Box>
-        </>
-      )}
-    </Box>
+          </>
+        )}
+      </Box>
+    </>
   )
 }
 

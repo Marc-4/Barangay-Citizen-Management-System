@@ -82,7 +82,7 @@ const BarangayClearance = () => {
     console.log(transaction);
     try {
       const body = {
-        notifType: 'REQUEST',
+        notifType: 'TRANSACTION',
         message: `${account.profile.firstName} ${account.profile.lastName} booked a Barangay Clearance Transaction.`,
         linkID: transaction._id,
       }
