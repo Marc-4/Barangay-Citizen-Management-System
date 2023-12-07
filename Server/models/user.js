@@ -73,7 +73,12 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
     profilePhoto: {
-      type: String,
+      data: {
+        type: Buffer,
+      },
+      fileName: {
+        type: String,
+      },
     },
     active: {
       type: Boolean,

@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { sendError } from './utils/index.js'
+import multer from 'multer'
 import {
   userRouter,
   adminRouter,
@@ -16,14 +17,20 @@ const PORT = 3000
 dotenv.config()
 const app = express()
 
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
+
 //middlewares
+app.use(upload.single('profilePhoto'))
 app.use(cookieParser())
 app.use(express.json())
-app.use(cors({
-  origin: 'http://localhost:5000',
- credentials: true,
-}))
-
+app.use(
+  cors({
+    origin: 'http://localhost:5000',
+    credentials: true,
+  })
+  )
+  
 //routers
 app.use('/api/admin', adminRouter)
 app.use('/api/employee', employeeRouter)

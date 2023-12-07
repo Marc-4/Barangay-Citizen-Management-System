@@ -3,7 +3,6 @@ import { Employee } from '../../../models/index.js'
 
 const getEmployees = async (req, res) => {
   console.log('admin accessing getEmployees')
-  console.log(req.query);
   if (req.query.entries === undefined)
     return sendError('missing required parameters', 404, res)
 

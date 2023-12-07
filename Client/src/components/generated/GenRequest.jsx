@@ -35,7 +35,6 @@ const GenRequest = () => {
     try {
       const route = `http://localhost:3000/api/admin/request/${id}`
       const data = await callAPI(null, 'GET', route)
-
       if (data && data.result === 'OK') {
         setError(null)
         setRequestData(data.payload)
@@ -66,7 +65,7 @@ const GenRequest = () => {
   }
 
   const handleUpdate = () => {
-    fetchTransactionData()
+    fetchRequestData()
   }
 
   return (

@@ -2,7 +2,15 @@ import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
 import ProfileCard from '../cards/ProfileCard'
 import { useParams } from 'react-router-dom'
-import { Text, Tabs, TabList, Tab, TabPanel, TabPanels } from '@chakra-ui/react'
+import {
+  Text,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
+  Spinner,
+} from '@chakra-ui/react'
 import TransactionCard from '../cards/TransactionCard'
 
 const GenUser = () => {
@@ -13,6 +21,7 @@ const GenUser = () => {
   const [transactionError, setTransactionError] = useState(null)
   const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     getProfile()
@@ -20,6 +29,7 @@ const GenUser = () => {
   }, [])
 
   const getProfile = async () => {
+    setIsLoading(true)
     try {
       const method = 'GET'
       const route = `http://localhost:3000/api/admin/user/${id}`
@@ -34,10 +44,13 @@ const GenUser = () => {
     } catch (err) {
       console.log(err)
       setAccountError('Error fetching Account Data')
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const getTransactions = async () => {
+    setIsLoading(true)
     try {
       const method = 'GET'
       const route = `http://localhost:3000/api/admin/user/${id}/transactions?entries=${entries}`
@@ -51,6 +64,8 @@ const GenUser = () => {
     } catch (err) {
       console.log(err)
       setTransactionError('Error fetching Profile Data')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -72,10 +87,15 @@ const GenUser = () => {
             >
               {accountError}
             </Text>
-            {account ? (
-              <ProfileCard data={account}/>
-            ) : (
+            <Spinner
+              m={'auto'}
+              size={'xl'}
+              display={isLoading ? 'block' : 'none'}
+            />
+            {isLoading ? null : !account ? (
               <Text fontSize={'2xl'}>This user has no Profile.</Text>
+            ) : (
+              <ProfileCard data={account} />
             )}
           </TabPanel>
           <TabPanel>

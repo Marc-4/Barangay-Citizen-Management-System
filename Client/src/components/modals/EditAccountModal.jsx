@@ -11,40 +11,43 @@ import {
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
-import { object, string, date } from 'yup'
+import { object, string, date, mixed } from 'yup'
 import EditForm from '../forms/EditForm'
 
 const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
+  // console.log('user: ' + JSON.stringify(user, null, 2))
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const accountRole = sessionStorage.getItem('userRole')
 
   const validationSchema = object({
-    firstName: string()
-      .required('required')
-      .matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols'),
+    firstName: string().matches(
+      /^[A-Za-z\s.'-]+$/,
+      'First Name must not contain symbols'
+    ),
     middleName: string().matches(
       /^[A-Za-z\s.'-]+$/,
       'Middle Name must not contain symbols'
     ),
-    lastName: string()
-      .required('required')
-      .matches(/^[A-Za-z\s.'-]+$/, 'Last Name must not contain symbols'),
+    lastName: string().matches(
+      /^[A-Za-z\s.'-]+$/,
+      'Last Name must not contain symbols'
+    ),
     dateOfBirth: date()
-      .required('required')
       .max(new Date(), 'Date of Birth cannot be in the future')
       .min(new Date('1900-01-01'), 'Date of Birth cannot be before 1900'),
-    placeOfBirth_City: string().required('required'),
-    placeOfBirth_Province: string().required('required'),
-    placeOfBirth_Country: string().required('required'),
-    sex: string().required('required'),
-    civilStatus: string().required('required'),
-    occupation: string().required('required'),
-    citizenship: string().required('required'),
+    placeOfBirth_city: string(),
+    placeOfBirth_province: string(),
+    placeOfBirth_country: string(),
+    sex: string(),
+    civilStatus: string(),
+    occupation: string(),
+    citizenship: string(),
     email: string().email(),
-    address_streetName: string().required('required'),
-    address_houseNumber: string().required('required'),
-    address_subdivisionPurok: string().required('required'),
+    address_streetName: string(),
+    address_houseNumber: string(),
+    address_subdivisionPurok: string(),
+    profilePhoto: mixed(),
   })
 
   useEffect(() => {
@@ -55,74 +58,61 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
     return () => clearTimeout(timeoutId)
   }, [success])
 
-  const editProfile = async (values, resetForm) => {
+  const editProfile = async (values) => {
     try {
-      const initialProfile = user?.profile
-      const valuesObject = {
-        firstName: values.firstName,
-        middleName: values.middleName,
-        lastName: values.lastName,
-        sex: values.sex,
-        occupation: values.occupation,
-        citizenship: values.citizenship,
-        civilStatus: values.civilStatus,
-        email: values.email,
-        placeOfBirth: {
-          city: values.placeOfBirth_City,
-          country: values.placeOfBirth_Country,
-          province: values.placeOfBirth_Province,
-        },
-        address: {
-          houseNumber: values.address_houseNumber,
-          streetName: values.address_streetName,
-          subdivisionPurok: values.address_subdivisionPurok,
-        },
-      }
-      const changedValues = Object.entries(valuesObject).reduce(
-        (acc, [key, value]) => {
-          if (key === 'dateOfBirth') {
-            const dateValue = new Date(value)
-            if (
-              dateValue.getTime() !== new Date(initialProfile[key])?.getTime()
-            ) {
-              acc[key] = dateValue
-            }
-          } else if (!areObjectsEqual(value, initialProfile[key])) {
-            acc[key] = value
-          }
-          return acc
-        },
-        {}
-      )
 
-      if (Object.keys(changedValues).length === 0) {
-        setError('No values to be updated')
+      if(!Object.values(values).some(value => value)){
+        setError('No Fields to update')
         return
       }
+
+      const formData = new FormData()
+
+      // Append form data
+      Object.entries(values).forEach(([key, value]) => {
+        if (key === 'profilePhoto' && value instanceof File) {
+          // If the field is profilePhoto and it's a File, append it to the FormData
+          formData.append(key, value)
+        } else {
+          // Otherwise, append other fields normally
+          formData.append(key, value)
+        }
+      })
+
+      for (const pair of formData.entries()) {
+        console.log(pair[0], pair[1])
+      }
+
       // console.log('initial profile: ' + JSON.stringify(initialProfile, null, 2))
       // console.log('values in form: ' + JSON.stringify(valuesObject, null, 2))
       // console.log('changed values: ' + JSON.stringify(changedValues, null, 2))
-      const body = { ...changedValues }
-
       let route
       if (accountRole === 'admin')
         route = `http://localhost:3000/api/admin/${role}/profile/${user._id}/edit`
       if (accountRole === 'user')
         route = `http://localhost:3000/api/user/account/edit`
 
-      const response = await callAPI(body, 'PATCH', route)
+      const response = await fetch(route, {
+        method: 'PATCH',
+        body: formData,
+        mode: 'cors',
+        credentials: 'include',
+      })
 
-      if (response.result === 'OK') {
+      const responseBody = await response.json()
+
+      if (response.ok) {
         setError(null)
         if (accountRole === 'admin') setSuccess('Successfully Updated User!')
         if (accountRole === 'user')
           setSuccess('Successfuly Requested Profile Update!')
 
-        createNotification(response.payload.request)
+        if (accountRole === 'user')
+          createNotification(responseBody.payload.request)
         if (onUpdate) {
           onUpdate()
         }
-      } else setError(response.payload.error || 'Connection Error')
+      } else setError(responseBody.payload.error)
     } catch (error) {
       console.log(error)
       setError('Connection Error')
@@ -136,6 +126,7 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
         message: `${user.profile.firstName} ${user.profile.lastName} is requesting a Profile update.`,
         linkID: request._id,
       }
+
       const route = `http://localhost:3000/api/${role}/notification/create`
       const response = await callAPI(body, 'POST', route)
       if (response === 'OK') setError(null)
@@ -186,36 +177,30 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
           <Divider m={'auto'} borderColor={'brand.100'} w={'90%'} />
           <ModalBody>
             <EditForm
-              onSubmit={(values, { setSubmitting, resetForm }) => {
+              onSubmit={(values, { setSubmitting }) => {
                 setTimeout(async () => {
-                  await editProfile(values, resetForm)
+                  await editProfile(values)
                   setSubmitting(false)
                 }, 1000)
               }}
               validationSchema={validationSchema}
               initialValues={{
-                firstName: user?.profile?.firstName,
-                middleName: user?.profile?.middleName,
-                lastName: user?.profile?.lastName,
-                dateOfBirth:
-                  user?.profile?.dateOfBirth &&
-                  !isNaN(new Date(user?.profile?.dateOfBirth))
-                    ? new Date(user?.profile?.dateOfBirth)
-                        .toISOString()
-                        .slice(0, 10)
-                    : null,
-                placeOfBirth_City: user?.profile?.placeOfBirth.city,
-                placeOfBirth_Province: user?.profile?.placeOfBirth.province,
-                placeOfBirth_Country: user?.profile?.placeOfBirth.country,
-                sex: user?.profile?.sex,
-                civilStatus: user?.profile?.civilStatus,
-                occupation: user?.profile?.occupation,
-                citizenship: user?.profile?.citizenship,
-                email: user?.profile?.email,
-                address_streetName: user?.profile?.address.streetName,
-                address_houseNumber: user?.profile?.address.houseNumber,
-                address_subdivisionPurok:
-                  user?.profile?.address.subdivisionPurok,
+                firstName: '',
+                middleName: '',
+                lastName: '',
+                dateOfBirth: '',
+                placeOfBirth_city: '',
+                placeOfBirth_province: '',
+                placeOfBirth_country: '',
+                sex: '',
+                civilStatus: '',
+                occupation: '',
+                citizenship: '',
+                email: '',
+                address_streetName: '',
+                address_houseNumber: '',
+                address_subdivisionPurok: '',
+                profilePhoto: '',
               }}
             />
             <Text

@@ -60,7 +60,12 @@ const requestSchema = new mongoose.Schema({
       type: String,
     },
     profilePhoto: {
-      type: Buffer,
+      data: {
+        type: Buffer,
+      },
+      fileName: {
+        type: String,
+      },
     },
   },
   timestamp: {

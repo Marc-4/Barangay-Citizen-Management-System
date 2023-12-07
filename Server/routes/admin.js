@@ -17,7 +17,7 @@ router.get('/user/:id/transactions/', middlewares, Admin.getUserTransactionsCont
 router.patch('/user/profile/:id/edit', middlewares, Admin.editUserController)
 // router.patch('/user/:id/archive', middlewares, Admin.archiveUserController) //test
 // router.patch('/user/:id/recover', middlewares, Admin.recoverUserController)
-router.delete('/user/:id/delete', middlewares, Admin.deleteUserController) //test
+router.delete('/user/:id/delete', middlewares, Admin.deleteUserController)
 
 router.post('/employee/register', middlewares, Admin.registerEmployeeController)
 router.get('/employee/:id', middlewares, Admin.getEmployeeController)

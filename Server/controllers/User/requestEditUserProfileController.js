@@ -19,7 +19,6 @@ const requestEditUserProfile = async (req, res) => {
     req.body.address?.streetName === undefined &&
     req.body.address?.houseNumber === undefined &&
     req.body.address?.subdivisionPurok === undefined
-    // req.body.profilePhoto === undefined
   )
     return sendError('missing required fields', 404, res)
 
@@ -27,7 +26,7 @@ const requestEditUserProfile = async (req, res) => {
   try {
     user = await User.findById(req.user.id)
   } catch (error) {
-    return sendError('Internal Server Error', 400, res)
+    return sendError('Internal Server Error', 500, res)
   }
 
   if (!user) return sendError('user does not exist', 404, res)
@@ -59,6 +58,8 @@ const requestEditUserProfile = async (req, res) => {
     address,
   } = req.body
 
+  const profilePhoto = req.file
+
   let requestContent = {
     firstName: '',
     lastName: '',
@@ -79,6 +80,10 @@ const requestEditUserProfile = async (req, res) => {
       houseNumber: '',
       subdivision_purok: ''
     },
+    profilePhoto: {
+      data: '',
+      fileName: ''
+    }
   }
 
   let request
@@ -98,6 +103,8 @@ const requestEditUserProfile = async (req, res) => {
     if (address?.streetName) requestContent.address.streetName = address.streetName
     if (address?.houseNumber) requestContent.address.houseNumber = address.houseNumber
     if (address?.subdivisionPurok) requestContent.address.subdivision_purok = address.subdivisionPurok
+    if (profilePhoto?.buffer) requestContent.profilePhoto.data = profilePhoto.buffer
+    if (profilePhoto?.originalname) requestContent.profilePhoto.fileName = profilePhoto.originalname
 
     request = await ProfileRequest.create({
       accountID: req.user.id,
@@ -115,6 +122,7 @@ const requestEditUserProfile = async (req, res) => {
     message: 'profile edit request sent successfully',
     request: request,
   }
+  console.log(payload)
   return sendSuccess(payload, 200, res)
 }
 

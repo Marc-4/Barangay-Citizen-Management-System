@@ -63,20 +63,21 @@ const AdminNotifications = () => {
         >
           {error}
         </Text>
-        <Spinner
-          display={isLoading ? 'block' : 'none'}
-          m={'auto'}
-          size={'xl'}
-          mt={'25px'}
-        />
-        {notifications.map((notification) => {
-          return (
+        {isLoading ? (
+          <Spinner size='xl' m={'auto'} mt={'25px'} />
+        ) : notifications.length === 0 && !error ? (
+          <Text fontWeight={'semibold'} fontSize={'2xl'}>
+            No Notifications
+          </Text>
+        ) : (
+          notifications.map((notification) => (
             <NotificationCard
               data={notification}
               key={notification._id}
+              account_type='user'
             ></NotificationCard>
-          )
-        })}
+          ))
+        )}
       </Center>
     </>
   )

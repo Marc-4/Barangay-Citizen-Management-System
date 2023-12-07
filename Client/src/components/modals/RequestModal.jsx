@@ -28,6 +28,7 @@ const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
       const body = { status: status }
 
       const response = await callAPI(body, 'PATCH', route)
+      
       if (response.result === 'OK') {
         setError(null)
         {

@@ -1,17 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Text,
   Input,
   Button,
   Heading,
-  RadioGroup,
-  Radio,
   Select,
+  Image,
 } from '@chakra-ui/react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Buffer } from 'buffer'
 
 const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
+  const [profilePhoto, setProfilePhoto] = useState()
+  // const revertBase64 = (imageBuf) => {
+  //   console.log(profilePhoto)
+  //   let base64String = Buffer.from(imageBuf).toString('base64')
+
+  //   return `data:image/png;base64,${base64String}`
+  // }
+
+  console.log(initialValues)
+
   return (
     <>
       <Formik
@@ -19,9 +29,43 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
         initialValues={initialValues}
         onSubmit={onSubmit}
       >
-        {({ isSubmitting, resetForm }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <Form>
             <Box>
+              <Heading fontSize={'xl'}>Profile Photo</Heading>
+              <Image
+                m={'auto'}
+                id='profile_photo'
+                boxSize={'250px'}
+                objectFit='cover'
+                display={'block'}
+                borderRadius={'full'}
+                fallbackSrc='https://via.placeholder.com/250'
+                src={profilePhoto ? profilePhoto : null}
+              />
+              <input
+                type='file'
+                name='profilePhoto'
+                accept='.jpg, .jpeg, .png'
+                onChange={(event) => {
+                  const file = event.currentTarget.files[0]
+                  if (file) {
+                    setFieldValue('profilePhoto', file)
+                    
+                    const reader = new FileReader()
+                    reader.onload = (e) => {
+                      setProfilePhoto(e.target.result)
+                    }
+                    reader.readAsDataURL(file)
+                  }
+                }}
+              />
+              <Text
+                as={ErrorMessage}
+                name='profilePhoto'
+                component='div'
+                color={'tomato'}
+              />
               <Heading fontSize={'xl'}>Full Name</Heading>
               <Input
                 as={Field}
@@ -65,36 +109,36 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
               <Input
                 as={Field}
                 type='text'
-                name='placeOfBirth_City'
+                name='placeOfBirth_city'
                 placeholder='City'
               />
               <Text
                 as={ErrorMessage}
-                name='placeOfBirth_City'
+                name='placeOfBirth_city'
                 component='div'
                 color={'tomato'}
               />
               <Input
                 as={Field}
                 type='text'
-                name='placeOfBirth_Province'
+                name='placeOfBirth_province'
                 placeholder='Province'
               />
               <Text
                 as={ErrorMessage}
-                name='placeOfBirth_Province'
+                name='placeOfBirth_province'
                 component='div'
                 color={'tomato'}
               />
               <Input
                 as={Field}
                 type='text'
-                name='placeOfBirth_Country'
+                name='placeOfBirth_country'
                 placeholder='Country'
               />
               <Text
                 as={ErrorMessage}
-                name='placeOfBirth_Country'
+                name='placeOfBirth_country'
                 component='div'
                 color={'tomato'}
               />

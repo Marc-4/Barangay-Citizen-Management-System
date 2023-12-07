@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Text,
@@ -7,14 +7,13 @@ import {
   Heading,
   RadioGroup,
   Radio,
+  Image,
 } from '@chakra-ui/react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 
-const RegisterForm = ({
-  onSubmit,
-  validationSchema,
-  initialValues,
-}) => {
+const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
+  const [profilePhoto, setProfilePhoto] = useState()
+
   return (
     <>
       <Formik
@@ -22,8 +21,8 @@ const RegisterForm = ({
         initialValues={initialValues}
         onSubmit={onSubmit}
       >
-        {({ isSubmitting }) => (
-          <Form>
+        {({ isSubmitting, setFieldValue }) => (
+          <Form encType={'multipart/form-data'}>
             <Heading fontSize={'2xl'}>Account Data</Heading>
             <Input
               as={Field}
@@ -51,6 +50,42 @@ const RegisterForm = ({
             />
             <Box>
               <Heading fontSize={'2xl'}>Profile Data</Heading>
+              <Box>
+                <Heading fontSize={'xl'}>Profile Photo</Heading>
+                <Image
+                  m={'auto'}
+                  id='profile_photo'
+                  boxSize={'250px'}
+                  objectFit='cover'
+                  display={'block'}
+                  borderRadius={'full'}
+                  fallbackSrc='https://via.placeholder.com/250'
+                  src={profilePhoto ? profilePhoto : null}
+                />
+                <input
+                  type='file'
+                  name='profilePhoto'
+                  accept='.jpg, .jpeg, .png'
+                  onChange={(event) => {
+                    const file = event.currentTarget.files[0]
+                    if (file) {
+                      setFieldValue('profilePhoto', file)
+
+                    const reader = new FileReader()
+                      reader.onload = (e) => {
+                        setProfilePhoto(e.target.result)
+                      }
+                      reader.readAsDataURL(file)
+                    }
+                  }}
+                />
+                <Text
+                  as={ErrorMessage}
+                  name='profilePhoto'
+                  component='div'
+                  color={'tomato'}
+                />
+              </Box>
               <Heading fontSize={'xl'}>Full Name</Heading>
               <Input
                 as={Field}
@@ -94,51 +129,51 @@ const RegisterForm = ({
               <Input
                 as={Field}
                 type='text'
-                name='placeOfBirth_City'
+                name='placeOfBirth_city'
                 placeholder='City'
               />
               <Text
                 as={ErrorMessage}
-                name='placeOfBirth_City'
+                name='placeOfBirth_city'
                 component='div'
                 color={'tomato'}
               />
               <Input
                 as={Field}
                 type='text'
-                name='placeOfBirth_Province'
+                name='placeOfBirth_province'
                 placeholder='Province'
               />
               <Text
                 as={ErrorMessage}
-                name='placeOfBirth_Province'
+                name='placeOfBirth_province'
                 component='div'
                 color={'tomato'}
               />
               <Input
                 as={Field}
                 type='text'
-                name='placeOfBirth_Country'
+                name='placeOfBirth_country'
                 placeholder='Country'
               />
               <Text
                 as={ErrorMessage}
-                name='placeOfBirth_Country'
+                name='placeOfBirth_country'
                 component='div'
                 color={'tomato'}
               />
               <Heading fontSize={'xl'}>Gender</Heading>
-              <RadioGroup name='sex'>
+              <RadioGroup name='sex' display={'flex'} flexDirection={'column'}>
                 <Field>
                   {({ field }) => (
-                    <Radio {...field} value='male' type='radio'>
+                    <Radio {...field} value='male' type='radio' size={'md'}>
                       Male
                     </Radio>
                   )}
                 </Field>
                 <Field>
                   {({ field }) => (
-                    <Radio {...field} value='female' type='radio'>
+                    <Radio {...field} value='female' type='radio' size={'md'}>
                       Female
                     </Radio>
                   )}

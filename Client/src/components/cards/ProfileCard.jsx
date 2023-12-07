@@ -9,7 +9,17 @@ import {
   Spacer,
 } from '@chakra-ui/react'
 
+import { Buffer } from 'buffer'
+
 const ProfileCard = (data) => {
+  console.log(data)
+
+  const revertBase64 = (imageBuf) => {
+    let base64String = Buffer.from(imageBuf).toString('base64')
+
+    return `data:image/png;base64,${base64String}`
+  }
+
   return (
     <>
       <Container
@@ -29,13 +39,27 @@ const ProfileCard = (data) => {
           rounded={'10px'}
           p={'20px'}
         >
-          <Image w={'250px'} h={'250px'} display={'block'} />
+          <Image
+            id='profile_photo'
+            boxSize={'250px'}
+            objectFit='cover'
+            display={'block'}
+            borderRadius={'full'}
+            fallbackSrc='https://via.placeholder.com/250'
+            src={
+              data.data.profile?.profilePhoto
+                ? revertBase64(data.data.profile.profilePhoto.data)
+                : null
+            }
+          />
           <Stack>
             <Text fontSize={'3xl'} fontWeight={'semibold'}>
               {data
-                ? data.data.profile ? `${data.data.profile?.lastName || ''}, ${
-                    data.data.profile?.firstName || ''
-                  } ${data.data.profile?.middleName || ''}`: 'N/A'
+                ? data.data.profile
+                  ? `${data.data.profile?.lastName || ''}, ${
+                      data.data.profile?.firstName || ''
+                    } ${data.data.profile?.middleName || ''}`
+                  : 'N/A'
                 : 'Loading...'}
             </Text>
             <Text fontSize={'xl'}>Username: {data.data.username}</Text>
@@ -48,12 +72,7 @@ const ProfileCard = (data) => {
           </Stack>
         </Box>
 
-        <Box
-          id='profile_details'
-          pl={'10px'}
-          p={'25px'}
-          rounded={'10px'}
-        >
+        <Box id='profile_details' pl={'10px'} p={'25px'} rounded={'10px'}>
           <Heading marginBottom={'25px'}>Profile Details</Heading>
           <Flex pl={'10px'} justify={'space-between'} wrap={'wrap'}>
             <Box bg={'brand.400'} p={'10px'} rounded={'10px'}>
@@ -179,13 +198,15 @@ const ProfileCard = (data) => {
                 <Heading fontSize={'2xl'}>Place Of Birth</Heading>
                 <Text>
                   {data
-                    ? data.data.profile ?`${
-                        data.data.profile?.placeOfBirth.city +
+                    ? data.data.profile
+                      ? `${
+                          data.data.profile?.placeOfBirth.city +
                           ' ' +
                           data.data.profile?.placeOfBirth.province +
                           ', ' +
                           data.data.profile?.placeOfBirth.country
-                      }` : 'N/A'
+                        }`
+                      : 'N/A'
                     : 'Loading...'}
                 </Text>
               </Box>
