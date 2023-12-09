@@ -16,6 +16,8 @@ import {
   Box,
   Flex,
   Link,
+  Spinner,
+  Text,
 } from '@chakra-ui/react'
 import { useEffect, useState, useRef } from 'react'
 import callAPI from '../../utils/callAPI'
@@ -32,6 +34,7 @@ const AdminEmployeeAccounts = () => {
   const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   const cancelRef = useRef()
 
   const {
@@ -55,17 +58,20 @@ const AdminEmployeeAccounts = () => {
   }, [filter])
 
   const getEmployees = async () => {
-    const body = null
-    const method = 'GET'
-    const route = `http://localhost:3000/api/admin/employees?entries=${entries}&filter=${filter}`
-
-    let data
+    setIsLoading(true)
     try {
+      const body = null
+      const method = 'GET'
+      const route = `http://localhost:3000/api/admin/employees?entries=${entries}&filter=${filter}`
+
+      let data
       data = await callAPI(body, method, route)
       setEmployees(data.payload)
     } catch (err) {
       console.log(err)
       setError(data.payload.error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -295,6 +301,29 @@ const AdminEmployeeAccounts = () => {
           </Tbody>
         </Table>
       </TableContainer>
+
+      {isLoading ? (
+        <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
+      ) : !error && employees.length === 0 ? (
+        <Text
+        mt={'25px'}
+          fontSize={'2xl'}
+          fontWeight={'semibold'}
+          color={'brand.100'}
+          textAlign={'center'}
+        >
+          No Employees yet
+        </Text>
+      ) : (
+        <Text
+          fontSize={'2xl'}
+          fontWeight={'semibold'}
+          color={'tomato'}
+          textAlign={'center'}
+        >
+          {error}
+        </Text>
+      )}
     </>
   )
 }

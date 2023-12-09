@@ -18,6 +18,9 @@ import {
   Link,
   Spinner,
   Text,
+  TabPanels,
+  TabPanel,
+  Spacer,
 } from '@chakra-ui/react'
 import { useEffect, useState, useRef } from 'react'
 import callAPI from '../../utils/callAPI'
@@ -26,9 +29,11 @@ import { Link as rr_Link } from 'react-router-dom'
 import RegisterAccountModal from '../../components/modals/RegisterAccountModal'
 import EditAccountModal from '../../components/modals/EditAccountModal'
 import DeleteAccountAlert from '../../components/popups/DeleteAccountAlert'
+import RefreshButton from '../../components/RefreshButton'
 
 const AdminUserAccounts = () => {
   const [users, setUsers] = useState([])
+  const [archivedUsers, setArchivedUsers] = useState([])
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
   const [entries, setEntries] = useState(20)
@@ -55,19 +60,40 @@ const AdminUserAccounts = () => {
 
   useEffect(() => {
     getUsers()
-  }, [filter])
+  }, [])
 
   const getUsers = async () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?entries=${entries}&filter=${filter}`
+    const route = `http://localhost:3000/api/admin/users?entries=${entries}&filter=ACTIVE`
 
     let data
     try {
       data = await callAPI(body, method, route)
       if (data.result === 'OK') {
         setUsers(data.payload)
+        setError(null)
+      } else setError(data.payload.errro)
+    } catch (err) {
+      console.log(err)
+      setError('Connection Error')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const getArchivedUsers = async () => {
+    setIsLoading(true)
+    const body = null
+    const method = 'GET'
+    const route = `http://localhost:3000/api/admin/users?entries=${entries}&filter=HISTORY}`
+
+    let data
+    try {
+      data = await callAPI(body, method, route)
+      if (data.result === 'OK') {
+        setArchivedUsers(data.payload)
         setError(null)
       } else setError(data.payload.errro)
     } catch (err) {
@@ -130,178 +156,377 @@ const AdminUserAccounts = () => {
         }}
       />
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
-        <Flex flexDirection='row' alignItems='center' gap={'25px'}>
+        <Flex
+          flexDirection='row'
+          alignItems='center'
+          gap={'10px'}
+          mt={'25px'}
+          mb={'25px'}
+        >
           <Searchbar entries={entries} page={page} />
-          <Heading mt='25px' mb='25px' display='flex' justifyContent='center'>
-            User Accounts
-          </Heading>
+          <RefreshButton />
+          <Button
+            mt={'10px'}
+            ml={'10px'}
+            colorScheme='blue'
+            onClick={onRegisterOpen}
+          >
+            Register User
+          </Button>
         </Flex>
       </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
       <Tabs margin={'auto'} w={'90%'} variant='line'>
-        <TabList mb='1em'>
-          <Tab onClick={() => setFilter('ACTIVE')}>User List</Tab>
-          <Tab onClick={() => setFilter('ARCHIVED')}>Archived Users</Tab>
+        <TabList>
+          <Tab>User List</Tab>
+          <Tab>Archived Users</Tab>
         </TabList>
+        <TabPanels>
+          <TabPanel>
+            <TableContainer
+              display={'flex'}
+              margin={'10px'}
+              alignContent={'center'}
+              justifyContent={'center'}
+              rounded='md'
+            >
+              <Table
+                m={'auto'}
+                w={'100%'}
+                p={'10px'}
+                rounded='md'
+                bg='brand.400'
+                variant={'simple'}
+                style={{ borderCollapse: 'separate', tableLayout: 'fixed' }}
+                borderColor={'gray.400'}
+                borderWidth={'1px'}
+              >
+                <Thead>
+                  <Tr>
+                    <Th p={'12px'} textAlign='center' w={'17%'}>
+                      User ID
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      Username
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      Last Name
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      First Name
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      Middle Name
+                    </Th>
+                    <Th p={'12px'} textAlign='center' w={'7%'}>
+                      Gender
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      Date of Registration
+                    </Th>
+                    <Th p={'12px'} textAlign='center' w={'15%'}>
+                      Actions
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {users.map((user) => {
+                    const profile = user.profile
+                    return (
+                      <Tr key={user._id}>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          <Link
+                            as={rr_Link}
+                            color={'brand.500'}
+                            to={`${user._id}`}
+                          >
+                            {user._id}
+                          </Link>
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          fontWeight={'semibold1'}
+                          textAlign='center '
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {user?.username || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {profile?.lastName || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {profile?.firstName || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {profile?.middleName || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {profile?.sex || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {new Date(user.dateOfCreation).toLocaleDateString()}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          justifyContent={'center'}
+                          display={'flex'}
+                          gap={'10px'}
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          <Button
+                            onClick={() => handleEditOpen(user)}
+                            colorScheme='green'
+                          >
+                            Edit
+                          </Button>
+                          <Button colorScheme='orange'>Archive</Button>
+                          <Button
+                            onClick={() => handleDeleteOpen(user)}
+                            colorScheme='red'
+                          >
+                            Delete
+                          </Button>
+                        </Td>
+                      </Tr>
+                    )
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </TabPanel>
+          <TabPanel>
+            <TableContainer
+              display={'flex'}
+              margin={'10px'}
+              alignContent={'center'}
+              justifyContent={'center'}
+              rounded='md'
+            >
+              <Table
+                w={'100%'}
+                p={'10px'}
+                rounded='md'
+                bg='brand.400'
+                variant={'simple'}
+                style={{ borderCollapse: 'separate', tableLayout: 'fixed' }}
+                borderColor={'gray.400'}
+                borderWidth={'1px'}
+              >
+                <Thead>
+                  <Tr>
+                    <Th p={'12px'} textAlign='center' w={'17%'}>
+                      User ID
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      Username
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      Last Name
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      First Name
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      Middle Name
+                    </Th>
+                    <Th p={'12px'} textAlign='center' w={'7%'}>
+                      Gender
+                    </Th>
+                    <Th p={'12px'} textAlign='center'>
+                      Date of Registration
+                    </Th>
+                    <Th p={'12px'} textAlign='center' w={'15%'}>
+                      Actions
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {archivedUsers.map((user) => {
+                    const profile = archivedUsers.profile
+                    return (
+                      <Tr key={user._id}>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          <Link
+                            as={rr_Link}
+                            color={'brand.500'}
+                            to={`${user._id}`}
+                          >
+                            {user._id}
+                          </Link>
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          fontWeight={'semibold1'}
+                          textAlign='center '
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {user?.username || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {profile?.lastName || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {profile?.firstName || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {profile?.middleName || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {profile?.sex || 'N/A'}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {new Date(user.dateOfCreation).toLocaleDateString()}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          justifyContent={'center'}
+                          display={'flex'}
+                          gap={'10px'}
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          <Button
+                            onClick={() => handleEditOpen(user)}
+                            colorScheme='green'
+                          >
+                            Edit
+                          </Button>
+                          <Button colorScheme='orange'>Archive</Button>
+                          <Button
+                            onClick={() => handleDeleteOpen(user)}
+                            colorScheme='red'
+                          >
+                            Delete
+                          </Button>
+                        </Td>
+                      </Tr>
+                    )
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </TabPanel>
+        </TabPanels>
       </Tabs>
-      <Button colorScheme='blue' onClick={onRegisterOpen}>
-        Register User
-      </Button>
-
-      <TableContainer
-        display={'flex'}
-        margin={'10px'}
-        alignContent={'center'}
-        justifyContent={'center'}
-        rounded='md'
-      >
-        <Table
-          w={'90%'}
-          p={'10px'}
-          rounded='md'
-          bg='brand.400'
-          variant={'simple'}
-          style={{ borderCollapse: 'separate', tableLayout: 'fixed' }}
-          borderColor={'gray.400'}
-          borderWidth={'1px'}
+      {isLoading ? (
+        <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
+      ) : !error && users.length === 0 ? (
+        <Text
+          mt={'25px'}
+          fontSize={'2xl'}
+          fontWeight={'semibold'}
+          color={'brand.100'}
+          textAlign={'center'}
         >
-          <Thead>
-            <Tr>
-              <Th p={'12px'} textAlign='center' w={'17%'}>
-                User ID
-              </Th>
-              <Th p={'12px'} textAlign='center'>
-                Username
-              </Th>
-              <Th p={'12px'} textAlign='center'>
-                Last Name
-              </Th>
-              <Th p={'12px'} textAlign='center'>
-                First Name
-              </Th>
-              <Th p={'12px'} textAlign='center'>
-                Middle Name
-              </Th>
-              <Th p={'12px'} textAlign='center' w={'7%'}>
-                Gender
-              </Th>
-              {/* <Th textAlign='center' w={'6%'}>
-                Age
-              </Th> */}
-              <Th p={'12px'} textAlign='center'>
-                Date of Registration
-              </Th>
-              <Th p={'12px'} textAlign='center' w={'15%'}>
-                Actions
-              </Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {users.map((user) => {
-              const profile = user.profile
-              return (
-                <Tr key={user._id}>
-                  <Td
-                    p={'12px'}
-                    textAlign='center'
-                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                  >
-                    <Link as={rr_Link} color={'brand.500'} to={`${user._id}`}>
-                      {user._id}
-                    </Link>
-                  </Td>
-                  <Td
-                    p={'12px'}
-                    fontWeight={'semibold1'}
-                    textAlign='center '
-                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                  >
-                    {user?.username || 'N/A'}
-                  </Td>
-                  <Td
-                    p={'12px'}
-                    textAlign='center'
-                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                  >
-                    {profile?.lastName || 'N/A'}
-                  </Td>
-                  <Td
-                    p={'12px'}
-                    textAlign='center'
-                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                  >
-                    {profile?.firstName || 'N/A'}
-                  </Td>
-                  <Td
-                    p={'12px'}
-                    textAlign='center'
-                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                  >
-                    {profile?.middleName || 'N/A'}
-                  </Td>
-                  <Td
-                    p={'12px'}
-                    textAlign='center'
-                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                  >
-                    {profile?.sex || 'N/A'}
-                  </Td>
-                  {/* <Td
-                      textAlign='center'
-                      style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                    >
-                      {calculateAge(profile?.dateOfBirth) || 'N/A'}
-                    </Td> */}
-                  <Td
-                    p={'12px'}
-                    textAlign='center'
-                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                  >
-                    {new Date(user.dateOfCreation).toLocaleDateString()}
-                  </Td>
-                  <Td
-                    p={'12px'}
-                    textAlign='center'
-                    justifyContent={'center'}
-                    display={'flex'}
-                    gap={'10px'}
-                    style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-                  >
-                    <Button
-                      onClick={() => handleEditOpen(user)}
-                      colorScheme='green'
-                    >
-                      Edit
-                    </Button>
-                    <Button colorScheme='orange'>Archive</Button>
-                    <Button
-                      onClick={() => handleDeleteOpen(user)}
-                      colorScheme='red'
-                    >
-                      Delete
-                    </Button>
-                  </Td>
-                </Tr>
-              )
-            })}
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <Text
-        fontSize={'2xl'}
-        fontWeight={'semibold'}
-        color={'tomato'}
-        display={error ? 'block' : 'none'}
-        textAlign={'center'}
-      >
-        {error}
-      </Text>
-      <Spinner
-        display={isLoading ? 'block' : 'none'}
-        m={'auto'}
-        size={'xl'}
-        mt={'25px'}
-      />
+          No Users yet
+        </Text>
+      ) : (
+        <Text
+          fontSize={'2xl'}
+          fontWeight={'semibold'}
+          color={'tomato'}
+          textAlign={'center'}
+        >
+          {error}
+        </Text>
+      )}
     </>
   )
 }
