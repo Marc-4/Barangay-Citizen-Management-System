@@ -2,7 +2,7 @@ import { User, ProfileRequest } from '../../models/index.js'
 import { sendError, sendSuccess } from '../../utils/index.js'
 
 const requestEditUserProfile = async (req, res) => {
-  console.log(req.body);
+  console.log(req.body)
   if (
     req.body.firstName === undefined &&
     req.body.lastName === undefined &&
@@ -35,6 +35,8 @@ const requestEditUserProfile = async (req, res) => {
   try {
     oldrequest = await ProfileRequest.findOne({
       accountID: req.user.id,
+      userFirstName: user.firstName,
+      userLastName: user.firstName,
       requestType: 'EDIT',
       status: 'PENDING',
     })
@@ -68,7 +70,7 @@ const requestEditUserProfile = async (req, res) => {
     placeOfBirth: {
       city: '',
       province: '',
-      country: ''
+      country: '',
     },
     sex: '',
     civilStatus: '',
@@ -78,12 +80,12 @@ const requestEditUserProfile = async (req, res) => {
     address: {
       streetName: '',
       houseNumber: '',
-      subdivision_purok: ''
+      subdivision_purok: '',
     },
     profilePhoto: {
       data: '',
-      fileName: ''
-    }
+      fileName: '',
+    },
   }
 
   let request
@@ -93,22 +95,31 @@ const requestEditUserProfile = async (req, res) => {
     if (middleName) requestContent.middleName = middleName
     if (dateOfBirth) requestContent.dateOfBirth = dateOfBirth
     if (placeOfBirth?.city) requestContent.placeOfBirth.city = placeOfBirth.city
-    if (placeOfBirth?.province) requestContent.placeOfBirth.province = placeOfBirth.province
-    if (placeOfBirth?.country) requestContent.placeOfBirth.country = placeOfBirth.country
+    if (placeOfBirth?.province)
+      requestContent.placeOfBirth.province = placeOfBirth.province
+    if (placeOfBirth?.country)
+      requestContent.placeOfBirth.country = placeOfBirth.country
     if (sex) requestContent.sex = sex
     if (civilStatus) requestContent.civilStatus = civilStatus
     if (occupation) requestContent.occupation = occupation
     if (citizenship) requestContent.occupation = citizenship
     if (email) requestContent.email = email
-    if (address?.streetName) requestContent.address.streetName = address.streetName
-    if (address?.houseNumber) requestContent.address.houseNumber = address.houseNumber
-    if (address?.subdivisionPurok) requestContent.address.subdivision_purok = address.subdivisionPurok
-    if (profilePhoto?.buffer) requestContent.profilePhoto.data = profilePhoto.buffer
-    if (profilePhoto?.originalname) requestContent.profilePhoto.fileName = profilePhoto.originalname
+    if (address?.streetName)
+      requestContent.address.streetName = address.streetName
+    if (address?.houseNumber)
+      requestContent.address.houseNumber = address.houseNumber
+    if (address?.subdivisionPurok)
+      requestContent.address.subdivision_purok = address.subdivisionPurok
+    if (profilePhoto?.buffer)
+      requestContent.profilePhoto.data = profilePhoto.buffer
+    if (profilePhoto?.originalname)
+      requestContent.profilePhoto.fileName = profilePhoto.originalname
 
     request = await ProfileRequest.create({
       accountID: req.user.id,
       requestType: 'EDIT',
+      userFirstName: user.firstName,
+      userLastName: user.firstName,
       requestContent: requestContent,
       timestamp: Date.now(),
       status: 'PENDING',

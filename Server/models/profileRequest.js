@@ -5,6 +5,12 @@ const requestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userFirstName:{
+    type: String
+  },
+  userLastName:{
+    type: String
+  },
   requestType: {
     type: String,
     required: true,

@@ -39,8 +39,6 @@ const AdminEmployeeAccounts = () => {
   const [selectedUser, setSelectedUser] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const cancelRef = useRef()
-  const [showText, setShowText] = useState(false)
-  const [showArchivedText, setShowArchivedText] = useState(false)
 
   const {
     isOpen: isRegisterOpen,
@@ -62,23 +60,6 @@ const AdminEmployeeAccounts = () => {
     getEmployees()
     getArchivedEmployees()
   }, [])
-
-  useEffect(() => {
-    if (employees.length === 0) {
-      const employeeTimer = setTimeout(() => {
-        setShowText(true)
-      }, 1000)
-
-      return () => clearTimeout(employeeTimer)
-    }
-    if (archivedEmployees.length === 0) {
-      const archivedEmployeeTimer = setTimeout(() => {
-        setShowArchivedText(true)
-      }, 1000)
-
-      return () => clearTimeout(archivedEmployeeTimer)
-    }
-  }, [employees, archivedEmployees])
 
   const getEmployees = async () => {
     setIsLoading(true)
@@ -356,19 +337,6 @@ const AdminEmployeeAccounts = () => {
                 </Tbody>
               </Table>
             </TableContainer>
-            {isLoading ? (
-              <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
-            ) : showText ? (
-              <Text
-                fontWeight={'semibold'}
-                fontSize={'3xl'}
-                textAlign={'center'}
-              >
-                No Employees yet
-              </Text>
-            ) : (
-              ''
-            )}
           </TabPanel>
           <TabPanel>
             <TableContainer
@@ -531,23 +499,14 @@ const AdminEmployeeAccounts = () => {
                 </Tbody>
               </Table>
             </TableContainer>
-            {isLoading ? (
-              <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
-            ) : showArchivedText ? (
-              <Text
-                fontWeight={'semibold'}
-                fontSize={'3xl'}
-                textAlign={'center'}
-              >
-                no Archived Employees yet
-              </Text>
-            ) : (
-              ''
-            )}
           </TabPanel>
         </TabPanels>
       </Tabs>
-
+      {isLoading ? (
+        <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
+      ) : (
+        ''
+      )}
       {error ? (
         <Text
           fontSize={'2xl'}

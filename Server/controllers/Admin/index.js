@@ -14,6 +14,7 @@ import registerEmployeeController from './forEmployee/registerEmployeeController
 import searchEmployeeController from './forEmployee/searchEmployeeController.js'
 
 import archiveUserController from './forUser/archiveUserController.js'
+import restoreUserController from './forUser/restoreUserController.js'
 import createUserProfileController from './forUser/createUserProfileController.js'
 import deleteUserController from './forUser/deleteUserController.js'
 import editUserController from './forUser/editUserController.js'
@@ -57,6 +58,7 @@ export {
   registerEmployeeController,
   searchEmployeeController,
   archiveUserController,
+  restoreUserController,
   createUserProfileController,
   deleteUserController,
   editUserController,

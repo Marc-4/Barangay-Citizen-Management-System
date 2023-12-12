@@ -5,15 +5,26 @@ import sendSuccess from '../../../utils/sendSuccess.js'
 const searchTransactions = async (req, res) => {
   console.log('searching for transactions..')
   try {
-    const { query } = req.query
+    const { query, filter } = req.query
 
     console.log(query)
-    const transactions = await Transaction.find({
+    console.log(filter)
+
+    const queryFilter = {
       $or: [
         { transacType: { $regex: query, $options: 'i' } },
-        // { accountID: { $regex: query, $options: 'i' } },
+        { userFirstName: { $regex: query, $options: 'i' } },
+        { userLastName: { $regex: query, $options: 'i' } },
       ],
-    })
+    }
+
+    if (filter === 'PENDING') {
+      queryFilter.status = 'PENDING'
+    } else if (filter === 'HISTORY') {
+      queryFilter.status = { $ne: 'PENDING' }
+    }
+
+    const transactions = await Transaction.find(queryFilter)
 
     const payload = transactions
 

@@ -1,10 +1,9 @@
 import { IconButton } from '@chakra-ui/react'
 import { RiRefreshLine } from 'react-icons/ri'
 
-const RefreshButton = () => {
-
-  const refreshPage = () => {
-    window.location.reload()
+const RefreshButton = ({ refreshCounter, setRefreshCounter }) => {
+  const refreshComponent = () => {
+    setRefreshCounter((prevCounter) => prevCounter + 1)
   }
 
   return (
@@ -13,7 +12,7 @@ const RefreshButton = () => {
         size={'lg'}
         colorScheme='facebook'
         icon={<RiRefreshLine />}
-        onClick={() => refreshPage()}
+        onClick={refreshComponent}
       />
     </>
   )

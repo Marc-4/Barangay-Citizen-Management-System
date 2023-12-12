@@ -22,6 +22,7 @@ const Searchbar = ({ entries, page, searchHandler }) => {
             w={'300px'}
             h={'50px'}
             pl={'75px'}
+            mb={'5px'}
             placeholder='Enter a keyword'
             value={query}
             onChange={(e) => setQuery(e.target.value)}

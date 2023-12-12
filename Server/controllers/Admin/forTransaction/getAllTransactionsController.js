@@ -25,7 +25,7 @@ const getAllTransactions = async (req, res) => {
     return sendError('Internal Server Error', 500, res)
   }
 
-  if (!transactions) return sendError('No Transactions Found', 404, res)
+  // if (!transactions) return sendError('No Transactions Found', 404, res)
 
   const payload = transactions
   return sendSuccess(payload, 200, res)

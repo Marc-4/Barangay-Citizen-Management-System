@@ -27,27 +27,41 @@ const BarangayRecords = () => {
   const createTransaction = async () => {
     setLoading(true)
     try {
-      const route = `http://localhost:3000/api/user/transaction/create`
-      const body = {
-        transacType: 'BRGY_RECORD',
-        formData: {
-          purpose: '',
-          income: '',
-          cost: 150,
-        //   attachment: ''
-        },
-      }
-      const response = await callAPI(body, 'POST', route)
+      const formData = new FormData()
 
-      if (response.result === 'OK') {
+      formData.append('transacType', 'BRGY_RECORD')
+      formData.append('purpose', '')
+      formData.append('income', '')
+      formData.append('cost', 150)
+
+      const attachmentInput = document.querySelector('input[name="attachment"]')
+      const file = attachmentInput.files[0]
+      console.log(file.name)
+      formData.append('attachment', file, file.name)
+
+      for (const pair of formData.entries()) {
+        console.log(pair[0], pair[1])
+      }
+
+      const route = `http://localhost:3000/api/user/transaction/create`
+
+      const response = await fetch(route, {
+        method: 'POST',
+        body: formData,
+        mode: 'cors',
+        credentials: 'include',
+      })
+
+      const responseData = await response.json()
+      if (responseData.result === 'OK') {
         setSuccess('Successfully Booked Transaction!')
         setError(null)
-        createNotification(response.payload)
+        createNotification(responseData.payload)
 
         setTimeout(() => {
-          navigate(`/user/transactions/${response.payload._id}`)
+          navigate(`/user/transactions/${responseData.payload._id}`)
         }, 1000)
-      } else setError(response.payload.error)
+      } else setError(responseData.payload.error)
     } catch (error) {
       console.log(error)
       setError('Connection Error')
@@ -79,7 +93,7 @@ const BarangayRecords = () => {
   }
 
   const createNotification = async (transaction) => {
-    console.log(transaction);
+    console.log(transaction)
     try {
       const body = {
         notifType: 'TRANSACTION',
@@ -108,18 +122,29 @@ const BarangayRecords = () => {
           bg={'white'}
         >
           <Box display={'flex'} flexDirection={'column'}>
-            <Heading textAlign={'center'}>Barangay Records & Documents Form</Heading>
+            <Heading textAlign={'center'}>
+              Barangay Records & Documents Form
+            </Heading>
             <Form onSubmit={() => createTransaction()}>
               <Box display={'flex'} flexDir={'column'} gap={'10px'}>
                 <Text>Letter of Request: </Text>
-                <Input type='file'/>
+                <input
+                  name='attachment'
+                  type='file'
+                  accept='.pdf,.doc,.docx'
+                  required={true}
+                />
                 <Checkbox size={'lg'} isRequired={true}>
                   I certify that I reside at this barangay.
                 </Checkbox>
                 <Text fontWeight={'semibold'} fontSize={'lg'}>
                   Processing Fee:
                 </Text>
-                <Input isReadOnly={true} fontWeight={'semibold'} value={150} />
+                <Input
+                  isReadOnly={true}
+                  fontWeight={'semibold'}
+                  value={'none'}
+                />
 
                 <Button
                   isDisabled={loading}

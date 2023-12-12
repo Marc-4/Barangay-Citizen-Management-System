@@ -2,7 +2,7 @@ import { User } from '../../models/index.js'
 import { sendError, sendSuccess } from '../../utils/index.js'
 
 const getUserProfile = async (req, res) => {
-    const user = await User.findById(req.user.id)
+    const user = await User.findById(req.user.id).select('-password')
     if (!user) return sendError('user profile does not exist', 404, res)
   
     const payload = user

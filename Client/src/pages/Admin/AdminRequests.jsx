@@ -10,45 +10,79 @@ import {
   TabList,
   Flex,
   Box,
+  Spinner
 } from '@chakra-ui/react'
 import TransactionCard from '../../components/cards/TransactionCard'
 import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
 import Searchbar from '../../components/Searchbar'
+import RefreshButton from '../../components/RefreshButton'
 
 const AdminRequests = () => {
-  const [Requests, setRequests] = useState([])
+  const [requests, setRequests] = useState([])
+  const [pastRequests, setPastRequests] = useState([])
   const [error, setError] = useState()
   const [filter, setFilter] = useState('PENDING')
+  const [isLoading, setIsLoading] = useState(true)
+  const [refreshCounter, setRefreshCounter] = useState(0)
 
   useEffect(() => {
     getRequests()
-  }, [filter])
+    getPastRequests()
+  }, [])
 
   const getRequests = async () => {
-    const body = null
-    const method = 'GET'
-    const route = `http://localhost:3000/api/admin/requests?entries=20&filter=${filter}`
+    setIsLoading(true)
     try {
+      const body = null
+      const method = 'GET'
+      const route = `http://localhost:3000/api/admin/requests?entries=20&filter=PENDING`
       console.log('calling API..')
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
         setError(null)
         return setRequests(data.payload)
-      } else return setError('Connection Error, refresh page to try again')
+      } else return setError(data.payload.error)
     } catch (err) {
       return setError('Connection Error, refresh page to try again')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+  const getPastRequests = async () => {
+    setIsLoading(true)
+    try {
+      const body = null
+      const method = 'GET'
+      const route = `http://localhost:3000/api/admin/requests?entries=20&filter=HISTORY`
+      console.log('calling API..')
+      const data = await callAPI(body, method, route)
+      if (data && data.result === 'OK') {
+        setError(null)
+        return setPastRequests(data.payload)
+      } else return setError(data.payload.error)
+    } catch (err) {
+      return setError('Connection Error, refresh page to try again')
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
     <>
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
-        <Flex flexDirection='row' alignItems='center' gap={'25px'}>
+        <Flex
+          flexDirection='row'
+          alignItems='center'
+          gap={'10px'}
+          mt={'25px'}
+          mb={'25px'}
+        >
           <Searchbar />
-          <Heading mt='25px' mb='25px' display='flex' justifyContent='center'>
-            Requests
-          </Heading>
+          <RefreshButton
+            refreshCounter={refreshCounter}
+            setRefreshCounter={setRefreshCounter}
+          />
         </Flex>
       </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
@@ -57,31 +91,68 @@ const AdminRequests = () => {
           <Tab onClick={() => setFilter('PENDING')}>Pending Requests</Tab>
           <Tab onClick={() => setFilter('HISTORY')}>Request History</Tab>
         </TabList>
+        <TabPanels>
+          <TabPanel>
+            <Center
+              margin={'10px'}
+              p={'25px'}
+              pt={'0px'}
+              flexDirection={'column'}
+              gap={'25px'}
+            >
+              <Text display={error ? 'block' : 'none'}>{error}</Text>
+
+              {!isLoading && requests.length === 0 ? (
+                <Text fontWeight={'semibold'} fontSize={'2xl'}>
+                  No Requests
+                </Text>
+              ) : (
+                requests.map((request) => {
+                  return (
+                    <TransactionCard
+                      key={request._id}
+                      data={request}
+                      basepath={'/admin/requests'}
+                    ></TransactionCard>
+                  )
+                })
+              )}
+            </Center>
+          </TabPanel>
+          <TabPanel>
+            <Center
+              margin={'10px'}
+              p={'25px'}
+              pt={'0px'}
+              flexDirection={'column'}
+              gap={'25px'}
+            >
+              <Text display={error ? 'block' : 'none'}>{error}</Text>
+
+              {!isLoading && requests.length === 0 ? (
+                <Text fontWeight={'semibold'} fontSize={'2xl'}>
+                  No Past Requests
+                </Text>
+              ) : (
+                pastRequests.map((request) => {
+                  return (
+                    <TransactionCard
+                      key={request._id}
+                      data={request}
+                      basepath={'/admin/requests'}
+                    ></TransactionCard>
+                  )
+                })
+              )}
+            </Center>
+          </TabPanel>
+          <Spinner
+            display={isLoading ? 'block' : 'none'}
+            size={'xl'}
+            m={'auto'}
+          />
+        </TabPanels>
       </Tabs>
-
-      <Center
-        margin={'10px'}
-        p={'25px'}
-        pt={'0px'}
-        flexDirection={'column'}
-        gap={'25px'}
-      >
-        <Text display={error ? 'block' : 'none'}>{error}</Text>
-
-        {Requests.length === 0 ? (
-          <Text fontWeight={'semibold'} fontSize={'2xl'}>No Requests</Text>
-        ) : (
-          Requests.map((request) => {
-            return (
-              <TransactionCard
-                key={request._id}
-                data={request}
-                basepath={'/admin/requests'}
-              ></TransactionCard>
-            )
-          })
-        )}
-      </Center>
     </>
   )
 }

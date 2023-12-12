@@ -22,6 +22,7 @@ const upload = multer({ storage: storage })
 
 //middlewares
 app.use(upload.single('profilePhoto'))
+app.use(upload.single('attachment'))
 app.use(cookieParser())
 app.use(express.json())
 app.use(

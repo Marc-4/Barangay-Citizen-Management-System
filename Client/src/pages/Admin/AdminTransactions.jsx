@@ -1,6 +1,5 @@
 import {
   Box,
-  Heading,
   Center,
   Flex,
   Divider,
@@ -8,6 +7,9 @@ import {
   Tabs,
   Tab,
   TabList,
+  TabPanels,
+  TabPanel,
+  Spinner,
 } from '@chakra-ui/react'
 import TransactionCard from '../../components/cards/TransactionCard'
 import { useEffect, useState } from 'react'
@@ -17,26 +19,51 @@ import RefreshButton from '../../components/RefreshButton'
 
 const AdminTransactions = () => {
   const [transactions, setTransactions] = useState([])
+  const [pastTransactions, setPastTransactions] = useState([])
   const [error, setError] = useState()
   const [filter, setFilter] = useState('PENDING')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [refreshCounter, setRefreshCounter] = useState(0)
 
   useEffect(() => {
     getTransactions()
-  }, [filter])
+    getPastTransactions()
+  }, [refreshCounter])
 
   const getTransactions = async () => {
-    const body = null
-    const method = 'GET'
-    const route = `http://localhost:3000/api/admin/transactions?entries=20&filter=${filter}`
+    setIsLoading(true)
     try {
+      const body = null
+      const method = 'GET'
+      const route = `http://localhost:3000/api/admin/transactions?entries=20&filter=PENDING`
+      const data = await callAPI(body, method, route)
+      if (data.result === 'OK') {
+        setError(null)
+        setTransactions(data.payload)
+      } else setError(data.payload.error)
+    } catch (err) {
+      setError('Connection Error, refresh page to try again')
+    } finally {
+      setIsLoading(true)
+    }
+  }
+
+  const getPastTransactions = async () => {
+    setIsLoading(true)
+
+    try {
+      const body = null
+      const method = 'GET'
+      const route = `http://localhost:3000/api/admin/transactions?entries=20&filter=HISTORY`
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
         setError(null)
-        return setTransactions(data.payload)
-      } else return setError('Connection Error, refresh page to try again')
+        setPastTransactions(data.payload)
+      } else setError(data.payload.error)
     } catch (err) {
-      return setError('Connection Error, refresh page to try again')
+      setError('Connection Error, refresh page to try again')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -44,12 +71,15 @@ const AdminTransactions = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/transactions/search?query=${query}`
+    const route = `http://localhost:3000/api/admin/transactions/search?query=${query}&filter=${filter}`
+    console.log(filter)
+    console.log(query)
 
     try {
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
-        setTransactions(data.payload)
+        if (filter === 'PENDING') setTransactions(data.payload)
+        else setPastTransactions(data.payload)
         setError(null)
       } else {
         setError(data.payload.error)
@@ -65,9 +95,18 @@ const AdminTransactions = () => {
   return (
     <>
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
-        <Flex flexDirection='row' alignItems='center' gap={'25px'}>
+        <Flex
+          flexDirection='row'
+          alignItems='center'
+          gap={'10px'}
+          mt={'25px'}
+          mb={'25px'}
+        >
           <Searchbar searchHandler={handleSearch} />
-          <RefreshButton />
+          <RefreshButton
+            refreshCounter={refreshCounter}
+            setRefreshCounter={setRefreshCounter}
+          />
         </Flex>
       </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
@@ -76,25 +115,64 @@ const AdminTransactions = () => {
           <Tab onClick={() => setFilter('PENDING')}>Pending Transactions</Tab>
           <Tab onClick={() => setFilter('HISTORY')}>Transaction History</Tab>
         </TabList>
+        <TabPanels>
+          <TabPanel>
+            {!isLoading && transactions.length === 0 ? (
+              <Text
+                fontWeight={'semibold'}
+                fontSize={'2xl'}
+                textAlign={'center'}
+              >
+                No Transactions
+              </Text>
+            ) : (
+              transactions.map((transaction) => (
+                <TransactionCard
+                  key={transaction._id}
+                  data={transaction}
+                  basepath={'/admin/transactions'}
+                />
+              ))
+            )}
+          </TabPanel>
+          <TabPanel>
+            {!isLoading && pastTransactions.length === 0 ? (
+              <Text
+                fontWeight={'semibold'}
+                fontSize={'2xl'}
+                textAlign={'center'}
+              >
+                No Past Transactions
+              </Text>
+            ) : (
+              pastTransactions.map((transaction) => (
+                <TransactionCard
+                  key={transaction._id}
+                  data={transaction}
+                  basepath={'/admin/transactions'}
+                />
+              ))
+            )}
+          </TabPanel>
+          <Spinner
+            display={isLoading ? 'block' : 'none'}
+            size={'xl'}
+            m={'auto'}
+          />
+          {error ? (
+            <Text
+              fontSize={'2xl'}
+              fontWeight={'semibold'}
+              color={'tomato'}
+              textAlign={'center'}
+            >
+              {error}
+            </Text>
+          ) : (
+            ''
+          )}
+        </TabPanels>
       </Tabs>
-
-      <Center p={'25px'} pt={'0px'} flexDirection={'column'}>
-        <Text display={error ? 'block' : 'none'}>{error}</Text>
-
-        {transactions.length === 0 ? (
-          <Text fontWeight={'semibold'} fontSize={'2xl'}>
-            No Transactions
-          </Text>
-        ) : (
-          transactions.map((transaction) => (
-            <TransactionCard
-              key={transaction._id}
-              data={transaction}
-              basepath={'/admin/transactions'}
-            />
-          ))
-        )}
-      </Center>
     </>
   )
 }

@@ -47,7 +47,6 @@ const AdminNotifications = () => {
     <>
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex flexDirection='row' alignItems='center' gap={'25px'}>
-          <Searchbar />
           <Heading mt='25px' mb='25px' display='flex' justifyContent='center'>
             Notifications
           </Heading>

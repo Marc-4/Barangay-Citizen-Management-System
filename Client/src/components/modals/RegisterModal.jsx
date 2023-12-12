@@ -63,29 +63,6 @@ function RegisterModal({ isOpen, onClose }) {
 
     setSubmitting(true)
     try {
-      // const body = {
-      //   username: values.username,
-      //   password: values.password,
-      //   firstName: values.firstName,
-      //   middleName: values.middleName,
-      //   lastName: values.lastName,
-      //   dateOfBirth: values.dateOfBirth,
-      //   placeOfBirth: {
-      //     city: values.placeOfBirth_City,
-      //     province: values.placeOfBirth_Province,
-      //     country: values.placeOfBirth_Country,
-      //   },
-      //   sex: values.sex,
-      //   civilStatus: values.civilStatus,
-      //   occupation: values.occupation,
-      //   citizenship: values.citizenship,
-      //   email: values.email,
-      //   address: {
-      //     streetName: values.address_streetName,
-      //     houseNumber: values.address_houseNumber,
-      //     subdivisionPurok: values.address_subdivisionPurok,
-      //   },
-      // }
 
       const formData = new FormData()
 
