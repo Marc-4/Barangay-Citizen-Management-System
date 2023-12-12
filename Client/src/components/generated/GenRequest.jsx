@@ -38,7 +38,6 @@ const GenRequest = () => {
       if (data && data.result === 'OK') {
         setError(null)
         setRequestData(data.payload)
-        console.log(requestData)
       } else {
         setError('Error fetching request data')
       }
@@ -55,7 +54,6 @@ const GenRequest = () => {
         if (data && data.result === 'OK') {
           setError(null)
           setAccount(data.payload)
-          console.log(account)
         }
       }
     } catch (error) {

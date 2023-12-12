@@ -5,6 +5,8 @@ import {
   Checkbox,
   Heading,
   Input,
+  Radio,
+  RadioGroup,
   Stack,
   Text,
   Textarea,
@@ -38,6 +40,8 @@ const CommunityTaxCertificate = () => {
           cost: 'Variable',
         },
       }
+      console.log(body);
+      
       const response = await callAPI(body, 'POST', route)
 
       if (response.result === 'OK') {
@@ -87,6 +91,7 @@ const CommunityTaxCertificate = () => {
         message: `${account.profile.firstName} ${account.profile.lastName} booked a Community Tax Certificate Transaction.`,
         linkID: transaction._id,
       }
+      
       const route = `http://localhost:3000/api/user/notification/create`
       const response = await callAPI(body, 'POST', route)
       if (response === 'OK') setError(null)
@@ -121,11 +126,11 @@ const CommunityTaxCertificate = () => {
                   isRequired={true}
                 />
                 <Text>Monthly Income: </Text>
-                <Input
-                  value={income}
-                  onChange={(e) => setIncome(e.target.value)}
-                  type='number'
-                  isRequired={true}
+                <Input 
+                isRequired={true}
+                onChange={(e)=> setIncome(e.target.value)}
+                value={income}
+                placeholder='income'
                 />
                 <Checkbox size={'lg'} isRequired={true}>
                   I certify that I reside at this barangay.

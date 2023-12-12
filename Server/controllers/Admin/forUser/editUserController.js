@@ -4,12 +4,11 @@ import mongoose from 'mongoose'
 
 const editUser = async (req, res) => {
   console.log('editing user...');
-  // console.log(req.body)
-  // console.log(req.file)
+  console.log(req.body);
+  console.log(req.file);
   if (!mongoose.isValidObjectId(req.params.id))
     return sendError('invalid user ID', 400, res)
 
-  //check input use &&
   if (
     req.body.firstName === undefined &&
     req.body.lastName === undefined &&
@@ -26,7 +25,6 @@ const editUser = async (req, res) => {
     req.body.address?.streetName === undefined &&
     req.body.address?.houseNumber === undefined &&
     req.body.address?.subdivisionPurok === undefined
-    // req.body.profilePhoto === undefined
   )
     return sendError('Mising Required Fields', 404, res)
 
@@ -53,15 +51,15 @@ const editUser = async (req, res) => {
     occupation,
     citizenship,
     email,
-    address,
-    // profilePhoto,
+    address
   } = req.body
 
   const profilePhoto = req.file
+
   if (firstName) user.profile.firstName = req.body.firstName
   if (lastName) user.profile.lastName = req.body.lastName
   if (middleName) user.profile.middleName = req.body.middleName
-  if (dateOfBirth) user.profile.dateOfBirth = req.body.dateOfBirth
+  if (dateOfBirth && !dateOfBirth === null) user.profile.dateOfBirth = req.body.dateOfBirth
   if (placeOfBirth?.city) user.profile.placeOfBirth.city = req.body.placeOfBirth.city
   if (placeOfBirth?.province) user.profile.placeOfBirth.province = req.body.placeOfBirth.province
   if (placeOfBirth?.country) user.profile.placeOfBirth.country = req.body.placeOfBirth.country

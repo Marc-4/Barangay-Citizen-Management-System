@@ -1,8 +1,16 @@
 // RequestContentCard.jsx
-import { VStack, Box, Heading, Divider, Text } from '@chakra-ui/react'
+import { VStack, Box, Heading, Divider, Text, Image } from '@chakra-ui/react'
+import { Buffer } from 'buffer'
 
 const ContentCard = ({ title, data, profile }) => {
   console.log(data)
+
+  const revertBase64 = (imageBuf) => {
+    let base64String = Buffer.from(imageBuf).toString('base64')
+
+    return `data:image/png;base64,${base64String}`
+  }
+
   return (
     <>
       <VStack spacing={4} align='start'>
@@ -22,6 +30,24 @@ const ContentCard = ({ title, data, profile }) => {
           </Heading>
           <Divider w='100%' borderColor={'brand.100'} marginBottom={'25px'} />
           <Box>
+            <Text
+              color={data?.firstName ? 'brand.300' : 'brand.100'}
+              fontWeight='bold'
+            >
+              Profile Photo:
+            </Text>
+            <Image
+              src={
+                data?.profilePhoto.data.data.length !== 0
+                  ? revertBase64(data.profilePhoto.data)
+                  : profile?.profilePhoto.data
+                  ? revertBase64(profile.profilePhoto.data)
+                  : ''
+              }
+              m={'auto'}
+              boxSize={'200px'}
+              objectFit={'cover'}
+            />
             <Text
               color={data?.firstName ? 'brand.300' : 'brand.100'}
               fontWeight='bold'
@@ -83,8 +109,9 @@ const ContentCard = ({ title, data, profile }) => {
               Date of Birth:
             </Text>
             <Text>
-              {new Date(data?.dateOfBirth).toLocaleDateString() ||
-                new Date(profile?.dateOfBirth).toLocaleDateString()}
+              {data.dateOfBirth !== null
+                ? new Date(data?.dateOfBirth).toLocaleDateString()
+                : new Date(profile?.dateOfBirth).toLocaleDateString()}
             </Text>
           </Box>
           <Box>
@@ -119,7 +146,9 @@ const ContentCard = ({ title, data, profile }) => {
               {data?.address.streetName || profile?.address.streetName}
             </Text>
             <Text
-              color={data?.address?.subdivisionPurok ? 'brand.300' : 'brand.100'}
+              color={
+                data?.address?.subdivisionPurok ? 'brand.300' : 'brand.100'
+              }
               ml={'10px'}
               fontWeight='bold'
             >

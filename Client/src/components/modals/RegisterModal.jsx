@@ -7,11 +7,8 @@ import {
   ModalCloseButton,
   ModalFooter,
   Text,
-  Heading,
-  Divider,
-  Center,
 } from '@chakra-ui/react'
-import { object, string, date } from 'yup'
+import { object, string, date, mixed } from 'yup'
 import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
 import login from '../../utils/login'
@@ -40,9 +37,9 @@ function RegisterModal({ isOpen, onClose }) {
       .required('required')
       .max(new Date(), 'Date of Birth cannot be in the future')
       .min(new Date('1900-01-01'), 'Date of Birth cannot be before 1900'),
-    placeOfBirth_City: string().required('required'),
-    placeOfBirth_Province: string().required('required'),
-    placeOfBirth_Country: string().required('required'),
+    placeOfBirth_city: string().required('required'),
+    placeOfBirth_province: string().required('required'),
+    placeOfBirth_country: string().required('required'),
     sex: string().required('required'),
     civilStatus: string().required('required'),
     occupation: string().required('required'),
@@ -51,42 +48,74 @@ function RegisterModal({ isOpen, onClose }) {
     address_streetName: string().required('required'),
     address_houseNumber: string().required('required'),
     address_subdivisionPurok: string().required('required'),
+    profilePhoto: mixed().required('required'),
+    g_recaptcha_response: mixed().required('required'),
   })
 
   const handleRegister = async (values, setSubmitting) => {
-    // e.preventDefault()
-    // e.stopPropagation()
+    const recaptchaResponse = values['g_recaptcha_response']
+    console.log(recaptchaResponse)
+
+    // if (!recaptchaResponse) {
+    //   setSubmitting(false)
+    //   return
+    // }
+
     setSubmitting(true)
     try {
-      const body = {
-        username: values.username,
-        password: values.password,
-        firstName: values.firstName,
-        middleName: values.middleName,
-        lastName: values.lastName,
-        dateOfBirth: values.dateOfBirth,
-        placeOfBirth: {
-          city: values.placeOfBirth_City,
-          province: values.placeOfBirth_Province,
-          country: values.placeOfBirth_Country,
-        },
-        sex: values.sex,
-        civilStatus: values.civilStatus,
-        occupation: values.occupation,
-        citizenship: values.citizenship,
-        email: values.email,
-        address: {
-          streetName: values.address_streetName,
-          houseNumber: values.address_houseNumber,
-          subdivisionPurok: values.address_subdivisionPurok,
-        },
+      // const body = {
+      //   username: values.username,
+      //   password: values.password,
+      //   firstName: values.firstName,
+      //   middleName: values.middleName,
+      //   lastName: values.lastName,
+      //   dateOfBirth: values.dateOfBirth,
+      //   placeOfBirth: {
+      //     city: values.placeOfBirth_City,
+      //     province: values.placeOfBirth_Province,
+      //     country: values.placeOfBirth_Country,
+      //   },
+      //   sex: values.sex,
+      //   civilStatus: values.civilStatus,
+      //   occupation: values.occupation,
+      //   citizenship: values.citizenship,
+      //   email: values.email,
+      //   address: {
+      //     streetName: values.address_streetName,
+      //     houseNumber: values.address_houseNumber,
+      //     subdivisionPurok: values.address_subdivisionPurok,
+      //   },
+      // }
+
+      const formData = new FormData()
+
+      // Append form data
+      Object.entries(values).forEach(([key, value]) => {
+        if (key === 'profilePhoto' && value instanceof File) {
+          // If the field is profilePhoto and it's a File, append it to the FormData
+          formData.append(key, value)
+        } else {
+          // Otherwise, append other fields normally
+          formData.append(key, value)
+        }
+      })
+
+      for (const pair of formData.entries()) {
+        console.log(pair[0], pair[1])
       }
-
       const route = 'http://localhost:3000/api/user/account/register'
-      const response = await callAPI(body, 'POST', route)
 
-      if (response.result === 'OK') {
-        console.log(response.payload)
+      const response = await fetch(route, {
+        method: 'POST',
+        body: formData,
+        mode: 'cors',
+        credentials: 'include',
+      })
+
+      const responseBody = await response.json()
+
+      if (responseBody.result === 'OK') {
+        console.log(responseBody.payload)
         setError(null)
         setSuccess('Successfully Registered!')
 
@@ -98,7 +127,7 @@ function RegisterModal({ isOpen, onClose }) {
           setSuccess('')
           handleLogin(values.username, values.password)
         }, 1200)
-      } else setError(response.payload.error)
+      } else setError(responseBody.payload.error)
     } catch (error) {
       console.log(error)
       setError('Registration Error')
@@ -126,7 +155,12 @@ function RegisterModal({ isOpen, onClose }) {
 
   return (
     <>
-      <Modal size={'sm'} isOpen={isOpen} onClose={onClose}>
+      <Modal
+        closeOnOverlayClick={false}
+        size={'sm'}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader
@@ -151,9 +185,9 @@ function RegisterModal({ isOpen, onClose }) {
                 middleName: '',
                 lastName: '',
                 dateOfBirth: '',
-                placeOfBirth_City: '',
-                placeOfBirth_Province: '',
-                placeOfBirth_Country: '',
+                placeOfBirth_city: '',
+                placeOfBirth_province: '',
+                placeOfBirth_country: '',
                 sex: '',
                 civilStatus: '',
                 occupation: '',
@@ -162,10 +196,12 @@ function RegisterModal({ isOpen, onClose }) {
                 address_streetName: '',
                 address_houseNumber: '',
                 address_subdivisionPurok: '',
+                profilePhoto: '',
+                g_recaptcha_response: '',
               }}
             />
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter justifyContent={'center'}>
             <Text
               textAlign={'center'}
               color={'tomato'}
@@ -176,6 +212,7 @@ function RegisterModal({ isOpen, onClose }) {
               {error}
             </Text>
             <Text
+              mr={'50px'}
               textAlign={'center'}
               fontSize={'2xl'}
               color={'green'}

@@ -16,7 +16,7 @@ const AdminLayout = () => {
             <Sidebar />
           </GridItem>
 
-          <GridItem id='content' colSpan={5} bg={'brand.200'}>
+          <GridItem id='content' colSpan={5} bg={'background.main'}>
             <Navbar />
             <Outlet />
           </GridItem>

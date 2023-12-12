@@ -12,7 +12,7 @@ router.get('/account', middlewares, Admin.getAdminController)
 router.post('/user/register', middlewares,Admin.registerUserController)
 router.get('/user/:id', middlewares, Admin.getUserController)
 router.get('/users/', middlewares, Admin.getUsersController)
-router.get('user/search', middlewares, Admin.searchUserController)
+router.get('/users/search', middlewares, Admin.searchUserController)
 router.get('/user/:id/transactions/', middlewares, Admin.getUserTransactionsController)
 router.patch('/user/profile/:id/edit', middlewares, Admin.editUserController)
 // router.patch('/user/:id/archive', middlewares, Admin.archiveUserController) //test
@@ -31,7 +31,7 @@ router.delete('/employee/:id/delete', middlewares, Admin.deleteEmployeeControlle
 //transactions
 router.get('/transaction/:id', middlewares, Admin.getTransactionController)
 router.get('/transactions/', middlewares, Admin.getAllTransactionsController)
-// router.get('/transactions/search', middlewares, Admin.searchTransactionController)
+router.get('/transactions/search', middlewares, Admin.searchTransactionController)
 router.patch('/transaction/:id/edit', middlewares, Admin.editTransactionController)
 
 //requests
@@ -44,7 +44,7 @@ router.patch('/request/:id/edit', middlewares, Admin.editUserRequestController)
 router.post('/notification/create', middlewares, Admin.createNotificationController)
 router.get('/notifications/', middlewares, Admin.getNotificationsController)
 router.get('/notification/:id', middlewares, Admin.getNotificationController)
-router.get('/notifications/search', middlewares, Admin.searchNotificationController)
+// router.get('/notifications/search', middlewares, Admin.searchNotificationController)
 router.patch('/notifications/:id/edit', middlewares, Admin.editNotificationController)
 router.delete('/notifications/:id/edit', middlewares, Admin.deleteNotificationController)
 

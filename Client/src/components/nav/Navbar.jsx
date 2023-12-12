@@ -33,7 +33,7 @@ const Navbar = () => {
       <Flex
         as='nav'
         p={'20px'}
-        bg={'brand.400'}
+        bg={'background.50'}
         alignItems={'center'}
         h={'75px'}
       >

@@ -6,7 +6,7 @@ const middlewares = [authToken, authUser]
 const router = Router()
 
 router.post('/account/register', User.registerUserController)
-router.post('/account/create-profile', middlewares, User.requestCreateUserProfileController) //works?
+router.post('/account/create-profile', middlewares, User.requestCreateUserProfileController)
 router.get('/account/', middlewares, User.getUserProfileController)
 router.patch('/account/edit', middlewares, User.requestEditUserProfileController)
 // router.patch('/account/archive', middlewares, User.requestArchiveUserController)

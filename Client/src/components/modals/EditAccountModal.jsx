@@ -60,8 +60,7 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
 
   const editProfile = async (values) => {
     try {
-
-      if(!Object.values(values).some(value => value)){
+      if (!Object.values(values).some((value) => value)) {
         setError('No Fields to update')
         return
       }
@@ -71,10 +70,8 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
       // Append form data
       Object.entries(values).forEach(([key, value]) => {
         if (key === 'profilePhoto' && value instanceof File) {
-          // If the field is profilePhoto and it's a File, append it to the FormData
           formData.append(key, value)
         } else {
-          // Otherwise, append other fields normally
           formData.append(key, value)
         }
       })

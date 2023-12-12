@@ -82,12 +82,11 @@ const Home = () => {
           Home Page
         </Heading>
         <Box>
-          <Image></Image>
           <Box
             boxShadow={'lg'}
             p={'10px'}
             rounded={'10px'}
-            bg={'brand.400'}
+            bg={'background.50'}
             padding={'25px'}
           >
             <form onSubmit={(e) => handleLogin(e)}>

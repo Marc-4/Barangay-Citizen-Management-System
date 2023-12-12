@@ -14,12 +14,11 @@ import { NavLink } from 'react-router-dom'
 const AdminSidebar = () => {
   return (
     <>
-      <Box bg='brand.400' minH={'100%'}>
+      <Box bg='background.50' minH={'100%'}>
         <Flex
           minW={'250px'}
           justifyContent={'space-between'}
           alignItems={'center'}
-          color={'brand.100'}
         >
           <Box
             display={'flex'}
@@ -27,7 +26,7 @@ const AdminSidebar = () => {
             justifyContent={'left'}
             width={'100%'}
           >
-            <Heading display={'flex'} h={'75px'} alignItems={'center'}>
+            <Heading color={'text.main'} display={'flex'} h={'75px'} alignItems={'center'}>
               Sidebar
             </Heading>
           </Box>
@@ -54,7 +53,7 @@ const AdminSidebar = () => {
             }}
             _activeLink={{
               fontWeight: 'semibold',
-              backgroundColor: 'blue.300',
+              backgroundColor: 'secondary.300',
             }}
             w={'300px'}
             p={'10px'}
@@ -70,7 +69,7 @@ const AdminSidebar = () => {
             }}
             _activeLink={{
               fontWeight: 'semibold',
-              backgroundColor: 'blue.300',
+              backgroundColor: 'secondary.300',
             }}
             w={'300px'}
             p={'10px'}
@@ -86,7 +85,7 @@ const AdminSidebar = () => {
             }}
             _activeLink={{
               fontWeight: 'semibold',
-              backgroundColor: 'blue.300',
+              backgroundColor: 'secondary.300',
             }}
             w={'300px'}
             p={'10px'}
@@ -102,7 +101,7 @@ const AdminSidebar = () => {
             }}
             _activeLink={{
               fontWeight: 'semibold',
-              backgroundColor: 'blue.300',
+              backgroundColor: 'secondary.300',
             }}
             w={'300px'}
             p={'10px'}
@@ -118,7 +117,7 @@ const AdminSidebar = () => {
             }}
             _activeLink={{
               fontWeight: 'semibold',
-              backgroundColor: 'blue.300',
+              backgroundColor: 'secondary.300',
             }}
             w={'300px'}
             p={'10px'}
@@ -134,7 +133,7 @@ const AdminSidebar = () => {
             }}
             _activeLink={{
               fontWeight: 'semibold',
-              backgroundColor: 'blue.300',
+              backgroundColor: 'secondary.300',
             }}
             w={'300px'}
             p={'10px'}
@@ -150,7 +149,7 @@ const AdminSidebar = () => {
             }}
             _activeLink={{
               fontWeight: 'semibold',
-              backgroundColor: 'blue.300',
+              backgroundColor: 'secondary.300',
             }}
             w={'300px'}
             p={'10px'}

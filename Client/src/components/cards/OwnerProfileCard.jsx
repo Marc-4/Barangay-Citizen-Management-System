@@ -1,11 +1,19 @@
 // GenericCard.jsx
-import { VStack, Box, Heading, Divider, Text } from '@chakra-ui/react'
+import { VStack, Box, Heading, Divider, Text, Image } from '@chakra-ui/react'
+import { Buffer } from 'buffer'
 
 const OwnerProfileCard = ({ title, data }) => {
+  
+  const revertBase64 = (imageBuf) => {
+    let base64String = Buffer.from(imageBuf).toString('base64')
+
+    return `data:image/png;base64,${base64String}`
+  }
+
   return (
     <VStack spacing={4} align='start'>
       <Box
-      w={'300px'}
+        w={'300px'}
         id='profile_details'
         marginTop={'25px'}
         marginBottom={'25px'}
@@ -20,6 +28,22 @@ const OwnerProfileCard = ({ title, data }) => {
         </Heading>
         <Divider w='100%' borderColor={'brand.100'} marginBottom={'25px'} />
         <Box>
+          <Text
+            color={data?.firstName ? 'brand.300' : 'brand.100'}
+            fontWeight='bold'
+          >
+            Profile Photo:
+          </Text>
+          <Image
+            src={
+              data?.profilePhoto.data
+                ? revertBase64(data.profilePhoto.data)
+                : ''
+            }
+            m={'auto'}
+            boxSize={'200px'}
+            objectFit={'cover'}
+          />
           <Text fontWeight='bold'>First Name:</Text>
           <Text>{data?.firstName || 'N/A'}</Text>
         </Box>
@@ -45,7 +69,11 @@ const OwnerProfileCard = ({ title, data }) => {
         </Box>
         <Box>
           <Text fontWeight='bold'>Date of Birth:</Text>
-          <Text>{data?.dateOfBirth ? new Date(data?.dateOfBirth).toLocaleDateString() : 'N/A' }</Text>
+          <Text>
+            {data?.dateOfBirth
+              ? new Date(data?.dateOfBirth).toLocaleDateString()
+              : 'N/A'}
+          </Text>
         </Box>
         <Box>
           <Text fontWeight='bold'>Civil Status:</Text>

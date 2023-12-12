@@ -44,12 +44,12 @@ const TransactionCard = ({ data, basepath }) => {
           overflow='hidden'
           display={'flex'}
           fontSize={'md'}
-          bg={'white'}
+          bg={'background.main'}
           minW={'100%'}
           h={'125px'}
           shadow={'none'}
           borderBottom={'2px'}
-          borderColor={'brand.400'}
+          borderColor={'accent.main'}
           transition='all 0.2s'
           _hover={{ shadow: 'md', zIndex: '1' }}
         >

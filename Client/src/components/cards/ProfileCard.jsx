@@ -12,7 +12,6 @@ import {
 import { Buffer } from 'buffer'
 
 const ProfileCard = (data) => {
-  console.log(data)
 
   const revertBase64 = (imageBuf) => {
     let base64String = Buffer.from(imageBuf).toString('base64')

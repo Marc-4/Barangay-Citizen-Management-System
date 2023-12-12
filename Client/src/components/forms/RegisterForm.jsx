@@ -9,6 +9,7 @@ import {
   Radio,
   Image,
 } from '@chakra-ui/react'
+import ReCAPTCHA from 'react-google-recaptcha'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 
 const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
@@ -71,7 +72,7 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
                     if (file) {
                       setFieldValue('profilePhoto', file)
 
-                    const reader = new FileReader()
+                      const reader = new FileReader()
                       reader.onload = (e) => {
                         setProfilePhoto(e.target.result)
                       }
@@ -270,6 +271,17 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
                 color={'tomato'}
               />
             </Box>
+            <ReCAPTCHA
+              sitekey='6LcLQywpAAAAAGJJwgJxWQAY40QFBLsLAJDwgXra'
+              onChange={(value) => setFieldValue('g_recaptcha_response', value)}
+            />
+            <Field type='hidden' name='g_recaptcha_response' />
+            <Text
+                as={ErrorMessage}
+                name='g_recaptcha_response'
+                component='div'
+                color={'tomato'}
+              />
             <Button
               m={'auto'}
               mt={'25px'}

@@ -74,7 +74,7 @@ const AdminNotifications = () => {
             <NotificationCard
               data={notification}
               key={notification._id}
-              account_type='user'
+              account_type='admin'
             ></NotificationCard>
           ))
         )}

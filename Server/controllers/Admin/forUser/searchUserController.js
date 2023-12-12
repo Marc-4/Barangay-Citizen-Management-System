@@ -1,33 +1,29 @@
-import { User, Profile } from '../../../models/index.js'
+import { User } from '../../../models/index.js'
+import sendError from '../../../utils/sendError.js'
+import sendSuccess from '../../../utils/sendSuccess.js'
 
 const searchUser = async (req, res) => {
+  console.log('searching for user..')
   try {
-    const { query, page, entries } = req.query
-    const users = await User.find({
-      $or: [{ username: { $regex: query, $options: 'i' } }],
-    })
-      .skip((page - 1) * entries)
-      .limit(Number(entries))
+    const { query } = req.query
 
-    const profiles = await Profile.find({
+    const users = await User.find({
       $or: [
-        { firstName: { $regex: query, $options: 'i' } },
-        { lastName: { $regex: query, $options: 'i' } },
-        { middleName: { $regex: query, $options: 'i' } },
-        { sex: { $regex: query, $options: 'i' } },
-        { civilStatus: { $regex: query, $options: 'i' } },
+        { username: { $regex: query, $options: 'i' } },
+        { 'profile.firstName': { $regex: query, $options: 'i' } },
+        { 'profile.lastName': { $regex: query, $options: 'i' } },
+        { 'profile.middleName': { $regex: query, $options: 'i' } },
+        { 'profile.sex': { $regex: query, $options: 'i' } },
+        { 'profile.civilStatus': { $regex: query, $options: 'i' } },
       ],
     })
-      .skip((page - 1) * entries)
-      .limit(Number(entries))
 
-    const payload = { users: users, profiles: profiles }
+    const payload = users
 
     return sendSuccess(payload, 200, res)
-
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: 'Internal Server Error' })
+    sendError('Internal Server Error', 500, res)
   }
 }
 

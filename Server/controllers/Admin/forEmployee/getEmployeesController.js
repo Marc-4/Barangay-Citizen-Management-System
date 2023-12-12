@@ -6,7 +6,7 @@ const getEmployees = async (req, res) => {
   if (req.query.entries === undefined)
     return sendError('missing required parameters', 404, res)
 
-  let employees
+  let employees = []
   try {
     if (req.query.entries == 0) employees = await Employee.countDocuments({active: true})
     else if (req.query.filter && req.query.filter == 'ARCHIVED')
@@ -18,7 +18,7 @@ const getEmployees = async (req, res) => {
     return sendError('Internal Server Error', 500, res)
   }
 
-  if (!employees) return sendError('no employees found', 404, res)
+  // if (!employees) return sendError('no employees found', 404, res)
 
   const payload = employees
 

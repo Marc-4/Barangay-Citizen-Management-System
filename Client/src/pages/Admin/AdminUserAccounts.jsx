@@ -39,7 +39,7 @@ const AdminUserAccounts = () => {
   const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
-  const [isLoading, setIsLoading] = useState()
+  const [isLoading, setIsLoading] = useState(true)
   const cancelRef = useRef()
 
   const {
@@ -60,6 +60,7 @@ const AdminUserAccounts = () => {
 
   useEffect(() => {
     getUsers()
+    getArchivedUsers()
   }, [])
 
   const getUsers = async () => {
@@ -74,7 +75,7 @@ const AdminUserAccounts = () => {
       if (data.result === 'OK') {
         setUsers(data.payload)
         setError(null)
-      } else setError(data.payload.errro)
+      } else setError(data.payload.err)
     } catch (err) {
       console.log(err)
       setError('Connection Error')
@@ -92,12 +93,35 @@ const AdminUserAccounts = () => {
     let data
     try {
       data = await callAPI(body, method, route)
+
       if (data.result === 'OK') {
         setArchivedUsers(data.payload)
         setError(null)
       } else setError(data.payload.errro)
     } catch (err) {
       console.log(err)
+      setError('Connection Error')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSearch = async (query) => {
+    setIsLoading(true)
+    const body = null
+    const method = 'GET'
+    const route = `http://localhost:3000/api/admin/users/search?query=${query}`
+
+    try {
+      const data = await callAPI(body, method, route)
+      if (data.result === 'OK') {
+        setUsers(data.payload)
+        setError(null)
+      } else {
+        setError(data.payload.error)
+      }
+    } catch (err) {
+      console.error(err)
       setError('Connection Error')
     } finally {
       setIsLoading(false)
@@ -163,7 +187,11 @@ const AdminUserAccounts = () => {
           mt={'25px'}
           mb={'25px'}
         >
-          <Searchbar entries={entries} page={page} />
+          <Searchbar
+            entries={entries}
+            page={page}
+            searchHandler={handleSearch}
+          />
           <RefreshButton />
           <Button
             mt={'10px'}
@@ -172,6 +200,14 @@ const AdminUserAccounts = () => {
             onClick={onRegisterOpen}
           >
             Register User
+          </Button>
+          <Button
+            mt={'10px'}
+            ml={'10px'}
+            colorScheme='facebook'
+            color={'white'}
+          >
+            Export to PDF
           </Button>
         </Flex>
       </Box>
@@ -233,7 +269,7 @@ const AdminUserAccounts = () => {
                   {users.map((user) => {
                     const profile = user.profile
                     return (
-                      <Tr key={user._id}>
+                      <Tr key={user._id} fontSize={'md'}>
                         <Td
                           p={'12px'}
                           textAlign='center'
@@ -252,7 +288,6 @@ const AdminUserAccounts = () => {
                         </Td>
                         <Td
                           p={'12px'}
-                          fontWeight={'semibold1'}
                           textAlign='center '
                           style={{
                             whiteSpace: 'normal',
@@ -342,6 +377,9 @@ const AdminUserAccounts = () => {
                 </Tbody>
               </Table>
             </TableContainer>
+            {isLoading ? (
+              <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
+            ): ''}
           </TabPanel>
           <TabPanel>
             <TableContainer
@@ -502,22 +540,15 @@ const AdminUserAccounts = () => {
                 </Tbody>
               </Table>
             </TableContainer>
+            {isLoading ? (
+              <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
+            ) : (
+              ''
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>
-      {isLoading ? (
-        <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
-      ) : !error && users.length === 0 ? (
-        <Text
-          mt={'25px'}
-          fontSize={'2xl'}
-          fontWeight={'semibold'}
-          color={'brand.100'}
-          textAlign={'center'}
-        >
-          No Users yet
-        </Text>
-      ) : (
+      {error ? (
         <Text
           fontSize={'2xl'}
           fontWeight={'semibold'}
@@ -526,6 +557,8 @@ const AdminUserAccounts = () => {
         >
           {error}
         </Text>
+      ) : (
+        ''
       )}
     </>
   )

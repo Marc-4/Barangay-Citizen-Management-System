@@ -41,7 +41,7 @@ const AdminDashboard = () => {
       if (data && data.result === 'OK') {
         setTotalUsers(data.payload)
         setError(null)
-      } else setError(data.payload.error)
+      }
     } catch (error) {
       console.log(error)
       setError('Connection Error')
@@ -60,7 +60,7 @@ const AdminDashboard = () => {
       if (data && data.result === 'OK') {
         setTotalEmployees(data.payload)
         setError(null)
-      } else setError(data.payload.error)
+      }
     } catch (error) {
       console.log(error)
       setError('Connection Error')
@@ -78,7 +78,7 @@ const AdminDashboard = () => {
       if (data && data.result === 'OK') {
         setPendingRequests(data.payload)
         setError(null)
-      } else setError(data.payload.error)
+      }
     } catch (error) {
       console.log(error)
       setError('Connection Error')
@@ -96,7 +96,7 @@ const AdminDashboard = () => {
       if (data && data.result === 'OK') {
         setError(null)
         setPendingTransactions(data.payload)
-      } else setError(data.payload.error)
+      }
     } catch (error) {
       console.log(error)
       setError('Connection Error')
@@ -115,7 +115,7 @@ const AdminDashboard = () => {
       if (data && data.result === 'OK') {
         setError(null)
         setLifetimeTransactions(data.payload)
-      } else setError(data.payload.error)
+      }
     } catch (error) {
       console.log(error)
       setError('Connection Error')

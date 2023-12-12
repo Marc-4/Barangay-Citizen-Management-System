@@ -4,6 +4,7 @@ import { sendError, sendSuccess } from '../../utils/index.js'
 
 const registerUser = async (req, res) => {
   console.log('user registering..')
+  console.log(req.body);
   if (
     req.body.username === undefined ||
     req.body.password === undefined ||
@@ -11,17 +12,17 @@ const registerUser = async (req, res) => {
     req.body.lastName === undefined ||
     req.body.middleName === undefined ||
     req.body.dateOfBirth === undefined ||
-    req.body.placeOfBirth.city === undefined ||
-    req.body.placeOfBirth.province === undefined ||
-    req.body.placeOfBirth.country === undefined ||
+    req.body.placeOfBirth_city === undefined ||
+    req.body.placeOfBirth_province === undefined ||
+    req.body.placeOfBirth_country === undefined ||
     req.body.sex === undefined ||
     req.body.civilStatus === undefined ||
     req.body.occupation === undefined ||
     req.body.citizenship === undefined ||
     req.body.email === undefined ||
-    req.body.address.streetName === undefined ||
-    req.body.address.houseNumber === undefined ||
-    req.body.address.subdivisionPurok === undefined
+    req.body.address_streetName === undefined ||
+    req.body.address_houseNumber === undefined ||
+    req.body.address_subdivisionPurok === undefined
   ) {
     sendError('missing required fields', 404, res)
     return
@@ -49,19 +50,38 @@ const registerUser = async (req, res) => {
     sendError('Internal Server Error', 500, res)
     return
   }
+
+  const profilePhoto = req.file
+  if (!profilePhoto) {
+    return sendError('Profile photo is missing', 400, res)
+  }
+
   const profile = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     middleName: req.body.middleName,
     dateOfBirth: req.body.dateOfBirth,
-    placeOfBirth: req.body.placeOfBirth,
+    placeOfBirth: {
+      city: req.body.placeOfBirth_city,
+      province: req.body.placeOfBirth_province,
+      country: req.body.placeOfBirth_country,
+    },
     sex: req.body.sex,
     civilStatus: req.body.civilStatus,
     occupation: req.body.occupation,
     citizenship: req.body.citizenship,
     email: req.body.email,
-    address: req.body.address,
+    address: {
+      streetName: req.body.address_streetName,
+      houseNumber: req.body.address_houseNumber,
+      subdivisionPurok: req.body.address_subdivisionPurok,
+    },
+    profilePhoto: {
+      data: profilePhoto.buffer,
+      fileName: profilePhoto.originalname,
+    },
   }
+
   let newUser = await User.create({
     username: req.body.username,
     password: hashedPassword,

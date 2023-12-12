@@ -28,7 +28,7 @@ const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
       const body = { status: status }
 
       const response = await callAPI(body, 'PATCH', route)
-      
+
       if (response.result === 'OK') {
         setError(null)
         {
@@ -56,18 +56,46 @@ const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
 
   const editUser = async (request) => {
     setIsLoading(true)
-    try { 
-      const body = request.requestContent
-      const route = `http://localhost:3000/api/admin/user/profile/${request.accountID}/edit`
-      const response = await callAPI(body, 'PATCH', route)
+    try {
+      const formData = new FormData()
 
-      if(response.result === 'OK')
-        setSuccess(response.payload.message)
-      else setError(response.payload.error)
+      console.log(request.requestContent)
+
+      Object.entries(request.requestContent).forEach(([key, value]) => {
+        if (key === 'profilePhoto') {
+          const { fileName, data } = value
+          const uint8Array = new Uint8Array(data.data)
+          const blob = new Blob([uint8Array], { type: 'image/png' })
+          const file = new File([blob], fileName, { type: 'image/png' })
+
+          formData.append('profilePhoto', file);
+        } else {
+          formData.append(key, value)
+        }
+      })
+
+      for (const pair of formData.entries()) {
+        console.log(pair[0], pair[1])
+      }
+
+      const route = `http://localhost:3000/api/admin/user/profile/${request.accountID}/edit`
+      const response = await fetch(route, {
+        method: 'PATCH',
+        body: formData,
+        mode: 'cors',
+        credentials: 'include',
+      })
+
+      const responseData = await response.json()
+      console.log(responseData)
+      if (responseData.ok) setSuccess(responseData.payload.message)
+      else setError(responseData.payload.error)
     } catch (error) {
       console.log(error)
       setError('Connection Error')
-    }finally{setIsLoading(false)}
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const createNotification = async (request) => {

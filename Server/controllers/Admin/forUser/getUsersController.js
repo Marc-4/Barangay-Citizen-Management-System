@@ -6,7 +6,7 @@ const getUsers = async (req, res) => {
   if (req.query.entries === undefined)
     sendError('Missing Required Fields', 404, res)
 
-  let users
+  let users = []
   try {
     if (req.query.entries && req.query.entries == 0)
       users = await User.countDocuments({active: true})
@@ -19,7 +19,7 @@ const getUsers = async (req, res) => {
     return sendError('Internal Server Error', 500, res)
   }
 
-  if (!users) return sendError('no users found', 404, res)
+  // if (!users) return sendError('no users found', 404, res)
 
   const payload = users
 
