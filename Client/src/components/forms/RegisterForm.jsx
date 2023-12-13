@@ -14,7 +14,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 
 const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
   const [profilePhoto, setProfilePhoto] = useState()
-
+  const role = sessionStorage.getItem('userRole')
+  console.log(role);
   return (
     <>
       <Formik
@@ -271,17 +272,24 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
                 color={'tomato'}
               />
             </Box>
-            <ReCAPTCHA
+            {role === null ? (
+              <ReCAPTCHA
               sitekey='6LcLQywpAAAAAGJJwgJxWQAY40QFBLsLAJDwgXra'
-              onChange={(value) => setFieldValue('g_recaptcha_response', value)}
+              onChange={(value) =>
+                setFieldValue('g_recaptcha_response', value)
+              }
             />
+            ) : (
+              ''
+            )}
+
             <Field type='hidden' name='g_recaptcha_response' />
             <Text
-                as={ErrorMessage}
-                name='g_recaptcha_response'
-                component='div'
-                color={'tomato'}
-              />
+              as={ErrorMessage}
+              name='g_recaptcha_response'
+              component='div'
+              color={'tomato'}
+            />
             <Button
               m={'auto'}
               mt={'25px'}

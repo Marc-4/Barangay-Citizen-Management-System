@@ -3,6 +3,7 @@ import getAdminController from './forAdmin/getAdminController.js'
 import registerAdminController from './forAdmin/registerAdminController.js'
 
 import archiveEmployeeController from './forEmployee/archiveEmployeeController.js'
+import restoreEmployeeController from './forEmployee/restoreEmployeeController.js'
 import createEmployeeController from './forEmployee/createEmployeeProfileController.js'
 import deleteEmployeeController from './forEmployee/deleteEmployeeController.js'
 import editEmployeeController from './forEmployee/editEmployeeController.js'
@@ -34,7 +35,7 @@ import searchTransactionController from './forTransaction/searchTransactionContr
 import getUserRequestController from './forRequest/getUserRequestController.js'
 import getUserRequestsController from './forRequest/getUserRequestsController.js'
 import editUserRequestController from './forRequest/editUserRequestController.js'
-import searchUserRequestController from './forRequest/searchRequestController.js'
+import searchRequestController from './forRequest/searchRequestController.js'
 
 import createNotificationController from './forNotification/createNotificationController.js'
 import getNotificationController from './forNotification/getNotificationController.js'
@@ -48,6 +49,7 @@ export {
   getAdminController,
   registerAdminController,
   archiveEmployeeController,
+  restoreEmployeeController,
   createEmployeeController,
   deleteEmployeeController,
   editEmployeeController,
@@ -76,7 +78,7 @@ export {
   getUserRequestController,
   getUserRequestsController,
   editUserRequestController,
-  searchUserRequestController,
+  searchRequestController,
   createNotificationController,
   getNotificationController,
   getNotificationsController,

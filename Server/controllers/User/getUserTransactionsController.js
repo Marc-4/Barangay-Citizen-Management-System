@@ -8,7 +8,7 @@ const getUserTransactions = async (req, res) => {
 
   let transactions
   try {
-    transactions = await Transaction.find({ accountID: req.user.id }).limit(
+    transactions = await Transaction.find({ accountID: req.user.id }).select('-formData').limit(
       req.query.entries
     )
   } catch (error) {

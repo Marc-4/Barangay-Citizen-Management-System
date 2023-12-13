@@ -7,8 +7,14 @@ const getTransaction = async (req, res) => {
     return sendError('Invalid Transaction ID', 400, res)
 
   let transaction
+  const { filter } = req.query
   try {
-    transaction = await Transaction.findById(req.params.id)
+    if (filter === 'FORMDATA')
+      transaction = await Transaction.findById(req.params.id)
+    else
+      transaction = await Transaction.findById(req.params.id).select(
+        '-formData'
+      )
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

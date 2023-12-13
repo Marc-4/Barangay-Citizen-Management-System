@@ -122,12 +122,13 @@ const AdminUserAccounts = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users/search?query=${query}`
+    const route = `http://localhost:3000/api/admin/users/search?query=${query}&filter=${filter}`
 
     try {
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
-        setUsers(data.payload)
+        if (filter === 'ACTIVE') setUsers(data.payload)
+        else setArchivedUsers(data.payload)
         setError(null)
       } else {
         setError(data.payload.error)
@@ -268,8 +269,8 @@ const AdminUserAccounts = () => {
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
       <Tabs margin={'auto'} w={'90%'} variant='line'>
         <TabList>
-          <Tab>User List</Tab>
-          <Tab>Archived Users</Tab>
+          <Tab onClick={()=>{setFilter('ACTIVE')}}>User List</Tab>
+          <Tab onClick={()=>{setFilter('ARCHIVED')}}>Archived Users</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>

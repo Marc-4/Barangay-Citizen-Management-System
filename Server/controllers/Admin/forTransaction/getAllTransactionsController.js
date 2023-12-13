@@ -13,7 +13,7 @@ const getAllTransactions = async (req, res) => {
     else if (req.query.entries == -1)
       transactions = await Transaction.countDocuments()
     else if (req.query.filter && req.query.filter == 'PENDING')
-      transactions = await Transaction.find({ status: 'PENDING' }).limit(
+      transactions = await Transaction.find({ status: 'PENDING' }).select('-formData').limit(
         req.query.entries
       )
     else

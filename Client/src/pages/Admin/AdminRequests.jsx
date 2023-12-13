@@ -10,7 +10,7 @@ import {
   TabList,
   Flex,
   Box,
-  Spinner
+  Spinner,
 } from '@chakra-ui/react'
 import TransactionCard from '../../components/cards/TransactionCard'
 import { useEffect, useState } from 'react'
@@ -29,7 +29,7 @@ const AdminRequests = () => {
   useEffect(() => {
     getRequests()
     getPastRequests()
-  }, [])
+  }, [refreshCounter])
 
   const getRequests = async () => {
     setIsLoading(true)
@@ -68,6 +68,29 @@ const AdminRequests = () => {
     }
   }
 
+  const handleSearch = async (query) => {
+    setIsLoading(true)
+    
+    try {
+      const body = null
+      const method = 'GET'
+      const route = `http://localhost:3000/api/admin/requests/search?query=${query}&filter=${filter}`
+      const data = await callAPI(body, method, route)
+      if (data.result === 'OK') {
+        if (filter === 'PENDING') setRequests(data.payload)
+        else setPastRequests(data.payload)
+        setError(null)
+      } else {
+        setError(data.payload.error)
+      }
+    } catch (err) {
+      console.error(err)
+      setError('Connection Error')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <>
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
@@ -78,7 +101,7 @@ const AdminRequests = () => {
           mt={'25px'}
           mb={'25px'}
         >
-          <Searchbar />
+          <Searchbar searchHandler={handleSearch} />
           <RefreshButton
             refreshCounter={refreshCounter}
             setRefreshCounter={setRefreshCounter}

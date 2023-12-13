@@ -6,12 +6,20 @@ const getUserTransaction = async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id))
     return sendError('Invalid Transaction ID', 400, res)
 
+  const { filter } = req.query
+  console.log(filter);
   let transaction
   try {
-    transaction = await Transaction.findOne({
-      _id: req.params.id,
-      accountID: req.user.id,
-    })
+    if (filter === 'FORMDATA')
+      transaction = await Transaction.findOne({
+        _id: req.params.id,
+        accountID: req.user.id,
+      })
+    else
+      transaction = await Transaction.findOne({
+        _id: req.params.id,
+        accountID: req.user.id,
+      }).select('-formData')
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

@@ -2,7 +2,8 @@ import mongoose from 'mongoose'
 import { Employee } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 
-const archiveEmployee = async (req, res) => {
+const restoreEmployee = async (req, res) => {
+  console.log('restoring employee..');
   try {
     if (!mongoose.isValidObjectId(req.params.id))
       return sendError('invalid employee ID', 400, res)
@@ -10,7 +11,7 @@ const archiveEmployee = async (req, res) => {
     const employee = await Employee.findById(req.params.id)
     if (!employee) return sendError('employee not found', 404, res)
 
-    await Employee.updateOne({ _id: employee._id }, { active: false })
+    await Employee.updateOne({ _id: employee._id }, { active: true })
 
     let payload = employee
 
@@ -21,4 +22,4 @@ const archiveEmployee = async (req, res) => {
   }
 }
 
-export default archiveEmployee
+export default restoreEmployee

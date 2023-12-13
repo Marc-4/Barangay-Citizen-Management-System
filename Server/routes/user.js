@@ -1,19 +1,23 @@
 import { Router } from "express";
 import * as User from '../controllers/User/index.js'
 import { authToken, authUser } from '../middlewares/index.js'
+import multer from "multer";
 
 const middlewares = [authToken, authUser]
 const router = Router()
 
-router.post('/account/register', User.registerUserController)
-router.post('/account/create-profile', middlewares, User.requestCreateUserProfileController)
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+router.post('/account/register', upload.single('profilePhoto'), User.registerUserController)
+// router.post('/account/create-profile', middlewares, User.requestCreateUserProfileController)
 router.get('/account/', middlewares, User.getUserProfileController)
-router.patch('/account/edit', middlewares, User.requestEditUserProfileController)
+router.patch('/account/edit', middlewares, upload.single('profilePhoto'), User.requestEditUserProfileController)
 // router.patch('/account/archive', middlewares, User.requestArchiveUserController)
 
-router.post('/transaction/create', middlewares, User.createUserTransactionController)
+router.post('/transaction/create',upload.single('attachment'), middlewares, User.createUserTransactionController)
 router.get('/transactions/', middlewares, User.getUserTransactionsController)
-router.get('/transaction/:id', middlewares, User.getUserTransactionController) //works
+router.get('/transaction/:id', middlewares, User.getUserTransactionController)
 // router.patch('/transaction/:id/edit', middlewares, User.editUserTransactionController)
 
 //notifications

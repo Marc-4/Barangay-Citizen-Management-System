@@ -44,13 +44,12 @@ const AdminTransactions = () => {
     } catch (err) {
       setError('Connection Error, refresh page to try again')
     } finally {
-      setIsLoading(true)
+      setIsLoading(false)
     }
   }
 
   const getPastTransactions = async () => {
     setIsLoading(true)
-
     try {
       const body = null
       const method = 'GET'
@@ -69,13 +68,11 @@ const AdminTransactions = () => {
 
   const handleSearch = async (query) => {
     setIsLoading(true)
-    const body = null
-    const method = 'GET'
-    const route = `http://localhost:3000/api/admin/transactions/search?query=${query}&filter=${filter}`
-    console.log(filter)
-    console.log(query)
-
+    
     try {
+      const body = null
+      const method = 'GET'
+      const route = `http://localhost:3000/api/admin/transactions/search?query=${query}&filter=${filter}`
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
         if (filter === 'PENDING') setTransactions(data.payload)

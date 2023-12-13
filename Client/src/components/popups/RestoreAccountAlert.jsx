@@ -19,8 +19,9 @@ const RestoreAccountAlert = ({
   role,
 }) => {
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(null)
 
-  const archiveAccount = async () => {
+  const restoreAccount = async () => {
     try {
       setSubmitting(true)
       const route = `http://localhost:3000/api/admin/${role}/${user._id}/restore`
@@ -64,7 +65,7 @@ const RestoreAccountAlert = ({
                 colorScheme='green'
                 isDisabled={submitting}
                 onClick={async () => {
-                  await archiveAccount()
+                  await restoreAccount()
                   onClose()
                 }}
                 ml={3}

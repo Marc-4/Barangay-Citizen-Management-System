@@ -25,9 +25,11 @@ import { useEffect, useState, useRef } from 'react'
 import callAPI from '../../utils/callAPI'
 import Searchbar from '../../components/Searchbar'
 import { Link as rr_Link } from 'react-router-dom'
-import RegisterUserModal from '../../components/modals/RegisterAccountModal'
+import RegisterAccountModal from '../../components/modals/RegisterAccountModal'
 import EditAccountModal from '../../components/modals/EditAccountModal'
 import DeleteAccountAlert from '../../components/popups/DeleteAccountAlert'
+import ArchiveAccountAlert from '../../components/popups/ArchiveAccountAlert'
+import RestoreAccountAlert from '../../components/popups/RestoreAccountAlert'
 import RefreshButton from '../../components/RefreshButton'
 
 const AdminEmployeeAccounts = () => {
@@ -39,6 +41,7 @@ const AdminEmployeeAccounts = () => {
   const [selectedUser, setSelectedUser] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const cancelRef = useRef()
+  const [refreshCounter, setRefreshCounter] = useState(0)
 
   const {
     isOpen: isRegisterOpen,
@@ -55,11 +58,21 @@ const AdminEmployeeAccounts = () => {
     onOpen: onDeleteOpen,
     onClose: onDeleteClose,
   } = useDisclosure()
+  const {
+    isOpen: isArchiveOpen,
+    onOpen: onArchiveOpen,
+    onClose: onArchiveClose,
+  } = useDisclosure()
+  const {
+    isOpen: isRestoreOpen,
+    onOpen: onRestoreOpen,
+    onClose: onRestoreClose,
+  } = useDisclosure()
 
   useEffect(() => {
     getEmployees()
     getArchivedEmployees()
-  }, [])
+  }, [refreshCounter])
 
   const getEmployees = async () => {
     setIsLoading(true)
@@ -69,8 +82,10 @@ const AdminEmployeeAccounts = () => {
       const route = `http://localhost:3000/api/admin/employees?entries=${entries}&filter=ACTIVE`
 
       const data = await callAPI(body, method, route)
-      if (data.ok) setEmployees(data.payload)
-      else setError(data.payload.err)
+      if (data.result === 'OK') {
+        setError(null)
+        setEmployees(data.payload)
+      } else setError(data.payload.err)
     } catch (err) {
       console.log(err)
       setError('Connection Error')
@@ -87,8 +102,10 @@ const AdminEmployeeAccounts = () => {
       const route = `http://localhost:3000/api/admin/employees?entries=${entries}&filter=ARCHIVED`
 
       const data = await callAPI(body, method, route)
-      if (data.ok) setArchivedEmployees(data.payload)
-      else setError(data.payload.err)
+      if (data.result === 'OK') {
+        setError(null)
+        setArchivedEmployees(data.payload)
+      } else setError(data.payload.err)
     } catch (err) {
       console.log(err)
       setError('Connection Error')
@@ -97,8 +114,32 @@ const AdminEmployeeAccounts = () => {
     }
   }
 
+  const handleSearch = async (query) => {
+    setIsLoading(true)
+    const body = null
+    const method = 'GET'
+    const route = `http://localhost:3000/api/admin/employees/search?query=${query}&filter=${filter}`
+
+    try {
+      const data = await callAPI(body, method, route)
+      if (data.result === 'OK') {
+        if (filter === 'ACTIVE') setEmployees(data.payload)
+        else setArchivedEmployees(data.payload)
+        setError(null)
+      } else {
+        setError(data.payload.error)
+      }
+    } catch (err) {
+      console.error(err)
+      setError('Connection Error')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handeUpdate = () => {
     getEmployees()
+    getArchivedEmployees()
   }
 
   const handleEditOpen = (employee) => {
@@ -119,10 +160,28 @@ const AdminEmployeeAccounts = () => {
     setSelectedUser(null)
     onDeleteClose()
   }
+  const handleArchiveOpen = (user) => {
+    setSelectedUser(user)
+    onArchiveOpen()
+  }
+
+  const handleArchiveClose = () => {
+    setSelectedUser(null)
+    onArchiveClose()
+  }
+  const handleRestoreOpen = (user) => {
+    setSelectedUser(user)
+    onRestoreOpen()
+  }
+
+  const handleRestoreClose = () => {
+    setSelectedUser(null)
+    onRestoreClose()
+  }
 
   return (
     <>
-      <RegisterUserModal
+      <RegisterAccountModal
         {...{
           isOpen: isRegisterOpen,
           onClose: onRegisterClose,
@@ -149,6 +208,26 @@ const AdminEmployeeAccounts = () => {
           role: 'employee',
         }}
       />
+      <ArchiveAccountAlert
+        {...{
+          isOpen: isArchiveOpen,
+          onClose: handleArchiveClose,
+          cancelRef: cancelRef,
+          user: selectedUser,
+          onUpdate: handeUpdate,
+          role: 'employee',
+        }}
+      />
+      <RestoreAccountAlert
+        {...{
+          isOpen: isRestoreOpen,
+          onClose: handleRestoreClose,
+          cancelRef: cancelRef,
+          user: selectedUser,
+          onUpdate: handeUpdate,
+          role: 'employee',
+        }}
+      />
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex
           flexDirection='row'
@@ -157,8 +236,11 @@ const AdminEmployeeAccounts = () => {
           mt={'25px'}
           mb={'25px'}
         >
-          <Searchbar />
-          <RefreshButton />
+          <Searchbar searchHandler={handleSearch} />
+          <RefreshButton
+            refreshCounter={refreshCounter}
+            setRefreshCounter={setRefreshCounter}
+          />
           <Button
             mt={'10px'}
             ml={'10px'}
@@ -172,8 +254,8 @@ const AdminEmployeeAccounts = () => {
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
       <Tabs margin={'auto'} w={'90%'} variant='line'>
         <TabList>
-          <Tab>Employee List</Tab>
-          <Tab>Archived Employees</Tab>
+          <Tab onClick={()=> setFilter('ACTIVE')}>Employee List</Tab>
+          <Tab onClick={()=> setFilter('ARCHIVED')}>Archived Employees</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -185,7 +267,7 @@ const AdminEmployeeAccounts = () => {
               rounded='md'
             >
               <Table
-                w={'90%'}
+                w={'100%'}
                 p={'10px'}
                 rounded='md'
                 bg='brand.400'
@@ -323,7 +405,12 @@ const AdminEmployeeAccounts = () => {
                           >
                             Edit
                           </Button>
-                          <Button colorScheme='orange'>Archive</Button>
+                          <Button
+                            colorScheme='orange'
+                            onClick={() => handleArchiveOpen(employee)}
+                          >
+                            Archive
+                          </Button>
                           <Button
                             colorScheme='red'
                             onClick={() => handleDeleteOpen(employee)}
@@ -347,7 +434,7 @@ const AdminEmployeeAccounts = () => {
               rounded='md'
             >
               <Table
-                w={'90%'}
+                w={'100%'}
                 p={'10px'}
                 rounded='md'
                 bg='brand.400'
@@ -481,11 +568,10 @@ const AdminEmployeeAccounts = () => {
                         >
                           <Button
                             colorScheme='green'
-                            onClick={() => handleEditOpen(employee)}
+                            onClick={() => handleRestoreOpen(employee)}
                           >
-                            Edit
+                            Restore
                           </Button>
-                          <Button colorScheme='orange'>Archive</Button>
                           <Button
                             colorScheme='red'
                             onClick={() => handleDeleteOpen(employee)}

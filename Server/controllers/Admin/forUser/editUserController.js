@@ -8,23 +8,23 @@ const editUser = async (req, res) => {
   console.log(req.file);
   if (!mongoose.isValidObjectId(req.params.id))
     return sendError('invalid user ID', 400, res)
-
+  console.log(req.body);
   if (
     req.body.firstName === undefined &&
     req.body.lastName === undefined &&
     req.body.middleName === undefined &&
     req.body.dateOfBirth === undefined &&
-    req.body.placeOfBirth?.city === undefined &&
-    req.body.placeOfBirth?.province === undefined &&
-    req.body.placeOfBirth?.country === undefined &&
+    req.body.placeOfBirth_city === undefined &&
+    req.body.placeOfBirth_province === undefined &&
+    req.body.placeOfBirth_country === undefined &&
     req.body.sex === undefined &&
     req.body.civilStatus === undefined &&
     req.body.occupation === undefined &&
     req.body.citizenship === undefined &&
     req.body.email === undefined &&
-    req.body.address?.streetName === undefined &&
-    req.body.address?.houseNumber === undefined &&
-    req.body.address?.subdivisionPurok === undefined
+    req.body.address_streetName === undefined &&
+    req.body.address_houseNumber === undefined &&
+    req.body.address_subdivisionPurok === undefined
   )
     return sendError('Mising Required Fields', 404, res)
 
@@ -45,13 +45,17 @@ const editUser = async (req, res) => {
     lastName,
     middleName,
     dateOfBirth,
-    placeOfBirth,
+    placeOfBirth_city,
+    placeOfBirth_province,
+    placeOfBirth_country,
     sex,
     civilStatus,
     occupation,
     citizenship,
     email,
-    address
+    address_streetName,
+    address_houseNumber,
+    address_subdivisionPurok,
   } = req.body
 
   const profilePhoto = req.file
@@ -59,18 +63,18 @@ const editUser = async (req, res) => {
   if (firstName) user.profile.firstName = req.body.firstName
   if (lastName) user.profile.lastName = req.body.lastName
   if (middleName) user.profile.middleName = req.body.middleName
-  if (dateOfBirth && !dateOfBirth === null) user.profile.dateOfBirth = req.body.dateOfBirth
-  if (placeOfBirth?.city) user.profile.placeOfBirth.city = req.body.placeOfBirth.city
-  if (placeOfBirth?.province) user.profile.placeOfBirth.province = req.body.placeOfBirth.province
-  if (placeOfBirth?.country) user.profile.placeOfBirth.country = req.body.placeOfBirth.country
+  if (dateOfBirth) user.profile.dateOfBirth = req.body.dateOfBirth
+  if (placeOfBirth_city) user.profile.placeOfBirth.city = placeOfBirth_city
+  if (placeOfBirth_province) user.profile.placeOfBirth.province = placeOfBirth_province
+  if (placeOfBirth_country) user.profile.placeOfBirth.country = placeOfBirth_country
   if (sex) user.profile.sex = req.body.sex
   if (civilStatus) user.profile.civilStatus = req.body.civilStatus
   if (occupation) user.profile.occupation = req.body.occupation
   if (citizenship) user.profile.citizenship = req.body.citizenship
   if (email) user.profile.email = req.body.email
-  if (address?.streetName) user.profile.address.streetName = req.body.address.streetName
-  if (address?.houseNumber) user.profile.address.houseNumber = req.body.address.houseNumber
-  if (address?.subdivisionPurok) user.profile.address.subdivisionPurok = req.body.address.subdivisionPurok
+  if (address_streetName) user.profile.address.streetName = address_streetName
+  if (address_houseNumber) user.profile.address.houseNumber = address_houseNumber
+  if (address_subdivisionPurok) user.profile.address.subdivisionPurok = address_subdivisionPurok
   if (profilePhoto?.buffer) user.profile.profilePhoto.data = profilePhoto.buffer 
   if (profilePhoto?.originalname) user.profile.profilePhoto.fileName = profilePhoto.originalname 
 

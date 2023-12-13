@@ -10,21 +10,20 @@ const registerEmployee = async (req, res) => {
     req.body.lastName === undefined ||
     req.body.middleName === undefined ||
     req.body.dateOfBirth === undefined ||
-    req.body.placeOfBirth.city === undefined ||
-    req.body.placeOfBirth.province === undefined ||
-    req.body.placeOfBirth.country === undefined ||
+    req.body.placeOfBirth_city === undefined ||
+    req.body.placeOfBirth_province === undefined ||
+    req.body.placeOfBirth_country === undefined ||
     req.body.sex === undefined ||
     req.body.civilStatus === undefined ||
     req.body.occupation === undefined ||
     req.body.citizenship === undefined ||
     req.body.email === undefined ||
-    req.body.address.streetName === undefined ||
-    req.body.address.houseNumber === undefined ||
-    req.body.address.subdivisionPurok === undefined
+    req.body.address_streetName === undefined ||
+    req.body.address_houseNumber === undefined ||
+    req.body.address_subdivisionPurok === undefined
   )
     return sendError('missing required parameters', 404, res)
 
-  //check if username exists in db
   let employee
   try {
     employee = await Employee.findOne({ username: req.body.username })
@@ -34,7 +33,11 @@ const registerEmployee = async (req, res) => {
   }
   if (employee) return sendError('username Taken', 400, res)
 
-  //encrypt pass
+  const profilePhoto = req.file
+    if (!profilePhoto) {
+      return sendError('Profile photo is missing', 400, res)
+    }
+
   const encryptedPass = await bcrypt.hash(req.body.password, 10)
 
   const profile = {
@@ -42,15 +45,27 @@ const registerEmployee = async (req, res) => {
     lastName: req.body.lastName,
     middleName: req.body.middleName,
     dateOfBirth: req.body.dateOfBirth,
-    placeOfBirth: req.body.placeOfBirth,
+    placeOfBirth: {
+      city: req.body.placeOfBirth_city,
+      province: req.body.placeOfBirth_province,
+      country: req.body.placeOfBirth_country,
+    },
     sex: req.body.sex,
     civilStatus: req.body.civilStatus,
     occupation: req.body.occupation,
     citizenship: req.body.citizenship,
     email: req.body.email,
-    address: req.body.address,
+    address: {
+      streetName: req.body.address_streetName,
+      houseNumber: req.body.address_houseNumber,
+      subdivisionPurok: req.body.address_subdivisionPurok,
+    },
+    profilePhoto: {
+      data: profilePhoto.buffer,
+      fileName: profilePhoto.originalname,
+    },
   }
-  //register
+  
   let newEmployee
   try {
     newEmployee = await Employee.create({
@@ -59,14 +74,14 @@ const registerEmployee = async (req, res) => {
       role: 'employee',
       active: true,
       dateOfCreation: Date.now(),
-      profile: profile
+      profile: profile,
     })
   } catch (error) {
     console.log(error)
-    sendError('Internal Server Error', 500, res)
+    return sendError('Internal Server Error', 500, res)
   }
   const payload = newEmployee
-  sendSuccess(payload, 200, res)
+  return sendSuccess(payload, 200, res)
 }
 
 export default registerEmployee

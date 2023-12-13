@@ -18,7 +18,7 @@ const GenUserTransaction = () => {
   const fetchTransactionData = async () => {
     try {
       let route
-        route = `http://localhost:3000/api/user/transaction/${id}`
+        route = `http://localhost:3000/api/user/transaction/${id}?filter=FORMDATA`
       const data = await callAPI(null, 'GET', route)
 
       if (data && data.result === 'OK') {

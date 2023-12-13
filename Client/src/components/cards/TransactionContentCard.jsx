@@ -1,6 +1,12 @@
 import { VStack, Box, Heading, Divider, Text } from '@chakra-ui/react'
-
+import { Buffer } from 'buffer'
 const TransactionContentCard = ({ title, data, profile }) => {
+  const revertBase64 = (Buf) => {
+    let base64String = Buffer.from(Buf).toString('base64')
+
+    return `data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${base64String}`
+  }
+
   return (
     <>
       <VStack spacing={4} align='start'>
@@ -37,7 +43,15 @@ const TransactionContentCard = ({ title, data, profile }) => {
           </Box>
           <Box>
             <Text fontWeight='bold'>Attachments:</Text>
-            <Text>{data?.attachment ? data?.attachment : 'No attachment'}</Text>
+            
+            {data?.attachment ? (
+              <iframe
+                src={revertBase64(data.attachment.data)}
+                style={{ width: '100%', height: '500px' }}
+              />
+            ) : (
+              'No attachment'
+            )}
           </Box>
         </Box>
       </VStack>
