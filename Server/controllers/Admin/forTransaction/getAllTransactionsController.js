@@ -13,13 +13,15 @@ const getAllTransactions = async (req, res) => {
     else if (req.query.entries == -1)
       transactions = await Transaction.countDocuments()
     else if (req.query.filter && req.query.filter == 'PENDING')
-      transactions = await Transaction.find({ status: 'PENDING' }).select('-formData').limit(
-        req.query.entries
-      )
+      transactions = await Transaction.find({ status: 'PENDING' })
+        .select('-formData')
+        .limit(req.query.entries)
     else
       transactions = await Transaction.find({
         status: { $ne: 'PENDING' },
-      }).limit(req.query.entries)
+      })
+        .select('-formData')
+        .limit(req.query.entries)
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

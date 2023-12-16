@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { MdOutlineMenu } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
+import { useState } from 'react'
 
 const AdminSidebar = () => {
   return (
@@ -26,17 +27,15 @@ const AdminSidebar = () => {
             justifyContent={'left'}
             width={'100%'}
           >
-            <Heading color={'text.main'} display={'flex'} h={'75px'} alignItems={'center'}>
-              Sidebar
+            <Heading
+              color={'text.main'}
+              display={'flex'}
+              h={'75px'}
+              alignItems={'center'}
+            >
+              BRMS
             </Heading>
           </Box>
-          <IconButton
-            variant={'unstyled'}
-            fontSize={'4xl'}
-            color={'brand.200'}
-            icon={<MdOutlineMenu />}
-            mr={'12px'}
-          ></IconButton>
         </Flex>
         <Divider
           borderColor={'brand.100'}
@@ -52,8 +51,9 @@ const AdminSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}
@@ -61,14 +61,14 @@ const AdminSidebar = () => {
           >
             <Text fontSize={'2xl'}>Dashboard</Text>
           </ChakraLink>
-          <ChakraLink
+          {/* <ChakraLink
             as={NavLink}
             to='/admin/notifications'
             _hover={{
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
+              fontWeight: 'bold',
               backgroundColor: 'secondary.300',
             }}
             w={'300px'}
@@ -76,7 +76,7 @@ const AdminSidebar = () => {
             borderRadius={'25px'}
           >
             <Text fontSize={'2xl'}>Notifications</Text>
-          </ChakraLink>
+          </ChakraLink> */}
           <ChakraLink
             as={NavLink}
             to='/admin/users'
@@ -84,8 +84,9 @@ const AdminSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}
@@ -100,8 +101,9 @@ const AdminSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}
@@ -116,8 +118,9 @@ const AdminSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}
@@ -132,8 +135,9 @@ const AdminSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}
@@ -148,8 +152,9 @@ const AdminSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}

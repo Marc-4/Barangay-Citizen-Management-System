@@ -12,26 +12,9 @@ import callAPI from '../../utils/callAPI'
 import { useEffect, useState } from 'react'
 
 const TransactionCard = ({ data, basepath }) => {
-  const [account, setAccount] = useState()
-  const accountRole = sessionStorage.getItem('userRole')
+  console.log(data)
+  // const accountRole = sessionStorage.getItem('userRole')
 
-  useEffect(() => {
-    getUser()
-  }, [])
-  const getUser = async () => {
-    try {
-      let route
-      if (accountRole === 'admin')
-        route = `http://localhost:3000/api/admin/user/${data.accountID}`
-      if (accountRole === 'user')
-        route = `http://localhost:3000/api/user/account`
-      const response = await callAPI(null, 'GET', route)
-      if (response.result === 'OK') setAccount(response.payload)
-      
-    } catch (error) {
-      console.log(error)
-    }
-  }
   return (
     <>
       <Link
@@ -47,11 +30,10 @@ const TransactionCard = ({ data, basepath }) => {
           bg={'background.main'}
           minW={'100%'}
           h={'125px'}
-          shadow={'none'}
-          borderBottom={'2px'}
-          borderColor={'accent.main'}
+          shadow={'md'}
+          mb={'5px'}
           transition='all 0.2s'
-          _hover={{ shadow: 'md', zIndex: '1' }}
+          _hover={{ zIndex: '1', backgroundColor: 'secondary.main' }}
         >
           <CardHeader
             paddingTop={'15px'}
@@ -63,23 +45,37 @@ const TransactionCard = ({ data, basepath }) => {
               #{data._id}
             </Text>
             <Box ml={'auto'} display={'flex'} gap={'5px'}>
-              <Text id='date'> {new Date(data?.timestamp).toLocaleDateString()} </Text>-
-              <Text id='time'>{new Date(data?.timestamp).toLocaleTimeString()}</Text>
+              <Text id='date'>
+                {' '}
+                {new Date(data?.timestamp).toLocaleDateString()}{' '}
+              </Text>
+              -
+              <Text id='time'>
+                {new Date(data?.timestamp).toLocaleTimeString()}
+              </Text>
             </Box>
           </CardHeader>
           <CardBody textAlign={'left'} pt={'0'} pb={'0'}>
             <Text id='name'>
               Requestor:
-              {account
-                ?' ' + account?.profile.firstName + ' ' + account.profile.lastName
-                : ' ' + 'N/A'}
+              {' ' + data?.userFirstName + ' ' + data.userLastName}
             </Text>
             <Text id='type'>
               Type: {data?.transacType ? data.transacType : data.requestType}
             </Text>
           </CardBody>
           <CardFooter pt={'0'}>
-            <Text fontWeight={'semibold'} id='status'>
+            <Text
+              fontWeight={'semibold'}
+              id='status'
+              color={
+                data.status === 'PENDING'
+                  ? 'orange.400'
+                  : data.status === 'ACCEPTED'
+                  ? 'green'
+                  : 'red'
+              }
+            >
               {data.status}
             </Text>
           </CardFooter>

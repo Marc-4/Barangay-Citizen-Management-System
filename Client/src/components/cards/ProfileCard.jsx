@@ -12,7 +12,6 @@ import {
 import { Buffer } from 'buffer'
 
 const ProfileCard = (data) => {
-
   const revertBase64 = (imageBuf) => {
     let base64String = Buffer.from(imageBuf).toString('base64')
 
@@ -31,14 +30,19 @@ const ProfileCard = (data) => {
           id='profile_photo'
           display={'flex'}
           gap={'20px'}
+          border={'1px'}
+          shadow={'md'}
+          borderColor={'background.100'}
           alignItems={'center'}
           justifyContent={'center'}
-          bg={'brand.300'}
-          textColor={'brand.200'}
+          bg={'background.main'}
+          textColor={'text.main'}
           rounded={'10px'}
           p={'20px'}
         >
           <Image
+            border={'4px'}
+            borderColor={'primary.main'}
             id='profile_photo'
             boxSize={'250px'}
             objectFit='cover'
@@ -74,7 +78,11 @@ const ProfileCard = (data) => {
         <Box id='profile_details' pl={'10px'} p={'25px'} rounded={'10px'}>
           <Heading marginBottom={'25px'}>Profile Details</Heading>
           <Flex pl={'10px'} justify={'space-between'} wrap={'wrap'}>
-            <Box bg={'brand.400'} p={'10px'} rounded={'10px'}>
+            <Box
+              p={'10px'}
+              rounded={'10px'}
+              bg={'primary.100'}
+            >
               <Box id='name' w={'250px'} marginBottom={'25px'}>
                 <div>
                   <Heading fontSize={'2xl'}>Name</Heading>
@@ -210,7 +218,7 @@ const ProfileCard = (data) => {
                 </Text>
               </Box>
             </Box>
-            <Box bg={'brand.400'} p={'10px'} rounded={'10px'}>
+            <Box bg={'primary.100'} p={'10px'} rounded={'10px'}>
               <Box id='Sex' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>Gender</Heading>
                 <Text>
@@ -242,7 +250,7 @@ const ProfileCard = (data) => {
                 </Text>
               </Box>
             </Box>
-            <Box bg={'brand.400'} p={'10px'} rounded={'10px'}>
+            <Box bg={'primary.100'} p={'10px'} rounded={'10px'}>
               <Box id='email' w={'200px'} marginBottom={'25px'}>
                 <Heading fontSize={'2xl'}>E-mail</Heading>
                 <Text>

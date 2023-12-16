@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Text, Box, HStack, Button, useDisclosure } from '@chakra-ui/react'
+import { Text, Box, VStack, Button, useDisclosure } from '@chakra-ui/react'
 import callAPI from '../../utils/callAPI'
 import TransactionDetailCard from '../cards/TransactionDetailCard'
 import TransactionContentCard from '../cards/TransactionContentCard'
@@ -28,11 +28,7 @@ const GenTransaction = () => {
     console.log('fetching transaction..');
 
   }, [id]);
-  
-  useEffect(() => {
-    fetchTransactionOwner();
-    console.log('fetching owner..');
-  }, [transactionData]);
+
 
   const fetchTransactionData = async () => {
     try {
@@ -48,22 +44,6 @@ const GenTransaction = () => {
       }
     } catch (error) {
       setError('Error fetching transaction data')
-    }
-  }
-
-  const fetchTransactionOwner = async () => {
-    try {
-      if (transactionData) {
-        const route = `http://localhost:3000/api/admin/user/${transactionData.accountID}`
-        const data = await callAPI(null, 'GET', route)
-        if (data && data.result === 'OK') {
-          setError(null)
-          setOwnerAccount(data.payload)
-        }
-      }
-    } catch (error) {
-      console.log(error)
-      setError('Error fetching transaction Owner')
     }
   }
 
@@ -104,14 +84,14 @@ const GenTransaction = () => {
         )}
         {transactionData && (
           <>
-            <HStack spacing={4} align='start'>
+            <VStack spacing={4} justifyContent={'center'}>
               <TransactionDetailCard
                 title='Transaction Details'
                 data={transactionData}
                 name={
-                  ownerAccount?.profile?.firstName +
+                  transactionData.userFirstName +
                   ', ' +
-                  ownerAccount?.profile?.lastName
+                  transactionData.userLastName
                 }
               />
               <TransactionContentCard
@@ -119,7 +99,7 @@ const GenTransaction = () => {
                 data={{ ...transactionData.formData }}
                 profile={ownerAccount?.profile}
               />
-            </HStack>
+            </VStack>
             {transactionData.status === 'PENDING' ? (
               <Box display={'flex'} justifyContent={'center'} gap={'10px'}>
                 <Button onClick={() => onAcceptOpen()} colorScheme='green'>

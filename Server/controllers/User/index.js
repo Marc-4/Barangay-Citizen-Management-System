@@ -6,10 +6,11 @@ import registerUserController from './registerUserController.js'
 import requestEditUserProfileController from './requestEditUserProfileController.js'
 import getUserTransactionsController from './getUserTransactionsController.js'
 import getUserTransactionController from './getUserTransactionController.js'
-
+import searchUserTransactionController from './searchTransactionController.js'
 import createUserNotificationController from './createUserNotificationController.js'
 import getUserNotificationsController from './getUserNotificationsController.js'
-
+import editUserNotificationController from './editUserNotifications.js'
+import editUserCredentialsController from './editUserCredentials.js'
 export {
   requestCreateUserProfileController,
   createUserTransactionController,
@@ -20,5 +21,8 @@ export {
   getUserTransactionController,
   getUserTransactionsController,
   getUserNotificationsController,
-  createUserNotificationController
+  createUserNotificationController,
+  editUserNotificationController,
+  searchUserTransactionController,
+  editUserCredentialsController
 }

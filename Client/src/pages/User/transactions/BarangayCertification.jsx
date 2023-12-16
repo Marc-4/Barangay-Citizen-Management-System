@@ -31,11 +31,9 @@ const BarangayCertification = () => {
       const route = `http://localhost:3000/api/user/transaction/create`
       const body = {
         transacType: 'BRGY_CERT',
-        formData: {
           purpose: purpose,
           income: '',
           cost: 150,
-        },
       }
       const response = await callAPI(body, 'POST', route)
       console.log(response.payload);

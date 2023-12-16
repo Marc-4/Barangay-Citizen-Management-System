@@ -8,18 +8,26 @@ const getUserTransactions = async (req, res) => {
 
   let transactions
   try {
-    transactions = await Transaction.find({ accountID: req.user.id }).select('-formData').limit(
-      req.query.entries
-    )
+    if (req.query.filter && req.query.filter == 'PENDING')
+      transactions = await Transaction.find({
+        accountID: req.user.id,
+        status: 'PENDING',
+      })
+        .select('-formData')
+        .limit(req.query.entries)
+    else
+      transactions = await Transaction.find({
+        accountID: req.user.id,
+        status: { $ne: 'PENDING' },
+      })
+        .select('-formData')
+        .limit(req.query.entries)
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)
   }
 
-  let payload
-  if (transactions) payload = transactions
-
-  return sendSuccess(payload, 200, res)
+  return sendSuccess(transactions, 200, res)
 }
 
 export default getUserTransactions

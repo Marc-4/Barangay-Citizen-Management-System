@@ -24,11 +24,26 @@ const AdminTransactions = () => {
   const [filter, setFilter] = useState('PENDING')
   const [isLoading, setIsLoading] = useState(true)
   const [refreshCounter, setRefreshCounter] = useState(0)
+  const [transactionSorted, setTransactionSorted] = useState([])
+  const [pastTransactionSorted, setPastTransactionSorted] = useState([])
 
   useEffect(() => {
     getTransactions()
     getPastTransactions()
   }, [refreshCounter])
+
+  useEffect(() => {
+    setTransactionSorted(
+      [...transactions].sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      )
+    )
+    setPastTransactionSorted(
+      [...pastTransactions].sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      )
+    )
+  }, [transactions])
 
   const getTransactions = async () => {
     setIsLoading(true)
@@ -68,7 +83,7 @@ const AdminTransactions = () => {
 
   const handleSearch = async (query) => {
     setIsLoading(true)
-    
+
     try {
       const body = null
       const method = 'GET'
@@ -92,13 +107,7 @@ const AdminTransactions = () => {
   return (
     <>
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
-        <Flex
-          flexDirection='row'
-          alignItems='center'
-          gap={'10px'}
-          mt={'25px'}
-          mb={'25px'}
-        >
+        <Flex flexDirection='row' gap={'10px'} mt={'15px'} mb={'15px'}>
           <Searchbar searchHandler={handleSearch} />
           <RefreshButton
             refreshCounter={refreshCounter}
@@ -112,6 +121,23 @@ const AdminTransactions = () => {
           <Tab onClick={() => setFilter('PENDING')}>Pending Transactions</Tab>
           <Tab onClick={() => setFilter('HISTORY')}>Transaction History</Tab>
         </TabList>
+        {error ? (
+          <Text
+            fontSize={'2xl'}
+            fontWeight={'semibold'}
+            color={'tomato'}
+            textAlign={'center'}
+          >
+            {error}
+          </Text>
+        ) : (
+          ''
+        )}
+        <Spinner
+          display={isLoading ? 'block' : 'none'}
+          size={'xl'}
+          m={'auto'}
+        />
         <TabPanels>
           <TabPanel>
             {!isLoading && transactions.length === 0 ? (
@@ -123,7 +149,7 @@ const AdminTransactions = () => {
                 No Transactions
               </Text>
             ) : (
-              transactions.map((transaction) => (
+              transactionSorted.map((transaction) => (
                 <TransactionCard
                   key={transaction._id}
                   data={transaction}
@@ -142,7 +168,7 @@ const AdminTransactions = () => {
                 No Past Transactions
               </Text>
             ) : (
-              pastTransactions.map((transaction) => (
+              pastTransactionSorted.map((transaction) => (
                 <TransactionCard
                   key={transaction._id}
                   data={transaction}
@@ -151,23 +177,6 @@ const AdminTransactions = () => {
               ))
             )}
           </TabPanel>
-          <Spinner
-            display={isLoading ? 'block' : 'none'}
-            size={'xl'}
-            m={'auto'}
-          />
-          {error ? (
-            <Text
-              fontSize={'2xl'}
-              fontWeight={'semibold'}
-              color={'tomato'}
-              textAlign={'center'}
-            >
-              {error}
-            </Text>
-          ) : (
-            ''
-          )}
         </TabPanels>
       </Tabs>
     </>

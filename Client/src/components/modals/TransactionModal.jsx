@@ -25,13 +25,19 @@ const TransactionModal = ({
   const { id } = useParams()
   const [error, setError] = useState()
   const [success, setSuccess] = useState()
+  const [message, setMessage] = useState(
+    status === 'ACCEPTED'
+      ? `Go to the barangay hall to get your requested document(s). Prepare a sum of P${transaction?.formData?.cost} to pay to the treasurer.`
+      : `Invalid requirements.`
+  )
   const [isLoading, setIsLoading] = useState(false)
 
   const editTransaction = async () => {
     setIsLoading(true)
     try {
       const route = `http://localhost:3000/api/admin/transaction/${id}/edit`
-      const body = { status: status }
+      const body = { status: status, message: message }
+      console.log(body)
 
       const response = await callAPI(body, 'PATCH', route)
       if (response.result === 'OK') {
@@ -83,7 +89,7 @@ const TransactionModal = ({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader
-          pb={0}
+            pb={0}
             textAlign={'center'}
             fontSize={'3xl'}
             fontWeight={'bold'}
@@ -104,16 +110,16 @@ const TransactionModal = ({
               </Box>
               <Textarea
                 height={'100px'}
-                defaultValue={
-                  status === 'ACCEPTED'
-                    ? `Go to the barangay hall to get your requested document(s). Prepare a sum of P${transaction?.formData?.cost} to pay to the treasurer.`
-                    : `Invalid requirements.`
-                }
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
               ></Textarea>
               {status === 'ACCEPTED' ? (
                 <Button
                   isDisabled={isLoading}
-                  onClick={() => editTransaction()}
+                  onClick={(e) => {
+                    setMessage()
+                    editTransaction()
+                  }}
                   colorScheme='blue'
                   type='submit'
                 >

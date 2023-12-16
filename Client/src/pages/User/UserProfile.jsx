@@ -1,4 +1,11 @@
-import { Heading, Button, Text, useDisclosure, Spinner } from '@chakra-ui/react'
+import {
+  Heading,
+  Button,
+  Text,
+  useDisclosure,
+  Spinner,
+  Box,
+} from '@chakra-ui/react'
 import ProfileCard from '../../components/cards/ProfileCard'
 import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
@@ -49,9 +56,9 @@ const UserProfile = () => {
     }
   }
 
-  // const handeUpdate = () => {
-  //   getProfile()
-  // }
+  const handeUpdate = () => {
+    getProfile()
+  }
 
   return (
     <>
@@ -69,13 +76,10 @@ const UserProfile = () => {
           isOpen: isCredentialsOpen,
           onClose: onCredentialsClose,
           user: account,
-          // onUpdate: handeUpdate,
+          onUpdate: handeUpdate,
           role: 'user',
         }}
       />
-      <Heading mt={'25px'} textAlign={'center'}>
-        Profile Page
-      </Heading>
       {loading && (
         <Spinner size='xl' marginY={3} mx={'auto'} display={'block'} />
       )}
@@ -101,16 +105,18 @@ const UserProfile = () => {
       )}
       {!loading && !error && account && (
         <>
-          <Button onClick={() => onProfileOpen()} colorScheme='blue'>
-            Update Profile
-          </Button>
-          <Button
-            onClick={() => onCredentialsOpen()}
-            colorScheme='blue'
-            marginLeft={4}
-          >
-            Update Credentials
-          </Button>
+          <Box mt={'25px'} ml={'25px'}>
+            <Button onClick={() => onProfileOpen()} colorScheme='blue'>
+              Update Profile
+            </Button>
+            <Button
+              onClick={() => onCredentialsOpen()}
+              colorScheme='blue'
+              marginLeft={4}
+            >
+              Update Credentials
+            </Button>
+          </Box>
           <ProfileCard data={account} />
         </>
       )}

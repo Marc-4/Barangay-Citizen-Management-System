@@ -31,11 +31,9 @@ const CertificateOfResidency = () => {
       const route = `http://localhost:3000/api/user/transaction/create`
       const body = {
         transacType: 'CERT_OF_RESIDENCY',
-        formData: {
-          purpose: purpose,
-          income: '',
-          cost: 150,
-        },
+        purpose: purpose,
+        income: '',
+        cost: 150,
       }
       const response = await callAPI(body, 'POST', route)
 

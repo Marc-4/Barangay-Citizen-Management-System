@@ -12,7 +12,7 @@ import {
 import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
 import { object, string } from 'yup'
-import EditForm from '../forms/EditForm'
+import EditCredentialsForm from '../forms/EditCredentialsForm'
 
 const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
   const [error, setError] = useState('')
@@ -21,7 +21,8 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
 
   const validationSchema = object({
     username: string().required('required').min(5),
-    password: string().min(8),
+    old_password: string().min(8),
+    new_password: string().min(8),
   })
 
   useEffect(() => {
@@ -32,18 +33,16 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
     return () => clearTimeout(timeoutId)
   }, [success])
 
-  const editProfile = async (values, resetForm) => {
+  const editCredentials = async (values) => {
     try {
       const body = {
         username: values.username,
-        password: values.password
+        new_password: values.new_password,
+        old_password: values.old_password,
       }
       console.log(body)
       let route
-      if (accountRole === 'admin')
-        route = `http://localhost:3000/api/admin/${role}/profile/${user._id}/edit`
-      if (accountRole === 'user')
-        route = `http://localhost:3000/api/user/account/edit`
+        route = `http://localhost:3000/api/${accountRole}/account/credentials/edit`
 
       const response = await callAPI(body, 'PATCH', route)
 
@@ -62,6 +61,7 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
     }
   }
 
+
   return (
     <>
       <Modal
@@ -73,22 +73,24 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <Heading>Update Account</Heading>
+            <Heading>Update Account Credentials</Heading>
           </ModalHeader>
           <ModalCloseButton />
           <Divider m={'auto'} borderColor={'brand.100'} w={'90%'} />
           <ModalBody>
-            <EditForm
+            <EditCredentialsForm
               onSubmit={(values, { setSubmitting, resetForm }) => {
                 setTimeout(async () => {
-                  await editProfile(values, resetForm)
+                  console.log(values);
+                  await editCredentials(values, resetForm)
                   setSubmitting(false)
                 }, 1000)
               }}
               validationSchema={validationSchema}
               initialValues={{
-                username: user?.profile?.username,
-                password: '',
+                username: '',
+                old_password: '',
+                new_password: '',
               }}
             />
             <Text

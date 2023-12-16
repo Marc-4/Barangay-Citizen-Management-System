@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import { sendSuccess, sendError } from '../../../utils/index.js'
-import { Notification } from '../../../models/index.js'
+import { sendSuccess, sendError } from '../../utils/index.js'
+import { Notification } from '../../models/index.js'
 
 const editNotification = async (req, res) => {
   console.log('editing notification..');

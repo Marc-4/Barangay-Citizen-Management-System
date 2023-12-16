@@ -7,7 +7,6 @@ const getUserTransaction = async (req, res) => {
     return sendError('Invalid Transaction ID', 400, res)
 
   const { filter } = req.query
-  console.log(filter);
   let transaction
   try {
     if (filter === 'FORMDATA')
@@ -28,6 +27,7 @@ const getUserTransaction = async (req, res) => {
   if (!transaction) return sendError('No Transaction Found', 404, res)
 
   const payload = transaction
+
   return sendSuccess(payload, 200, res)
 }
 

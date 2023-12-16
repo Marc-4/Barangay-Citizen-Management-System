@@ -34,11 +34,9 @@ const CommunityTaxCertificate = () => {
       const route = `http://localhost:3000/api/user/transaction/create`
       const body = {
         transacType: 'COM_TAX_CERT',
-        formData: {
-          purpose: purpose,
-          income: income,
-          cost: 'Variable',
-        },
+        purpose: purpose,
+        income: income,
+        cost: 'Variable',
       }
       console.log(body)
 

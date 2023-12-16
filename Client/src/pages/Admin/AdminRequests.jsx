@@ -96,10 +96,9 @@ const AdminRequests = () => {
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex
           flexDirection='row'
-          alignItems='center'
           gap={'10px'}
-          mt={'25px'}
-          mb={'25px'}
+          mt={'15px'}
+          mb={'15px'}
         >
           <Searchbar searchHandler={handleSearch} />
           <RefreshButton

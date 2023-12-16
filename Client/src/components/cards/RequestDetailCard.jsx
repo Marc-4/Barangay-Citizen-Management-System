@@ -43,7 +43,17 @@ const TransactionDetailCard = ({ title, data, name }) => {
         </Box>
         <Box>
           <Text fontWeight='bold'>Status:</Text>
-          <Text>{data.status}</Text>
+          <Text
+            color={
+              data.status === 'PENDING'
+                ? 'orange.400'
+                : data.status === 'ACCEPTED'
+                ? 'green'
+                : 'red'
+            }
+          >
+            {data.status}
+          </Text>
         </Box>
       </Box>
     </VStack>

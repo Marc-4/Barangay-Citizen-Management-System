@@ -42,6 +42,9 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  message:{
+    type: String
+  }
 })
 
 export default mongoose.model('Transaction', transactionSchema)

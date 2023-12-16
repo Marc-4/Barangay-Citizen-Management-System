@@ -4,18 +4,19 @@ const createUserTransaction = async (req, res) => {
   console.log(req.body)
   if (
     req.body.transacType === undefined ||
-    req.body.cost === undefined
+    req.body.cost === undefined ||
+    req.body.purpose === undefined
   )
     return sendError('Missing Required Fields', 404, res)
 
     const attachment = req.file
   const formData = {
     purpose: req.body.purpose,
-    income: req.body.income,
+    income: req.body?.income,
     cost: req.body.cost,
     attachment:{
-      data: attachment.buffer,
-      fileName: attachment.originalname
+      data: attachment?.buffer,
+      fileName: attachment?.originalname
     }
   }
 
@@ -40,6 +41,8 @@ const createUserTransaction = async (req, res) => {
       timestamp: Date.now(),
       status: 'PENDING',
     })
+
+    console.log(transaction);
 
     const payload = transaction
     return sendSuccess(payload, 200, res)

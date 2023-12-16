@@ -15,6 +15,7 @@ import { useState, useEffect } from 'react'
 
 const BarangayRecords = () => {
   const [account, setAccount] = useState()
+  const [purpose, setPurpose] = useState()
   const [success, setSuccess] = useState()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
@@ -30,7 +31,7 @@ const BarangayRecords = () => {
       const formData = new FormData()
 
       formData.append('transacType', 'BRGY_RECORD')
-      formData.append('purpose', '')
+      formData.append('purpose', purpose)
       formData.append('income', '')
       formData.append('cost', 150)
 
@@ -127,11 +128,17 @@ const BarangayRecords = () => {
             </Heading>
             <Form onSubmit={() => createTransaction()}>
               <Box display={'flex'} flexDir={'column'} gap={'10px'}>
+              <Text>Purpose:</Text>
+                <Textarea
+                  value={purpose}
+                  onChange={(e) => setPurpose(e.target.value)}
+                  isRequired={true}
+                />
                 <Text>Letter of Request: </Text>
                 <input
                   name='attachment'
                   type='file'
-                  accept='.pdf,.doc,.docx'
+                  accept='.pdf'
                   required={true}
                 />
                 <Checkbox size={'lg'} isRequired={true}>

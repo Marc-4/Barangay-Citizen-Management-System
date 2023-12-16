@@ -7,8 +7,7 @@ import {
   Flex,
   Link as ChakraLink,
 } from '@chakra-ui/react'
-import { MdOutlineMenu } from 'react-icons/md'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const UserSidebar = () => {
   return (
@@ -19,18 +18,21 @@ const UserSidebar = () => {
           alignItems={'center'}
           color={'text.main'}
         >
-          <Box display={'flex'} justifyContent={'center'} width={'100%'}>
-            <Heading display={'flex'} h={'75px'} alignItems={'center'}>
-              Sidebar
+          <Box
+            display={'flex'}
+            ml={'20px'}
+            justifyContent={'left'}
+            width={'100%'}
+          >
+            <Heading
+              color={'text.main'}
+              display={'flex'}
+              h={'75px'}
+              alignItems={'center'}
+            >
+              BRMS
             </Heading>
           </Box>
-          <IconButton
-            variant={'unstyled'}
-            fontSize={'4xl'}
-            color={'secondary.main'}
-            icon={<MdOutlineMenu />}
-            mr={'12px'}
-          ></IconButton>
         </Flex>
         <hr style={{ border: '1px solid ', width: '90%', margin: 'auto' }} />
         <VStack gap={'10px'} pt={'50px'} pb={'50px'}>
@@ -41,8 +43,9 @@ const UserSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}
@@ -50,22 +53,23 @@ const UserSidebar = () => {
           >
             <Text fontSize={'2xl'}>Profile</Text>
           </ChakraLink>
-          <ChakraLink
+          {/* <ChakraLink
             as={NavLink}
             to='/user/notifications'
             _hover={{
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color:'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}
             borderRadius={'25px'}
           >
             <Text fontSize={'2xl'}>Notifications</Text>
-          </ChakraLink>
+          </ChakraLink> */}
           <ChakraLink
             as={NavLink}
             to='/user/transactions'
@@ -73,8 +77,9 @@ const UserSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}
@@ -89,8 +94,9 @@ const UserSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}
@@ -105,8 +111,9 @@ const UserSidebar = () => {
               bg: 'gray.300',
             }}
             _activeLink={{
-              fontWeight: 'semibold',
-              backgroundColor: 'secondary.300',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
             }}
             w={'300px'}
             p={'10px'}

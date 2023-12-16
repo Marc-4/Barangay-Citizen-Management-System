@@ -1,5 +1,5 @@
 import JWT from 'jsonwebtoken'
-import bcrpyt from 'bcrypt'
+import bcrypt from 'bcrypt'
 import { User } from '../../models/index.js'
 import { sendError, sendSuccess } from '../../utils/index.js'
 
@@ -22,8 +22,10 @@ const userLogin = async (req, res) => {
 
   const hashedPass = user.password
 
+  bcrypt.hash(req.body.password, 10)
+  console.log(hashedPass)
   //check password
-  bcrpyt.compare(req.body.password, hashedPass, async (err, result) => {
+  bcrypt.compare(req.body.password, hashedPass, async (err, result) => {
     if (err) {
       console.log(err)
       return sendError('Internal Server Error', 500, res)

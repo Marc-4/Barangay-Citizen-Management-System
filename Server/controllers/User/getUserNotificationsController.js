@@ -13,15 +13,9 @@ const getUserNotifications = async (req, res) => {
         recipient: req.user.id,
         status: 'UNREAD',
       })
-    else if (req.query.filter && req.query.filter == 'UNREAD')
+    else
       notifications = await Notification.find({
         recipient: req.user.id,
-        status: 'UNREAD',
-      })
-    else if (req.query.filter && req.query.filter == 'READ')
-      notifications = await Notification.find({
-        recipient: req.user.id,
-        status: 'READ',
       })
   } catch (error) {
     console.log(error)

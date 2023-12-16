@@ -15,7 +15,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
   const [profilePhoto, setProfilePhoto] = useState()
   const role = sessionStorage.getItem('userRole')
-  console.log(role);
+  console.log(role)
   return (
     <>
       <Formik
@@ -106,6 +106,12 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
                 type='text'
                 name='middleName'
                 placeholder='Middle Name'
+              />
+              <Text
+                as={ErrorMessage}
+                name='middleName'
+                component='div'
+                color={'tomato'}
               />
               <Input
                 as={Field}
@@ -234,6 +240,12 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
                 component='div'
                 color={'tomato'}
               />
+              <Text
+                as={ErrorMessage}
+                name='email'
+                component='div'
+                color={'tomato'}
+              />
               <Heading fontSize={'xl'}>Address</Heading>
               <Input
                 as={Field}
@@ -274,11 +286,11 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
             </Box>
             {role === null ? (
               <ReCAPTCHA
-              sitekey='6LcLQywpAAAAAGJJwgJxWQAY40QFBLsLAJDwgXra'
-              onChange={(value) =>
-                setFieldValue('g_recaptcha_response', value)
-              }
-            />
+                sitekey='6LcLQywpAAAAAGJJwgJxWQAY40QFBLsLAJDwgXra'
+                onChange={(value) =>
+                  setFieldValue('g_recaptcha_response', value)
+                }
+              />
             ) : (
               ''
             )}

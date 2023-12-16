@@ -7,7 +7,7 @@ import {
   Stack,
   Text,
   Textarea,
-  Input
+  Input,
 } from '@chakra-ui/react'
 import { Form, useNavigate } from 'react-router-dom'
 import callAPI from '../../../utils/callAPI'
@@ -31,11 +31,10 @@ const BarangayClearance = () => {
       const route = `http://localhost:3000/api/user/transaction/create`
       const body = {
         transacType: 'BRGY_CLEARANCE',
-        formData: {
-          purpose: purpose,
-          income: '',
-          cost: 150,
-        },
+
+        purpose: purpose,
+        income: '',
+        cost: 150,
       }
       const response = await callAPI(body, 'POST', route)
 
@@ -45,8 +44,8 @@ const BarangayClearance = () => {
         createNotification(response.payload)
 
         setTimeout(() => {
-            navigate(`/user/transactions/${response.payload._id}`)
-          }, 1000);
+          navigate(`/user/transactions/${response.payload._id}`)
+        }, 1000)
       } else setError(response.payload.error)
     } catch (error) {
       console.log(error)
@@ -79,7 +78,7 @@ const BarangayClearance = () => {
   }
 
   const createNotification = async (transaction) => {
-    console.log(transaction);
+    console.log(transaction)
     try {
       const body = {
         notifType: 'TRANSACTION',
@@ -121,7 +120,7 @@ const BarangayClearance = () => {
                   I certify that I reside at this barangay.
                 </Checkbox>
                 <Text fontWeight={'semibold'} fontSize={'lg'}>
-                  Processing Fee: 
+                  Processing Fee:
                 </Text>
                 <Input isReadOnly={true} fontWeight={'semibold'} value={150} />
 

@@ -21,7 +21,8 @@ function RegisterModal({ isOpen, onClose }) {
   const [success, setSuccess] = useState('')
 
   const validationSchema = object({
-    username: string().required('required'),
+    username: string()
+      .required('required'),
     password: string().required('required').min(8),
     firstName: string()
       .required('required')
@@ -54,16 +55,9 @@ function RegisterModal({ isOpen, onClose }) {
 
   const handleRegister = async (values, setSubmitting) => {
     const recaptchaResponse = values['g_recaptcha_response']
-    console.log(recaptchaResponse)
-
-    // if (!recaptchaResponse) {
-    //   setSubmitting(false)
-    //   return
-    // }
 
     setSubmitting(true)
     try {
-
       const formData = new FormData()
 
       // Append form data

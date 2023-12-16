@@ -42,6 +42,8 @@ const AdminUserAccounts = () => {
   const [isLoading, setIsLoading] = useState(true)
   const cancelRef = useRef()
   const [refreshCounter, setRefreshCounter] = useState(0)
+  const [sortedUsers, setSortedUsers] = useState([])
+  const [sortedArchivedUsers, setSortedArchivedUsers] = useState([])
 
   const {
     isOpen: isRegisterOpen,
@@ -73,6 +75,19 @@ const AdminUserAccounts = () => {
     getUsers()
     getArchivedUsers()
   }, [refreshCounter])
+
+  useEffect(() => {
+    setSortedUsers(
+      [...users].sort(
+        (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
+      )
+    )
+    setSortedArchivedUsers(
+      [...archivedUsers].sort(
+        (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
+      )
+    )
+  }, [users, archivedUsers])
 
   const getUsers = async () => {
     setIsLoading(true)
@@ -232,13 +247,7 @@ const AdminUserAccounts = () => {
         }}
       />
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
-        <Flex
-          flexDirection='row'
-          alignItems='center'
-          gap={'10px'}
-          mt={'25px'}
-          mb={'25px'}
-        >
+        <Flex flexDirection='row' gap={'10px'} mt={'15px'} mb={'15px'}>
           <Searchbar
             entries={entries}
             page={page}
@@ -269,9 +278,38 @@ const AdminUserAccounts = () => {
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
       <Tabs margin={'auto'} w={'90%'} variant='line'>
         <TabList>
-          <Tab onClick={()=>{setFilter('ACTIVE')}}>User List</Tab>
-          <Tab onClick={()=>{setFilter('ARCHIVED')}}>Archived Users</Tab>
+          <Tab
+            onClick={() => {
+              setFilter('ACTIVE')
+            }}
+          >
+            User List
+          </Tab>
+          <Tab
+            onClick={() => {
+              setFilter('ARCHIVED')
+            }}
+          >
+            Archived Users
+          </Tab>
         </TabList>
+        {error ? (
+          <Text
+            fontSize={'2xl'}
+            fontWeight={'semibold'}
+            color={'tomato'}
+            textAlign={'center'}
+          >
+            {error}
+          </Text>
+        ) : (
+          ''
+        )}
+        {isLoading ? (
+          <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
+        ) : (
+          ''
+        )}
         <TabPanels>
           <TabPanel>
             {isLoading !== true && users.length === 0 ? (
@@ -330,7 +368,7 @@ const AdminUserAccounts = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {users.map((user) => {
+                    {sortedUsers.map((user) => {
                       const profile = user.profile
                       return (
                         <Tr key={user._id} fontSize={'md'}>
@@ -504,7 +542,7 @@ const AdminUserAccounts = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {archivedUsers.map((user) => {
+                    {sortedArchivedUsers.map((user) => {
                       const profile = user.profile
                       return (
                         <Tr key={user._id}>
@@ -619,23 +657,6 @@ const AdminUserAccounts = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
-      {isLoading ? (
-        <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
-      ) : (
-        ''
-      )}
-      {error ? (
-        <Text
-          fontSize={'2xl'}
-          fontWeight={'semibold'}
-          color={'tomato'}
-          textAlign={'center'}
-        >
-          {error}
-        </Text>
-      ) : (
-        ''
-      )}
     </>
   )
 }

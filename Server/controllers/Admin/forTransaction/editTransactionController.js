@@ -17,6 +17,7 @@ const editTransaction = async (req, res) => {
     return sendError('Transaction Not Found', 404, res)
   }
 
+  if (req.body.message) transaction.message = req.body.message
   transaction.status = req.body.status
 
   try {

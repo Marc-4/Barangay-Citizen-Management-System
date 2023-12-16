@@ -30,11 +30,9 @@ const BusinessClearance = () => {
       const route = `http://localhost:3000/api/user/transaction/create`
       const body = {
         transacType: 'BSNS_CLEARANCE',
-        formData: {
           purpose: purpose,
           income: '',
           cost: 800,
-        },
       }
       const response = await callAPI(body, 'POST', route)
 

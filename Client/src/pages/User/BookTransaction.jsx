@@ -12,7 +12,12 @@ const BookTransaction = () => {
           pl={'25px'}
         >
           <Link style={{ width: '100%' }} to={'barangay_certification'}>
-            <Card borderColor={'brand.100'} height='125px'>
+            <Card
+              borderColor={'brand.100'}
+              height='125px'
+              _hover={{ bg: 'secondary.main' }}
+              transition='all 0.2s'
+            >
               <CardHeader
                 pt={'10px'}
                 pb={'10px'}
@@ -29,7 +34,11 @@ const BookTransaction = () => {
             </Card>
           </Link>
           <Link style={{ width: '100%' }} to={'barangay_clearance'}>
-            <Card height='125px'>
+            <Card
+              height='125px'
+              _hover={{ bg: 'secondary.main' }}
+              transition='all 0.2s'
+            >
               <CardHeader
                 pt={'10px'}
                 pb={'10px'}
@@ -46,7 +55,11 @@ const BookTransaction = () => {
             </Card>
           </Link>
           <Link style={{ width: '100%' }} to={'community_tax_certificate'}>
-            <Card height='125px'>
+            <Card
+              height='125px'
+              _hover={{ bg: 'secondary.main' }}
+              transition='all 0.2s'
+            >
               <CardHeader
                 pt={'10px'}
                 pb={'10px'}
@@ -64,7 +77,11 @@ const BookTransaction = () => {
             </Card>
           </Link>
           <Link style={{ width: '100%' }} to={'barangay_records'}>
-            <Card height='125px'>
+            <Card
+              height='125px'
+              _hover={{ bg: 'secondary.main' }}
+              transition='all 0.2s'
+            >
               <CardHeader
                 pt={'10px'}
                 pb={'10px'}
@@ -82,7 +99,11 @@ const BookTransaction = () => {
             </Card>
           </Link>
           <Link style={{ width: '100%' }} to={'certificate_of_residency'}>
-            <Card height='125px'>
+            <Card
+              height='125px'
+              _hover={{ bg: 'secondary.main' }}
+              transition='all 0.2s'
+            >
               <CardHeader
                 pt={'10px'}
                 pb={'10px'}
@@ -99,7 +120,11 @@ const BookTransaction = () => {
             </Card>
           </Link>
           <Link style={{ width: '100%' }} to={'business_clearance'}>
-            <Card height='125px'>
+            <Card
+              height='125px'
+              _hover={{ bg: 'secondary.main' }}
+              transition='all 0.2s'
+            >
               <CardHeader
                 pt={'10px'}
                 pb={'10px'}

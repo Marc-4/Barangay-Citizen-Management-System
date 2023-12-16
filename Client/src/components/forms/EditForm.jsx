@@ -85,6 +85,12 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
                 name='middleName'
                 placeholder='Middle Name'
               />
+              <Text
+                as={ErrorMessage}
+                name='middleName'
+                component='div'
+                color={'tomato'}
+              />
               <Input
                 as={Field}
                 type='text'
