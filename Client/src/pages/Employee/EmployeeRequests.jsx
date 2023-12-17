@@ -36,7 +36,7 @@ const AdminRequests = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/requests?entries=20&filter=PENDING`
+      const route = `http://localhost:3000/api/employee/requests?entries=20&filter=PENDING`
       console.log('calling API..')
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
@@ -54,7 +54,7 @@ const AdminRequests = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/requests?entries=20&filter=HISTORY`
+      const route = `http://localhost:3000/api/employee/requests?entries=20&filter=HISTORY`
       console.log('calling API..')
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
@@ -74,7 +74,7 @@ const AdminRequests = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/requests/search?query=${query}&filter=${filter}`
+      const route = `http://localhost:3000/api/employee/requests/search?query=${query}&filter=${filter}`
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
         if (filter === 'PENDING') setRequests(data.payload)
@@ -134,7 +134,7 @@ const AdminRequests = () => {
                     <TransactionCard
                       key={request._id}
                       data={request}
-                      basepath={'/admin/requests'}
+                      basepath={'/employee/requests'}
                     ></TransactionCard>
                   )
                 })
@@ -161,7 +161,7 @@ const AdminRequests = () => {
                     <TransactionCard
                       key={request._id}
                       data={request}
-                      basepath={'/admin/requests'}
+                      basepath={'/employee/requests'}
                     ></TransactionCard>
                   )
                 })

@@ -11,6 +11,8 @@ const GenTransaction = () => {
   const [transactionData, setTransactionData] = useState(null)
   const [ownerAccount, setOwnerAccount] = useState(null)
   const [error, setError] = useState(null)
+  
+  const role = sessionStorage.getItem('userRole')
   const {
     isOpen: isAcceptOpen,
     onOpen: onAcceptOpen,
@@ -33,7 +35,7 @@ const GenTransaction = () => {
   const fetchTransactionData = async () => {
     try {
       let route
-      route = `http://localhost:3000/api/admin/transaction/${id}?filter=FORMDATA`
+      route = `http://localhost:3000/api/${role}/transaction/${id}?filter=FORMDATA`
       const data = await callAPI(null, 'GET', route)
 
       if (data && data.result === 'OK') {

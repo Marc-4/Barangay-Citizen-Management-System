@@ -13,15 +13,10 @@ const AdminLayout = () => {
             colSpan={1}
             style={{ position: 'sticky', top: 0 }}
           >
-            <Sidebar
-            />
+            <Sidebar />
           </GridItem>
 
-          <GridItem
-            id='content'
-            colSpan={5}
-            bg={'background.main'}
-          >
+          <GridItem id='content' colSpan={5} bg={'background.main'}>
             <Navbar />
             <Outlet />
           </GridItem>

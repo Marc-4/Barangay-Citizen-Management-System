@@ -8,7 +8,6 @@ const editUser = async (req, res) => {
   console.log(req.file);
   if (!mongoose.isValidObjectId(req.params.id))
     return sendError('invalid user ID', 400, res)
-  console.log(req.body);
   if (
     req.body.firstName === undefined &&
     req.body.lastName === undefined &&
@@ -63,7 +62,7 @@ const editUser = async (req, res) => {
   if (firstName) user.profile.firstName = req.body.firstName
   if (lastName) user.profile.lastName = req.body.lastName
   if (middleName) user.profile.middleName = req.body.middleName
-  if (dateOfBirth) user.profile.dateOfBirth = req.body.dateOfBirth
+  if (dateOfBirth !== null) user.profile.dateOfBirth = req.body.dateOfBirth
   if (placeOfBirth_city) user.profile.placeOfBirth.city = placeOfBirth_city
   if (placeOfBirth_province) user.profile.placeOfBirth.province = placeOfBirth_province
   if (placeOfBirth_country) user.profile.placeOfBirth.country = placeOfBirth_country

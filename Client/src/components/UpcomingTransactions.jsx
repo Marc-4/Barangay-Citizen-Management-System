@@ -9,6 +9,7 @@ const UpcomingTransactions = () => {
   const [entries, setEntries] = useState(3)
   const [isLoading, setIsLoading] = useState(true)
 
+  const userRole = sessionStorage.getItem('userRole')
   useEffect(() => {
     getTransactionsData()
   }, [])
@@ -17,7 +18,7 @@ const UpcomingTransactions = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/transactions?entries=${entries}&filter=${filter}`
+    const route = `http://localhost:3000/api/${userRole}/transactions?entries=${entries}&filter=${filter}`
     try {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') setTransactions(data.payload)

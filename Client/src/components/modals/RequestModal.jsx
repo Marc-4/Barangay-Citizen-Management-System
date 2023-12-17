@@ -21,10 +21,12 @@ const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
   const [success, setSuccess] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
+  const role = sessionStorage.getItem('userRole')
+
   const editRequest = async () => {
     setIsLoading(true)
     try {
-      const route = `http://localhost:3000/api/admin/request/${id}/edit`
+      const route = `http://localhost:3000/api/${role}/request/${id}/edit`
       const body = { status: status }
 
       const response = await callAPI(body, 'PATCH', route)
@@ -78,7 +80,7 @@ const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
         console.log(pair[0], pair[1])
       }
 
-      const route = `http://localhost:3000/api/admin/user/profile/${request.accountID}/edit`
+      const route = `http://localhost:3000/api/${role}/user/profile/${request.accountID}/edit`
       const response = await fetch(route, {
         method: 'PATCH',
         body: formData,
@@ -109,7 +111,7 @@ const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
         linkID: request._id,
         recipient: request.accountID,
       }
-      const route = `http://localhost:3000/api/admin/notification/create`
+      const route = `http://localhost:3000/api/${role}/notification/create`
       const response = await callAPI(body, 'POST', route)
       if (response === 'OK') setError(null)
     } catch (error) {

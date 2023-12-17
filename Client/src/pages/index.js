@@ -17,6 +17,7 @@ import AdminAbout from './Admin/AdminAbout.jsx'
 import EmployeeDashboard from './Employee/EmployeeDashboard.jsx'
 import EmployeeProfile from './Employee/EmployeeProfile.jsx'
 import EmployeeTransactions from './Employee/EmployeeTransactions.jsx'
+import EmployeeRequests from './Employee/EmployeeRequests.jsx'
 import EmployeeNotifications from './Employee/EmployeeNotifications.jsx'
 import EmployeeUserAccounts from './Employee/EmployeeUserAccounts.jsx'
 import EmployeeAbout from './Employee/EmployeeAbout.jsx'
@@ -52,6 +53,7 @@ export {
   EmployeeProfile,
   EmployeeUserAccounts,
   EmployeeTransactions,
+  EmployeeRequests,
   EmployeeNotifications,
   EmployeeAbout,
   UserProfile,

@@ -20,10 +20,12 @@ const ArchiveAccountAlert = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
 
+  const userRole = sessionStorage.getItem('userRole')
+  
   const archiveAccount = async () => {
     try {
       setSubmitting(true)
-      const route = `http://localhost:3000/api/admin/${role}/${user._id}/archive`
+      const route = `http://localhost:3000/api/${userRole}/${role}/${user._id}/archive`
       const response = await callAPI(null, 'PATCH', route)
 
       if (response.result === 'OK') {

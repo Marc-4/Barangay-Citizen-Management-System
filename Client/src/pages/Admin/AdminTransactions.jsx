@@ -43,7 +43,7 @@ const AdminTransactions = () => {
         (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
       )
     )
-  }, [transactions])
+  }, [transactions, pastTransactions])
 
   const getTransactions = async () => {
     setIsLoading(true)
@@ -90,6 +90,7 @@ const AdminTransactions = () => {
       const route = `http://localhost:3000/api/admin/transactions/search?query=${query}&filter=${filter}`
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
+        console.log(data.payload);
         if (filter === 'PENDING') setTransactions(data.payload)
         else setPastTransactions(data.payload)
         setError(null)

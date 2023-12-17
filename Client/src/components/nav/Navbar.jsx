@@ -129,6 +129,8 @@ const Navbar = () => {
                 borderRadius={'25px'}
                 fallbackSrc={'https://via.placeholder.com/250'}
                 w={'50px'}
+                h={'50px'}
+                objectFit={'cover'}
                 src={image ? revertBase64(image.data) : ''}
               ></Image>
               <Text fontWeight={'semibold'} fontSize={'xl'}>
@@ -137,7 +139,7 @@ const Navbar = () => {
             </Box>
           </Link>
           <Box>
-            <Button onClick={handleLogout} colorScheme='blue'>
+            <Button onClick={handleLogout} colorScheme='facebook'>
               Logout
             </Button>
           </Box>

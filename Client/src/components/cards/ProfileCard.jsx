@@ -207,11 +207,11 @@ const ProfileCard = (data) => {
                   {data
                     ? data.data.profile
                       ? `${
-                          data.data.profile?.placeOfBirth.city +
+                          data.data.profile?.placeOfBirth?.city +
                           ' ' +
-                          data.data.profile?.placeOfBirth.province +
+                          data.data.profile?.placeOfBirth?.province +
                           ', ' +
-                          data.data.profile?.placeOfBirth.country
+                          data.data.profile?.placeOfBirth?.country
                         }`
                       : 'N/A'
                     : 'Loading...'}

@@ -35,8 +35,6 @@ const requestEditUserProfile = async (req, res) => {
   try {
     oldrequest = await ProfileRequest.findOne({
       accountID: req.user.id,
-      userFirstName: user.firstName,
-      userLastName: user.firstName,
       requestType: 'EDIT',
       status: 'PENDING',
     })
@@ -118,8 +116,8 @@ const requestEditUserProfile = async (req, res) => {
     request = await ProfileRequest.create({
       accountID: req.user.id,
       requestType: 'EDIT',
-      userFirstName: user.firstName,
-      userLastName: user.firstName,
+      userFirstName: user.profile.firstName,
+      userLastName: user.profile.lastName,
       requestContent: requestContent,
       timestamp: Date.now(),
       status: 'PENDING',

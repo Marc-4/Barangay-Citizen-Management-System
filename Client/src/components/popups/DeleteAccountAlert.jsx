@@ -15,11 +15,12 @@ const DeleteAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }
   // const [error, setError] = useState(null)
   // const [success, setSuccess] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const userRole = sessionStorage.getItem('userRole')
 
   const deleteAccount = async () => {
     try {
       setSubmitting(true)
-      const route = `http://localhost:3000/api/admin/${role}/${user._id}/delete`
+      const route = `http://localhost:3000/api/${userRole}/${role}/${user._id}/delete`
       const response = await callAPI(null, 'DELETE', route)
 
       if (response.result === 'OK') {

@@ -9,13 +9,13 @@ const NotificationCard = ({ data, account_type, onNotificationClick }) => {
       ? data.notifType === 'RQ_ACCEPT' || data.notifType === 'RQ_REJECT'
         ? '/user/profile'
         : `/user/transactions/${data?.linkID}`
-      : `/admin/${data.notifType.toLowerCase() + 's'}/${data?.linkID}`
+      : `/${role}/${data.notifType.toLowerCase() + 's'}/${data?.linkID}`
 
   const readNotification = async () => {
     try {
       const route = `http://localhost:3000/api/${role}/notification/${data._id}/edit`
-      await callAPI(null, 'PATCH', route)
       onNotificationClick()
+      await callAPI(null, 'PATCH', route)
     } catch (error) {
       console.log(error)
     }

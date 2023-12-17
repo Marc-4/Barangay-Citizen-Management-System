@@ -7,15 +7,16 @@ const searchUser = async (req, res) => {
   try {
     const { query, filter } = req.query
 
-    console.log(filter);
+    const escapedQuery = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+
     const queryFilter = {
       $or: [
         { username: { $regex: query, $options: 'i' } },
-        { 'profile.firstName': { $regex: query, $options: 'i' } },
-        { 'profile.lastName': { $regex: query, $options: 'i' } },
-        { 'profile.middleName': { $regex: query, $options: 'i' } },
-        { 'profile.sex': { $regex: query, $options: 'i' } },
-        { 'profile.civilStatus': { $regex: query, $options: 'i' } },
+        { 'profile.firstName': { $regex: escapedQuery, $options: 'i' } },
+        { 'profile.lastName': { $regex: escapedQuery, $options: 'i' } },
+        { 'profile.middleName': { $regex: escapedQuery, $options: 'i' } },
+        { 'profile.sex': { $regex: escapedQuery, $options: 'i' } },
+        { 'profile.civilStatus': { $regex: escapedQuery, $options: 'i' } },
       ],
     }
 

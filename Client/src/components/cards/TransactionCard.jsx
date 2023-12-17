@@ -12,7 +12,6 @@ import callAPI from '../../utils/callAPI'
 import { useEffect, useState } from 'react'
 
 const TransactionCard = ({ data, basepath }) => {
-  console.log(data)
   // const accountRole = sessionStorage.getItem('userRole')
 
   return (

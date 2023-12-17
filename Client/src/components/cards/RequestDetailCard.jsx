@@ -1,7 +1,8 @@
 import { VStack, Box, Heading, Divider, Text, Link } from '@chakra-ui/react'
 import { Link as rr_Link } from 'react-router-dom'
 
-const TransactionDetailCard = ({ title, data, name }) => {
+const TransactionDetailCard = ({ title, data }) => {
+  const role = sessionStorage.getItem('userRole')
   return (
     <VStack spacing={4} align='start'>
       <Box
@@ -28,9 +29,11 @@ const TransactionDetailCard = ({ title, data, name }) => {
           <Link
             color={'brand.500'}
             as={rr_Link}
-            to={`/admin/users/${data.accountID}`}
+            to={`/${role}/users/${data.accountID}`}
           >
-            <Text>{name}</Text>
+            <Text fontWeight={'semibold'} color={'primary.main'}>
+              {data.userFirstName}, {data.userLastName}
+            </Text>
           </Link>
         </Box>
         <Box>
@@ -44,6 +47,7 @@ const TransactionDetailCard = ({ title, data, name }) => {
         <Box>
           <Text fontWeight='bold'>Status:</Text>
           <Text
+            fontWeight={'bold'}
             color={
               data.status === 'PENDING'
                 ? 'orange.400'

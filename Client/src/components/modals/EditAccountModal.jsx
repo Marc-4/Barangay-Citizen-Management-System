@@ -15,7 +15,6 @@ import { object, string, date, mixed } from 'yup'
 import EditForm from '../forms/EditForm'
 
 const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
-  // console.log('user: ' + JSON.stringify(user, null, 2))
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const accountRole = sessionStorage.getItem('userRole')
@@ -84,10 +83,11 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
       // console.log('values in form: ' + JSON.stringify(valuesObject, null, 2))
       // console.log('changed values: ' + JSON.stringify(changedValues, null, 2))
       let route
-      if (accountRole === 'admin')
-        route = `http://localhost:3000/api/admin/${role}/profile/${user._id}/edit`
-      if (accountRole === 'user')
-        route = `http://localhost:3000/api/user/account/edit`
+      if (role === 'admin' || role === 'employee')
+        route = `http://localhost:3000/api/${accountRole}/account/edit`
+      else if (accountRole !== 'user')
+        route = `http://localhost:3000/api/${accountRole}/${role}/profile/${user._id}/edit`
+      else route = `http://localhost:3000/api/${accountRole}/account/edit`
 
       const response = await fetch(route, {
         method: 'PATCH',
@@ -98,11 +98,11 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
 
       const responseBody = await response.json()
 
-      if (response.ok) {
+      if (responseBody.result === 'OK') {
         setError(null)
-        if (accountRole === 'admin') setSuccess('Successfully Updated User!')
         if (accountRole === 'user')
           setSuccess('Successfuly Requested Profile Update!')
+        else setSuccess('Successfully Updated User!')
 
         if (accountRole === 'user')
           createNotification(responseBody.payload.request)
@@ -131,30 +131,6 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
       console.log(error)
       setError('Error creating notification')
     }
-  }
-
-  const areObjectsEqual = (obj1, obj2) => {
-    const keys1 = Object.keys(obj1)
-    const keys2 = Object.keys(obj2)
-
-    if (keys1.length !== keys2.length) {
-      return false
-    }
-
-    for (const key of keys1) {
-      const val1 = obj1[key]
-      const val2 = obj2[key]
-
-      if (typeof val1 === 'object' && typeof val2 === 'object') {
-        if (!areObjectsEqual(val1, val2)) {
-          return false
-        }
-      } else if (val1 !== val2) {
-        return false
-      }
-    }
-
-    return true
   }
 
   return (

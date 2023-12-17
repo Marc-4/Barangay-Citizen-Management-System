@@ -105,8 +105,24 @@ const router = createBrowserRouter([
             element: <page.EmployeeUserAccounts />,
           },
           {
+            path: 'users/:id',
+            element: <GenUser />,
+          },
+          {
             path: 'transactions',
             element: <page.EmployeeTransactions />,
+          },
+          {
+            path: 'transactions/:id',
+            element: <GenTransaction />,
+          },
+          {
+            path: 'requests',
+            element: <page.EmployeeRequests />,
+          },
+          {
+            path: 'requests/:id',
+            element: <GenRequest />,
           },
           {
             path: 'notifications',
@@ -142,10 +158,6 @@ const router = createBrowserRouter([
             path: 'users/:id',
             element: <GenUser />,
           },
-          // {
-          //   path: 'users/:id/transactions',
-          //   element: <GenUserTransactions />,
-          // },
           {
             path: 'employees',
             element: <page.AdminEmployeeAccounts />,

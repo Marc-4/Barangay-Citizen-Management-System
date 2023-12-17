@@ -8,7 +8,7 @@ const getUser = async (req, res) => {
   
   let user
   try {
-    user = await User.findById(req.params.id)
+    user = await User.findById(req.params.id).select('-password')
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

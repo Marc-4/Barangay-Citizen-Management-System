@@ -1,38 +1,43 @@
-import { Profile } from '../../../models/index.js'
+import { User } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 import mongoose from 'mongoose'
 
 const editUser = async (req, res) => {
+  console.log('editing user...');
+  console.log(req.body);
+  console.log(req.file);
   if (!mongoose.isValidObjectId(req.params.id))
-    return sendError('invalid profile ID', 400, res)
+    return sendError('invalid user ID', 400, res)
 
-  //check input use &&
   if (
     req.body.firstName === undefined &&
     req.body.lastName === undefined &&
     req.body.middleName === undefined &&
     req.body.dateOfBirth === undefined &&
+    req.body.placeOfBirth_city === undefined &&
+    req.body.placeOfBirth_province === undefined &&
+    req.body.placeOfBirth_country === undefined &&
     req.body.sex === undefined &&
     req.body.civilStatus === undefined &&
     req.body.occupation === undefined &&
+    req.body.citizenship === undefined &&
     req.body.email === undefined &&
-    req.body.address?.streetName === undefined &&
-    req.body.address?.houseNumber === undefined &&
-    req.body.address?.subdivisionPurok === undefined
-    // req.body.profilePhoto === undefined
+    req.body.address_streetName === undefined &&
+    req.body.address_houseNumber === undefined &&
+    req.body.address_subdivisionPurok === undefined
   )
     return sendError('Mising Required Fields', 404, res)
 
   //check if user profile exists
-  let profile
+  let user
   try {
-    profile = await Profile.findById(req.params.id)
+    user = await User.findById(req.params.id)
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)
   }
 
-  if (!profile) return sendError('Profile not found', 404, res)
+  if (!user) return sendError('user not found', 404, res)
 
   //destructure
   const {
@@ -40,35 +45,47 @@ const editUser = async (req, res) => {
     lastName,
     middleName,
     dateOfBirth,
+    placeOfBirth_city,
+    placeOfBirth_province,
+    placeOfBirth_country,
     sex,
     civilStatus,
     occupation,
+    citizenship,
     email,
-    address,
-    //profilePhoto,
+    address_streetName,
+    address_houseNumber,
+    address_subdivisionPurok,
   } = req.body
 
-  if (firstName) profile.firstName = req.body.firstName
-  if (lastName) profile.lastName = req.body.lastName
-  if (middleName) profile.middleName = req.body.middleName
-  if (dateOfBirth) profile.dateOfBirth = req.body.dateOfBirth
-  if (sex) profile.sex = req.body.sex
-  if (civilStatus) profile.civilStatus = req.body.civilStatus
-  if (occupation) profile.occupation = req.body.occupation
-  if (email) profile.email = req.body.email
-  if (address.streetName) profile.address.streetName = req.body.address.streetName
-  if (address.houseNumber) profile.address.houseNumber = req.body.address.houseNumber
-  if (address.subdivisionPurok) profile.address.subdivisionPurok = req.body.address.subdivisionPurok
-  //   if(profilePhoto) profile.profilePhoto = req.body.profilePhoto
+  const profilePhoto = req.file
+
+  if (firstName) user.profile.firstName = req.body.firstName
+  if (lastName) user.profile.lastName = req.body.lastName
+  if (middleName) user.profile.middleName = req.body.middleName
+  if (dateOfBirth && dateOfBirth !== 'null') user.profile.dateOfBirth = dateOfBirth //i am stupid. too lazy to change the frontend now
+  if (placeOfBirth_city) user.profile.placeOfBirth.city = placeOfBirth_city
+  if (placeOfBirth_province) user.profile.placeOfBirth.province = placeOfBirth_province
+  if (placeOfBirth_country) user.profile.placeOfBirth.country = placeOfBirth_country
+  if (sex) user.profile.sex = req.body.sex
+  if (civilStatus) user.profile.civilStatus = req.body.civilStatus
+  if (occupation) user.profile.occupation = req.body.occupation
+  if (citizenship) user.profile.citizenship = req.body.citizenship
+  if (email) user.profile.email = req.body.email
+  if (address_streetName) user.profile.address.streetName = address_streetName
+  if (address_houseNumber) user.profile.address.houseNumber = address_houseNumber
+  if (address_subdivisionPurok) user.profile.address.subdivisionPurok = address_subdivisionPurok
+  if (profilePhoto?.buffer) user.profile.profilePhoto.data = profilePhoto.buffer 
+  if (profilePhoto?.originalname) user.profile.profilePhoto.fileName = profilePhoto.originalname 
 
   try {
-    await profile.save()
+    await user.save()
   } catch (error) {
     console.log(error)
-    return sendError('Internal Server Error', 400, res)
+    return sendError('Internal Server Error', 500, res)
   }
 
-  const payload = profile
+  const payload = {request: user}
 
   return sendSuccess(payload, 200, res)
 }

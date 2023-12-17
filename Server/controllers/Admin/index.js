@@ -1,6 +1,8 @@
 import createAdminProfileController from './forAdmin/createAdminProfileController.js'
 import getAdminController from './forAdmin/getAdminController.js'
 import registerAdminController from './forAdmin/registerAdminController.js'
+import editAdminController from './forAdmin/editAdminProfileController.js'
+import editAdminCredentialsController from './forAdmin/editAdminCredentialsController.js'
 
 import archiveEmployeeController from './forEmployee/archiveEmployeeController.js'
 import restoreEmployeeController from './forEmployee/restoreEmployeeController.js'
@@ -48,6 +50,8 @@ export {
   createAdminProfileController,
   getAdminController,
   registerAdminController,
+  editAdminController,
+  editAdminCredentialsController,
   archiveEmployeeController,
   restoreEmployeeController,
   createEmployeeController,

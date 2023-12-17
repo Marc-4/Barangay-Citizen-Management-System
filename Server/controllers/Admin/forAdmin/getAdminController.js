@@ -2,7 +2,7 @@ import { Admin } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 
 const getAdmin = async (req, res) => {
-  const admin = await Admin.findById(req.user.id)
+  const admin = await Admin.findById(req.user.id).select('-password')
   if (!admin) return sendError('account does not exist', 404, res)
 
   const payload = admin

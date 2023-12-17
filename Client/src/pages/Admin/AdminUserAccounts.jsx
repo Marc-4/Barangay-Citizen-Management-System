@@ -26,6 +26,7 @@ import Searchbar from '../../components/Searchbar'
 import { Link as rr_Link } from 'react-router-dom'
 import RegisterAccountModal from '../../components/modals/RegisterAccountModal'
 import EditAccountModal from '../../components/modals/EditAccountModal'
+import ExportModal from '../../components/modals/ExportModal'
 import DeleteAccountAlert from '../../components/popups/DeleteAccountAlert'
 import ArchiveAccountAlert from '../../components/popups/ArchiveAccountAlert'
 import RestoreAccountAlert from '../../components/popups/RestoreAccountAlert'
@@ -59,6 +60,11 @@ const AdminUserAccounts = () => {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
     onClose: onDeleteClose,
+  } = useDisclosure()
+  const {
+    isOpen: isExportOpen,
+    onOpen: onExportOpen,
+    onClose: onExportClose,
   } = useDisclosure()
   const {
     isOpen: isArchiveOpen,
@@ -179,6 +185,7 @@ const AdminUserAccounts = () => {
     setSelectedUser(null)
     onDeleteClose()
   }
+
   const handleArchiveOpen = (user) => {
     setSelectedUser(user)
     onArchiveOpen()
@@ -212,6 +219,16 @@ const AdminUserAccounts = () => {
           isOpen: isEditOpen,
           onClose: handleEditClose,
           user: selectedUser,
+          onUpdate: handeUpdate,
+          role: 'user',
+        }}
+      />
+      <ExportModal
+        {...{
+          isOpen: isExportOpen,
+          onClose: onExportClose,
+          cancelRef: cancelRef,
+          users: users,
           onUpdate: handeUpdate,
           role: 'user',
         }}
@@ -260,7 +277,7 @@ const AdminUserAccounts = () => {
           <Button
             mt={'10px'}
             ml={'10px'}
-            colorScheme='blue'
+            colorScheme='facebook'
             onClick={onRegisterOpen}
           >
             Register User
@@ -270,6 +287,7 @@ const AdminUserAccounts = () => {
             ml={'10px'}
             colorScheme='facebook'
             color={'white'}
+            onClick={onExportOpen}
           >
             Export to PDF
           </Button>
@@ -382,7 +400,7 @@ const AdminUserAccounts = () => {
                           >
                             <Link
                               as={rr_Link}
-                              color={'brand.500'}
+                              color={'primary.500'}
                               to={`${user._id}`}
                             >
                               {user._id}
@@ -556,7 +574,7 @@ const AdminUserAccounts = () => {
                           >
                             <Link
                               as={rr_Link}
-                              color={'brand.500'}
+                              color={'primary.500'}
                               to={`${user._id}`}
                             >
                               {user._id}

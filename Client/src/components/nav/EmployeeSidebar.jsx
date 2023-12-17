@@ -5,61 +5,130 @@ import {
   Text,
   IconButton,
   Flex,
+  Divider,
+  Link as ChakraLink,
 } from '@chakra-ui/react'
 import { MdOutlineMenu } from 'react-icons/md'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import { useState } from 'react'
 
 const EmployeeSidebar = () => {
   return (
     <>
-      <Box bg='brand.300' minH={'100%'} rounded={'5px'}>
+      <Box bg='background.50' minH={'100%'}>
         <Flex
+          minW={'250px'}
           justifyContent={'space-between'}
           alignItems={'center'}
-          color={'brand.200'}
         >
-          <Box display={'flex'} justifyContent={'center'} width={'100%'}>
-            <Heading display={'flex'} h={'75px'} alignItems={'center'}>
-              Sidebar
+          <Box
+            display={'flex'}
+            ml={'20px'}
+            justifyContent={'left'}
+            width={'100%'}
+          >
+            <Heading
+              color={'text.main'}
+              display={'flex'}
+              h={'75px'}
+              alignItems={'center'}
+            >
+              BRMS
             </Heading>
           </Box>
-          <IconButton
-            variant={'unstyled'}
-            fontSize={'4xl'}
-            color={'brand.200'}
-            icon={<MdOutlineMenu />}
-            mr={'12px'}
-          ></IconButton>
         </Flex>
-        <hr
-          style={{ border: '1px solid #DEDCFF', width: '90%', margin: 'auto' }}
+        <Divider
+          borderColor={'brand.100'}
+          borderWidth={'1px'}
+          w={'90%'}
+          m={'auto'}
         />
-        <VStack gap={'50px'} pt={'50px'} pb={'50px'}>
-          <Link to={'/employee/dashboard'}>
-            <Text fontWeight={'semibold'} fontSize={'3xl'} color={'white'}>
-              Dashboard
-            </Text>
-          </Link>
-          <Link to={'/employee/notifications'}>
-            <Text fontWeight={'semibold'} fontSize={'3xl'} color={'white'}>
-              Notifications
-            </Text>
-          </Link>
-          <Link to={'/employee/users'}>
-            <Text fontWeight={'semibold'} fontSize={'3xl'} color={'white'}>
-              Residents
-            </Text>
-          </Link>
-          <Link to={'/employee/transactions'}>
-            <Text fontWeight={'semibold'} fontSize={'3xl'} color={'white'}>
-              Transactions
-            </Text>
-          </Link>
-          <Link to={'/employee/about'}>
-            <Text fontWeight={'semibold'} fontSize={'3xl'} color={'white'}>
-              About
-            </Text>
-          </Link>
+        <VStack gap={'10px'} pt={'50px'} pb={'50px'} color={'brand.100'}>
+          <ChakraLink
+            as={NavLink}
+            to='/employee/dashboard'
+            _hover={{
+              bg: 'gray.300',
+            }}
+            _activeLink={{
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
+            }}
+            w={'300px'}
+            p={'10px'}
+            borderRadius={'25px'}
+          >
+            <Text fontSize={'2xl'}>Dashboard</Text>
+          </ChakraLink>
+          <ChakraLink
+            as={NavLink}
+            to='/employee/users'
+            _hover={{
+              bg: 'gray.300',
+            }}
+            _activeLink={{
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
+            }}
+            w={'300px'}
+            p={'10px'}
+            borderRadius={'25px'}
+          >
+            <Text fontSize={'2xl'}>Residents</Text>
+          </ChakraLink>
+          <ChakraLink
+            as={NavLink}
+            to='/employee/transactions'
+            _hover={{
+              bg: 'gray.300',
+            }}
+            _activeLink={{
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
+            }}
+            w={'300px'}
+            p={'10px'}
+            borderRadius={'25px'}
+          >
+            <Text fontSize={'2xl'}>Transactions</Text>
+          </ChakraLink>
+          <ChakraLink
+            as={NavLink}
+            to='/employee/requests'
+            _hover={{
+              bg: 'gray.300',
+            }}
+            _activeLink={{
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
+            }}
+            w={'300px'}
+            p={'10px'}
+            borderRadius={'25px'}
+          >
+            <Text fontSize={'2xl'}>Requests</Text>
+          </ChakraLink>
+          <ChakraLink
+            as={NavLink}
+            to='/employee/about'
+            _hover={{
+              bg: 'gray.300',
+            }}
+            _activeLink={{
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'primary.main',
+            }}
+            w={'300px'}
+            p={'10px'}
+            borderRadius={'25px'}
+          >
+            <Text fontSize={'2xl'}>About</Text>
+          </ChakraLink>
         </VStack>
       </Box>
     </>

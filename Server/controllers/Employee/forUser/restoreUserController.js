@@ -2,8 +2,8 @@ import mongoose from 'mongoose'
 import { User } from '../../../models/index.js'
 import { sendError, sendSuccess } from '../../../utils/index.js'
 
-const archiveUser = async (req, res) => {
-  console.log('archiving user..')
+const restoreUser = async (req, res) => {
+  console.log('restoring user..')
   try {
     if (!mongoose.isValidObjectId(req.params.id))
       return sendError('invalid user ID', 400, res)
@@ -11,7 +11,7 @@ const archiveUser = async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) return sendError('user not found', 404, res)
 
-    await User.updateOne({ _id: user._id }, { active: false })
+    await User.updateOne({ _id: user._id }, { active: true })
 
     let payload = user
 
@@ -22,4 +22,4 @@ const archiveUser = async (req, res) => {
   }
 }
 
-export default archiveUser
+export default restoreUser

@@ -12,6 +12,8 @@ const GenRequest = () => {
   const [account, setAccount] = useState(null)
   const [error, setError] = useState(null)
 
+  const role = sessionStorage.getItem('userRole')
+
   const {
     isOpen: isAcceptOpen,
     onOpen: onAcceptOpen,
@@ -33,7 +35,7 @@ const GenRequest = () => {
 
   const fetchRequestData = async () => {
     try {
-      const route = `http://localhost:3000/api/admin/request/${id}`
+      const route = `http://localhost:3000/api/${role}/request/${id}`
       const data = await callAPI(null, 'GET', route)
       if (data && data.result === 'OK') {
         setError(null)
@@ -49,7 +51,7 @@ const GenRequest = () => {
   const fetchRequestOwner = async () => {
     try {
       if (requestData) {
-        const route = `http://localhost:3000/api/admin/user/${requestData.accountID}`
+        const route = `http://localhost:3000/api/${role}/user/${requestData.accountID}`
         const data = await callAPI(null, 'GET', route)
         if (data && data.result === 'OK') {
           setError(null)
@@ -103,9 +105,6 @@ const GenRequest = () => {
               <RequestDetailCard
                 title='Request Details'
                 data={requestData}
-                name={
-                  account?.profile.firstName + ', ' + account?.profile.lastName
-                }
               />
               <OwnerProfileCard title='Owner Profile' data={account?.profile} />
               {requestData.requestType == 'EDIT' && (

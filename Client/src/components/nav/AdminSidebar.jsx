@@ -61,22 +61,6 @@ const AdminSidebar = () => {
           >
             <Text fontSize={'2xl'}>Dashboard</Text>
           </ChakraLink>
-          {/* <ChakraLink
-            as={NavLink}
-            to='/admin/notifications'
-            _hover={{
-              bg: 'gray.300',
-            }}
-            _activeLink={{
-              fontWeight: 'bold',
-              backgroundColor: 'secondary.300',
-            }}
-            w={'300px'}
-            p={'10px'}
-            borderRadius={'25px'}
-          >
-            <Text fontSize={'2xl'}>Notifications</Text>
-          </ChakraLink> */}
           <ChakraLink
             as={NavLink}
             to='/admin/users'

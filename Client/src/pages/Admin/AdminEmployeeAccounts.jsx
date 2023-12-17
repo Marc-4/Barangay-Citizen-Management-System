@@ -355,7 +355,7 @@ const AdminEmployeeAccounts = () => {
                           >
                             <Link
                               as={rr_Link}
-                              color={'brand.500'}
+                              color={'primary.500'}
                               to={`${employee._id}`}
                             >
                               {employee._id}
@@ -532,7 +532,7 @@ const AdminEmployeeAccounts = () => {
                           >
                             <Link
                               as={rr_Link}
-                              color={'brand.500'}
+                              color={'primary.500'}
                               to={`${employee._id}`}
                             >
                               {employee._id}

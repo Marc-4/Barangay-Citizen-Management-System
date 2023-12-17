@@ -7,14 +7,13 @@ const searchTransactions = async (req, res) => {
   try {
     const { query, filter } = req.query
 
-    console.log(query)
-    console.log(filter)
+    const escapedQuery = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 
     const queryFilter = {
       $or: [
-        { transacType: { $regex: query, $options: 'i' } },
-        { userFirstName: { $regex: query, $options: 'i' } },
-        { userLastName: { $regex: query, $options: 'i' } },
+        { transacType: { $regex: escapedQuery, $options: 'i' } },
+        { userFirstName: { $regex: escapedQuery, $options: 'i' } },
+        { userLastName: { $regex: escapedQuery, $options: 'i' } },
       ],
     }
 

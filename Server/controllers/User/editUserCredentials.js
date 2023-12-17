@@ -1,5 +1,6 @@
 import { User } from '../../models/index.js'
 import { sendError, sendSuccess } from '../../utils/index.js'
+import bcrypt from 'bcrypt'
 
 const editUserCredentials = async (req, res) => {
   console.log(req.body.username)
@@ -18,12 +19,15 @@ const editUserCredentials = async (req, res) => {
 
   const { username, new_password, old_password } = req.body
 
-  if(user.password !== old_password)
-  return sendError('incorrect old password', 400, res)
+  const result = await bcrypt.compare(old_password, user.password)
+  if (!result) return sendError('incorrect old password', 400, res)
 
   try {
     if (username) user.username = username
-    if (new_password) user.password = new_password
+    if (new_password) {
+      const newpass = await bcrypt.hash(new_password, 10)
+      user.password = newpass
+    }
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

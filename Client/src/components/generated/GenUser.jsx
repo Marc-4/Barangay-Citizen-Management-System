@@ -23,6 +23,8 @@ const GenUser = () => {
   const [filter, setFilter] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
+  const role = sessionStorage.getItem('userRole')
+
   useEffect(() => {
     getProfile()
     getTransactions()
@@ -32,7 +34,7 @@ const GenUser = () => {
     setIsLoading(true)
     try {
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/user/${id}`
+      const route = `http://localhost:3000/api/${role}/user/${id}`
       const response = await callAPI(null, method, route)
 
       if (response.result === 'OK') {
@@ -53,7 +55,7 @@ const GenUser = () => {
     setIsLoading(true)
     try {
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/user/${id}/transactions?entries=${entries}`
+      const route = `http://localhost:3000/api/${role}/user/${id}/transactions?entries=${entries}`
       const response = await callAPI(null, method, route)
 
       if (response.result === 'OK') {

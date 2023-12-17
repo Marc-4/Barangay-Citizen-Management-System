@@ -1,10 +1,25 @@
-import { Heading, Button, Text } from '@chakra-ui/react'
+import { Heading, Button, Text, useDisclosure, Box } from '@chakra-ui/react'
 import ProfileCard from '../../components/cards/ProfileCard'
 import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
+import EditAccountModal from '../../components/modals/EditAccountModal'
+import EditCredentialsModal from '../../components/modals/EditCredentialsModal'
+
 const AdminProfile = () => {
   const [profileData, setProfileData] = useState()
   const [error, setError] = useState()
+
+  const {
+    isOpen: isProfileOpen,
+    onOpen: onProfileOpen,
+    onClose: onProfileClose,
+  } = useDisclosure()
+
+  const {
+    isOpen: isCredentialsOpen,
+    onOpen: onCredentialsOpen,
+    onClose: onCredentialsClose,
+  } = useDisclosure()
 
   useEffect(() => {
     getProfile()
@@ -30,11 +45,30 @@ const AdminProfile = () => {
     console.log(profileData)
   }
 
+  const handeUpdate = () => {
+    getProfile()
+  }
+
   return (
     <>
-      <Heading mt={'25px'} textAlign={'center'}>
-        Profile Page
-      </Heading>
+      <EditAccountModal
+        {...{
+          isOpen: isProfileOpen,
+          onClose: onProfileClose,
+          onUpdate: handeUpdate,
+          user: profileData,
+          role: 'admin',
+        }}
+      />
+      <EditCredentialsModal
+        {...{
+          isOpen: isCredentialsOpen,
+          onClose: onCredentialsClose,
+          user: profileData,
+          onUpdate: handeUpdate,
+          role: 'admin',
+        }}
+      />
       <Text
         fontSize={'2xl'}
         display={error ? 'block' : 'none'}
@@ -44,7 +78,15 @@ const AdminProfile = () => {
       >
         {error}
       </Text>
-      {profileData &&<ProfileCard data={profileData} />}
+      <Box display={'flex'} gap={'10px'} p={'10px'} mt={'25px'} ml={'80px'}>
+        <Button onClick={() => onProfileOpen()} colorScheme='facebook'>
+          Edit Profile
+        </Button>
+        <Button onClick={() => onCredentialsOpen()} colorScheme='facebook'>
+          Edit Credentials
+        </Button>
+      </Box>
+      {profileData && <ProfileCard data={profileData} />}
     </>
   )
 }

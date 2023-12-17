@@ -5,7 +5,7 @@ const NotificationPopup = ({ notifications, isOpen, onNotificationClick }) => {
   const sortedNotifications = [...notifications].sort(
     (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
   )
-  console.log(notifications)
+  
   return (
     <>
       <Box

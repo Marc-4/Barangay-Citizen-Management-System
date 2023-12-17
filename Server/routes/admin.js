@@ -9,10 +9,10 @@ const router = Router()
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.post('/account/register', Admin.registerAdminController)
-// router.post('/account/create-profile', middlewares, Admin.createAdminProfileController)
+// router.post('/account/register', middlewares, Admin.registerAdminController)
 router.get('/account', middlewares, Admin.getAdminController)
-// router.patch('/account/edit', middlewares, Admin.editAdminController)
+router.patch('/account/edit', middlewares, upload.single('profilePhoto'), Admin.editAdminController)
+router.patch('/account/credentials/edit', middlewares, Admin.editAdminCredentialsController)
 
 router.post('/user/register', middlewares, upload.single('profilePhoto'), Admin.registerUserController)
 router.get('/user/:id', middlewares, Admin.getUserController)
