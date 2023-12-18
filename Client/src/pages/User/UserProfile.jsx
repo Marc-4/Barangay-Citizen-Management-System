@@ -66,9 +66,9 @@ const UserProfile = () => {
         {...{
           isOpen: isProfileOpen,
           onClose: onProfileClose,
-          // onUpdate: handeUpdate,
           user: account,
           role: 'user',
+          editingSelf: true
         }}
       />
       <EditCredentialsModal
@@ -106,12 +106,12 @@ const UserProfile = () => {
       {!loading && !error && account && (
         <>
           <Box mt={'25px'} ml={'25px'}>
-            <Button onClick={() => onProfileOpen()} colorScheme='blue'>
+            <Button onClick={() => onProfileOpen()} colorScheme='facebook'>
               Update Profile
             </Button>
             <Button
               onClick={() => onCredentialsOpen()}
-              colorScheme='blue'
+              colorScheme='facebook'
               marginLeft={4}
             >
               Update Credentials

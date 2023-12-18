@@ -3,10 +3,11 @@ import { sendError, sendSuccess } from '../../../utils/index.js'
 import mongoose from 'mongoose'
 
 const editEmployee = async (req, res) => {
+  console.log('editing employee...');
+  console.log(req.body);
+  console.log(req.file);
   if (!mongoose.isValidObjectId(req.params.id))
     return sendError('invalid employee ID', 400, res)
-
-  //check input use &&
   if (
     req.body.firstName === undefined &&
     req.body.lastName === undefined &&
@@ -23,7 +24,6 @@ const editEmployee = async (req, res) => {
     req.body.address_streetName === undefined &&
     req.body.address_houseNumber === undefined &&
     req.body.address_subdivisionPurok === undefined
-    // req.body.profilePhoto === undefined
   )
     return sendError('Mising Required Fields', 404, res)
 
@@ -36,7 +36,7 @@ const editEmployee = async (req, res) => {
     return sendError('Internal Server Error', 500, res)
   }
 
-  if (!employee) return sendError('Employee not found', 404, res)
+  if (!employee) return sendError('employee not found', 404, res)
 
   //destructure
   const {
@@ -62,7 +62,7 @@ const editEmployee = async (req, res) => {
   if (firstName) employee.profile.firstName = req.body.firstName
   if (lastName) employee.profile.lastName = req.body.lastName
   if (middleName) employee.profile.middleName = req.body.middleName
-  if (dateOfBirth) employee.profile.dateOfBirth = req.body.dateOfBirth
+  if (dateOfBirth !== 'null') employee.profile.dateOfBirth = req.body.dateOfBirth
   if (placeOfBirth_city) employee.profile.placeOfBirth.city = placeOfBirth_city
   if (placeOfBirth_province) employee.profile.placeOfBirth.province = placeOfBirth_province
   if (placeOfBirth_country) employee.profile.placeOfBirth.country = placeOfBirth_country
@@ -84,7 +84,7 @@ const editEmployee = async (req, res) => {
     return sendError('Internal Server Error', 400, res)
   }
 
-  const payload = employee
+  const payload = {request: employee}
 
   return sendSuccess(payload, 200, res)
 }

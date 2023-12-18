@@ -16,7 +16,7 @@ const getUserNotifications = async (req, res) => {
     else
       notifications = await Notification.find({
         recipient: req.user.id,
-      })
+      }).sort({ _id: -1 })
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

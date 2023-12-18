@@ -16,12 +16,14 @@ const getAllTransactions = async (req, res) => {
       transactions = await Transaction.find({ status: 'PENDING' })
         .select('-formData')
         .limit(req.query.entries)
+        .sort({ _id: -1 })
     else
       transactions = await Transaction.find({
         status: { $ne: 'PENDING' },
       })
         .select('-formData')
         .limit(req.query.entries)
+        .sort({ _id: -1 })
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

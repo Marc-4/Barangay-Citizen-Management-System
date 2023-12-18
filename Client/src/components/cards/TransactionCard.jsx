@@ -32,7 +32,7 @@ const TransactionCard = ({ data, basepath }) => {
           shadow={'md'}
           mb={'5px'}
           transition='all 0.2s'
-          _hover={{ zIndex: '1', backgroundColor: 'secondary.main' }}
+          _hover={{ zIndex: '1', backgroundColor: 'secondary.300' }}
         >
           <CardHeader
             paddingTop={'15px'}

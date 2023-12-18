@@ -15,6 +15,7 @@ const getUserTransactions = async (req, res) => {
       })
         .select('-formData')
         .limit(req.query.entries)
+        .sort({ _id: -1 })
     else
       transactions = await Transaction.find({
         accountID: req.user.id,
@@ -22,6 +23,7 @@ const getUserTransactions = async (req, res) => {
       })
         .select('-formData')
         .limit(req.query.entries)
+        .sort({ _id: -1 })
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

@@ -3,7 +3,7 @@ import {
   Heading,
   VStack,
   Text,
-  IconButton,
+  Image,
   Flex,
   Divider,
   Link as ChakraLink,
@@ -27,14 +27,20 @@ const AdminSidebar = () => {
             justifyContent={'left'}
             width={'100%'}
           >
-            <Heading
+            <Image
+              alignItems={'center'}
+              h={'75px'}
+              // w={'150px'}
+              src='/LOGO.png'
+            />
+            {/* <Heading
               color={'text.main'}
               display={'flex'}
               h={'75px'}
               alignItems={'center'}
             >
               BRMS
-            </Heading>
+            </Heading> */}
           </Box>
         </Flex>
         <Divider

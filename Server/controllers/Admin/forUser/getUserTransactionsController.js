@@ -23,7 +23,7 @@ const getUserProfileTransactions = async (req, res) => {
   try {
     transanctions = await Transaction.find({ accountID: req.params.id }).limit(
       req.query.entries
-    )
+    ).sort({_id: -1})
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

@@ -9,6 +9,7 @@ import {
   Select,
   Divider,
   useDisclosure,
+  Image,
 } from '@chakra-ui/react'
 import RegisterModal from '../components/modals/RegisterModal'
 import login from '../utils/login'
@@ -77,9 +78,25 @@ const Home = () => {
   return (
     <>
       <Container>
-        <Heading mt='30px' p='10px' textAlign={'center'}>
-          Home Page
-        </Heading>
+        <Box
+          display={'flex'}
+          m={'25px'}
+          alignItems={'center'}
+          color={'primary.main'}
+        >
+          <Heading p='10px' textAlign={'center'} fontSize={'4xl'}>
+            Welcome
+          </Heading>
+          <Heading
+            p='10px'
+            textAlign={'center'}
+            // padding={'10px'}
+            fontSize={'4xl'}
+          >
+            to
+          </Heading>
+          <Image w={'200px'} src='/LOGO.png' />
+        </Box>
         <Box>
           <Box
             boxShadow={'lg'}

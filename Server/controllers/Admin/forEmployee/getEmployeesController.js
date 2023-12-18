@@ -11,9 +11,9 @@ const getEmployees = async (req, res) => {
   try {
     if (req.query.entries == 0) employees = await Employee.countDocuments({active: true})
     else if (req.query.filter && req.query.filter === 'ARCHIVED')
-      employees = await Employee.find({ active: false }).select('-password').limit(req.query.entries)
+      employees = await Employee.find({ active: false }).select('-password').limit(req.query.entries).sort({_id: -1})
     else if (req.query.filter && req.query.filter === 'ACTIVE')
-      employees = await Employee.find({ active: true }).select('-password').limit(req.query.entries)
+      employees = await Employee.find({ active: true }).select('-password').limit(req.query.entries).sort({_id: -1})
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

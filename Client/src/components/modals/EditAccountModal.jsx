@@ -14,7 +14,14 @@ import callAPI from '../../utils/callAPI'
 import { object, string, date, mixed } from 'yup'
 import EditForm from '../forms/EditForm'
 
-const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
+const EditAccountModal = ({
+  isOpen,
+  onClose,
+  user,
+  onUpdate,
+  role,
+  editingSelf,
+}) => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const accountRole = sessionStorage.getItem('userRole')
@@ -79,15 +86,14 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role }) => {
         console.log(pair[0], pair[1])
       }
 
-      // console.log('initial profile: ' + JSON.stringify(initialProfile, null, 2))
-      // console.log('values in form: ' + JSON.stringify(valuesObject, null, 2))
-      // console.log('changed values: ' + JSON.stringify(changedValues, null, 2))
       let route
-      if (role === 'admin' || role === 'employee')
-        route = `http://localhost:3000/api/${accountRole}/account/edit`
-      else if (accountRole !== 'user')
+      console.log(editingSelf);
+      if (!editingSelf)
         route = `http://localhost:3000/api/${accountRole}/${role}/profile/${user._id}/edit`
-      else route = `http://localhost:3000/api/${accountRole}/account/edit`
+      if (editingSelf)
+        route = `http://localhost:3000/api/${accountRole}/account/edit`
+
+      console.log(route)
 
       const response = await fetch(route, {
         method: 'PATCH',

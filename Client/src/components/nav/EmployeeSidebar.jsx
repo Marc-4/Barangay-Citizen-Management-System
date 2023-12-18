@@ -3,7 +3,7 @@ import {
   Heading,
   VStack,
   Text,
-  IconButton,
+  Image,
   Flex,
   Divider,
   Link as ChakraLink,
@@ -27,14 +27,11 @@ const EmployeeSidebar = () => {
             justifyContent={'left'}
             width={'100%'}
           >
-            <Heading
-              color={'text.main'}
-              display={'flex'}
-              h={'75px'}
+            <Image
               alignItems={'center'}
-            >
-              BRMS
-            </Heading>
+              h={'75px'}
+              src='/LOGO.png'
+            />
           </Box>
         </Flex>
         <Divider

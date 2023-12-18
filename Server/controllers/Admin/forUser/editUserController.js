@@ -59,10 +59,12 @@ const editUser = async (req, res) => {
 
   const profilePhoto = req.file
 
+  console.log('DOB: '+req.body.dateOfBirth);
+
   if (firstName) user.profile.firstName = req.body.firstName
   if (lastName) user.profile.lastName = req.body.lastName
   if (middleName) user.profile.middleName = req.body.middleName
-  if (dateOfBirth !== null) user.profile.dateOfBirth = req.body.dateOfBirth
+  if (dateOfBirth !== 'null') user.profile.dateOfBirth = dateOfBirth
   if (placeOfBirth_city) user.profile.placeOfBirth.city = placeOfBirth_city
   if (placeOfBirth_province) user.profile.placeOfBirth.province = placeOfBirth_province
   if (placeOfBirth_country) user.profile.placeOfBirth.country = placeOfBirth_country

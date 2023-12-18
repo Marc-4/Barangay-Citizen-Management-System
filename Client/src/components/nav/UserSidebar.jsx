@@ -3,7 +3,7 @@ import {
   Heading,
   VStack,
   Text,
-  IconButton,
+  Image,
   Flex,
   Link as ChakraLink,
 } from '@chakra-ui/react'
@@ -24,14 +24,11 @@ const UserSidebar = () => {
             justifyContent={'left'}
             width={'100%'}
           >
-            <Heading
-              color={'text.main'}
-              display={'flex'}
-              h={'75px'}
+            <Image
               alignItems={'center'}
-            >
-              BRMS
-            </Heading>
+              h={'75px'}
+              src='/LOGO.png'
+            />
           </Box>
         </Flex>
         <hr style={{ border: '1px solid ', width: '90%', margin: 'auto' }} />

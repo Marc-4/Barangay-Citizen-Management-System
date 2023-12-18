@@ -58,6 +58,7 @@ const AdminProfile = () => {
           onUpdate: handeUpdate,
           user: profileData,
           role: 'admin',
+          editingSelf: true
         }}
       />
       <EditCredentialsModal

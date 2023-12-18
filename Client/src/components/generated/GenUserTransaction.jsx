@@ -68,7 +68,7 @@ const GenUserTransaction = () => {
                 <Heading fontSize={'xl'} fontWeight={'bold'}>
                   Response:{' '}
                 </Heading>
-                <Text fontWeight={'semibold'} display={'flex'}>
+                <Text fontWeight={'semibold'} display={'flex'} w={'600px'}>
                   {transactionData.message}
                 </Text>
                 {transactionData.status === 'ACCEPTED' ? (

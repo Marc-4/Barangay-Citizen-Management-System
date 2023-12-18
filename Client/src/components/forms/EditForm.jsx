@@ -20,8 +20,6 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
   //   return `data:image/png;base64,${base64String}`
   // }
 
-  console.log(initialValues)
-
   return (
     <>
       <Formik

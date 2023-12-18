@@ -91,7 +91,7 @@ const requestEditUserProfile = async (req, res) => {
     if (firstName) requestContent.firstName = firstName
     if (lastName) requestContent.lastName = lastName
     if (middleName) requestContent.middleName = middleName
-    if (dateOfBirth) requestContent.dateOfBirth = dateOfBirth
+    if (dateOfBirth !== 'null') requestContent.dateOfBirth = dateOfBirth
     if (placeOfBirth?.city) requestContent.placeOfBirth.city = placeOfBirth.city
     if (placeOfBirth?.province)
       requestContent.placeOfBirth.province = placeOfBirth.province

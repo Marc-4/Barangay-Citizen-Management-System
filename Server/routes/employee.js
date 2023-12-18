@@ -9,7 +9,7 @@ const middlewares = [authToken, authEmployee]
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.post('/account/register', Employee.registerEmployeeController)
+// router.post('/account/register', Employee.registerEmployeeController)
 router.get('/account', middlewares, Employee.getEmployeeController)
 router.patch('/account/edit', middlewares, upload.single('profilePhoto'), Employee.editEmployeeController)
 router.patch('/account/credentials/edit', middlewares, Employee.editEmployeeCredentialsController)
@@ -38,7 +38,7 @@ router.patch('/request/:id/edit', middlewares, Employee.editUserRequestControlle
 router.post('/notification/create', middlewares, Employee.createNotificationController)
 router.get('/notifications/', middlewares, Employee.getNotificationsController)
 router.get('/notification/:id', middlewares, Employee.getNotificationController)
-router.get('/notifications/search', middlewares, Employee.searchNotificationController)
+// router.get('/notifications/search', middlewares, Employee.searchNotificationController)
 router.patch('/notification/:id/edit', middlewares, Employee.editNotificationController)
 
 export default router

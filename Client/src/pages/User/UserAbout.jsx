@@ -1,5 +1,5 @@
 import { Flex, Heading, Image, Text, Box } from '@chakra-ui/react'
-const UserAbout = () => {
+const AdminAbout = () => {
   return (
     <>
       <Flex
@@ -10,17 +10,12 @@ const UserAbout = () => {
         alignItems={'center'}
         // justifyContent={'center'}
       >
-        {/* <Image
-          mt={'25px'}
-          w={'250px'}
-          h={'250px'}
-          src='../../barangay2logo.png'
-        /> */}
+        <Image mt={'25px'} w={'300px'} src='/LOGO.png' />
         <Box
           display={'flex'}
           flexDir={'column'}
           alignItems={'center'}
-          mt={'200px'}
+          mt={'25px'}
         >
           <Heading fontSize={'2xl'}>About BRMS</Heading>
           <Text
@@ -75,4 +70,4 @@ const UserAbout = () => {
   )
 }
 
-export default UserAbout
+export default AdminAbout

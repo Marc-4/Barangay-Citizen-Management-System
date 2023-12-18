@@ -21,8 +21,7 @@ function RegisterModal({ isOpen, onClose }) {
   const [success, setSuccess] = useState('')
 
   const validationSchema = object({
-    username: string()
-      .required('required'),
+    username: string().required('required'),
     password: string().required('required').min(8),
     firstName: string()
       .required('required')
@@ -56,6 +55,21 @@ function RegisterModal({ isOpen, onClose }) {
   const handleRegister = async (values, setSubmitting) => {
     const recaptchaResponse = values['g_recaptcha_response']
 
+    const validateEmail = await fetch(
+      `https://open.kickbox.com/v1/disposable/${values.email}`,
+      {
+        method: 'GET',
+      }
+    )
+
+    const data = await validateEmail.json()
+
+    console.log(data)
+
+    if (data.disposable)
+      return setError(
+        'Disposable email detected. Please enter a valid Email address.'
+      )
     setSubmitting(true)
     try {
       const formData = new FormData()

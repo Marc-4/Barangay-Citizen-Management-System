@@ -27,7 +27,11 @@ const TransactionModal = ({
   const [success, setSuccess] = useState()
   const [message, setMessage] = useState(
     status === 'ACCEPTED'
-      ? `Go to the barangay hall to get your requested document(s). Prepare a sum of P${transaction?.formData?.cost} to pay to the treasurer.`
+      ? `Go to the barangay hall to get your requested document(s). Prepare a sum of ${
+          transaction?.formData?.cost
+            ? 'P' + transaction?.formData?.cost
+            : '[amount]'
+        } to pay to the treasurer.`
       : `Invalid requirements.`
   )
   const [isLoading, setIsLoading] = useState(false)

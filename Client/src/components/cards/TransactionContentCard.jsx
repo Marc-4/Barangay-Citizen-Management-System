@@ -6,6 +6,7 @@ import {
   Text,
   Input,
   Textarea,
+  Button,
 } from '@chakra-ui/react'
 import { Buffer } from 'buffer'
 import { Document, Page, pdfjs } from 'react-pdf'
@@ -17,10 +18,32 @@ const TransactionContentCard = ({ title, data, profile }) => {
     'pdfjs-dist/build/pdf.worker.min.js',
     import.meta.url
   ).toString()
+
   const revertBase64 = (Buf) => {
     let base64String = Buffer.from(Buf).toString('base64')
 
     return `data:application/pdf;base64,${base64String}`
+  }
+
+  const handleDownload = () => {
+    if (data?.attachment) {
+      const base64String = Buffer.from(data.attachment.data).toString('base64')
+      const pdfBlob = new Blob([Buffer.from(base64String, 'base64')], {
+        type: 'application/pdf',
+      })
+
+      const url = URL.createObjectURL(pdfBlob)
+
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'download.pdf'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+
+      // Optionally, revoke the Object URL to free up resources
+      // URL.revokeObjectURL(url);
+    }
   }
 
   return (
@@ -44,7 +67,12 @@ const TransactionContentCard = ({ title, data, profile }) => {
           <Box>
             <Text fontWeight='bold'>Purpose:</Text>
 
-            <Textarea value={data?.purpose} isReadOnly={true} />
+            <Textarea
+              value={data?.purpose}
+              isReadOnly={true}
+              borderColor={'primary.main'}
+              _hover={{borderColor:'secondary.main'}}
+            />
           </Box>
           <Box>
             {data?.income ? (
@@ -64,9 +92,19 @@ const TransactionContentCard = ({ title, data, profile }) => {
             <Text fontWeight='bold'>Attachments:</Text>
 
             {data?.attachment ? (
-              <Document file={revertBase64(data.attachment.data)}>
-                <Page pageNumber={1} style={{ width: '100%' }} />
-              </Document>
+              <VStack>
+                <Document file={revertBase64(data.attachment.data)}>
+                  <Page pageNumber={1} style={{ width: '100%' }} />
+                </Document>
+                <Button
+                  onClick={() => handleDownload()}
+                  colorScheme='facebook'
+                  mt={'15px'}
+                  alignSelf={'center'}
+                >
+                  Download
+                </Button>
+              </VStack>
             ) : (
               'No attachment'
             )}

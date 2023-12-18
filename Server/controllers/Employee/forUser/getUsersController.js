@@ -14,10 +14,12 @@ const getUsers = async (req, res) => {
       users = await User.find({ active: false })
         .select('-password')
         .limit(req.query.entries)
+        .sort({ _id: -1 })
     else if (req.query.filter && req.query.filter == 'ACTIVE')
       users = await User.find({ active: true })
         .select('-password')
         .limit(req.query.entries)
+        .sort({ _id: -1 })
   } catch (error) {
     console.log(error)
     return sendError('Internal Server Error', 500, res)

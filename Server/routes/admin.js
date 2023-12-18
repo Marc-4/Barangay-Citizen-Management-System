@@ -9,7 +9,6 @@ const router = Router()
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// router.post('/account/register', middlewares, Admin.registerAdminController)
 router.get('/account', middlewares, Admin.getAdminController)
 router.patch('/account/edit', middlewares, upload.single('profilePhoto'), Admin.editAdminController)
 router.patch('/account/credentials/edit', middlewares, Admin.editAdminCredentialsController)
@@ -50,7 +49,7 @@ router.post('/notification/create', middlewares, Admin.createNotificationControl
 router.get('/notifications/', middlewares, Admin.getNotificationsController)
 router.get('/notification/:id', middlewares, Admin.getNotificationController)
 router.patch('/notification/:id/edit', middlewares, Admin.editNotificationController)
-router.delete('/notifications/:id/edit', middlewares, Admin.deleteNotificationController)
+// router.delete('/notifications/:id/edit', middlewares, Admin.deleteNotificationController)
 
 
 export default router
