@@ -50,7 +50,7 @@ const TransactionContentCard = ({ title, data, profile }) => {
     <>
       <VStack spacing={4} align='start'>
         <Box
-          minW={'500px'}
+          minW={'600px'}
           id='profile_details'
           marginTop={'25px'}
           marginBottom={'25px'}
@@ -92,7 +92,7 @@ const TransactionContentCard = ({ title, data, profile }) => {
             <Text fontWeight='bold'>Attachments:</Text>
 
             {data?.attachment ? (
-              <VStack>
+              <VStack w={'100%'} overflow={'auto'} >
                 <Document file={revertBase64(data.attachment.data)}>
                   <Page pageNumber={1} style={{ width: '100%' }} />
                 </Document>

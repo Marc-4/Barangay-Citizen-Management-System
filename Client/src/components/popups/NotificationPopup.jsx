@@ -1,11 +1,22 @@
 import { Box, Heading, Text } from '@chakra-ui/react'
 import NotificationCard from '../cards/NotificationCard'
+import { useEffect, use } from 'react'
+import { number } from 'yup'
 
-const NotificationPopup = ({ notifications, isOpen, onNotificationClick }) => {
+const NotificationPopup = ({
+  notifications,
+  isOpen,
+  onNotificationClick,
+  rightOffset,
+}) => {
   const sortedNotifications = [...notifications].sort(
     (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
   )
-  
+
+  useEffect(() => {
+    console.log(rightOffset)
+  })
+
   return (
     <>
       <Box
@@ -20,7 +31,7 @@ const NotificationPopup = ({ notifications, isOpen, onNotificationClick }) => {
         overflowX={'clip'}
         position={'absolute'}
         top={'60px'}
-        right={'265px'}
+        right={rightOffset + 145}
         css={{
           '::-webkit-scrollbar': {
             width: '1px',

@@ -253,7 +253,7 @@ const AdminEmployeeAccounts = () => {
           <Button
             mt={'10px'}
             ml={'10px'}
-            colorScheme='blue'
+            colorScheme='facebook'
             onClick={onRegisterOpen}
           >
             Register Employee

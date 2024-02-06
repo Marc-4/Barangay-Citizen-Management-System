@@ -10,7 +10,8 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import UpcomingTransactions from '../../components/UpcomingTransactions'
-import { FaUser, FaUserCog, FaUserSlash } from 'react-icons/fa'
+import { BsFillPersonBadgeFill } from "react-icons/bs";
+import { FaUser, FaUserCog } from 'react-icons/fa'
 import { HiDocumentText, HiClipboardDocumentList } from 'react-icons/hi2'
 import callAPI from '../../utils/callAPI'
 
@@ -152,7 +153,7 @@ const AdminDashboard = () => {
         <Card>
           <CardHeader>
             <Icon
-              as={FaUserCog}
+              as={BsFillPersonBadgeFill}
               boxSize={'10'}
               display={'inline-block'}
               mr={'15px'}

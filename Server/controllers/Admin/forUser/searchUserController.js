@@ -11,7 +11,7 @@ const searchUser = async (req, res) => {
 
     const queryFilter = {
       $or: [
-        { username: { $regex: query, $options: 'i' } },
+        { username: { $regex: escapedQuery, $options: 'i' } },
         { 'profile.firstName': { $regex: escapedQuery, $options: 'i' } },
         { 'profile.lastName': { $regex: escapedQuery, $options: 'i' } },
         { 'profile.middleName': { $regex: escapedQuery, $options: 'i' } },

@@ -10,10 +10,11 @@ import {
   Link,
   IconButton,
 } from '@chakra-ui/react'
+import { AiOutlineMenu } from 'react-icons/ai'
 import { Link as rr_link, useNavigate } from 'react-router-dom'
 import callAPI from '../../utils/callAPI'
 import { IoIosNotifications } from 'react-icons/io'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import NotificationPopup from '../popups/NotificationPopup'
 import { Buffer } from 'buffer'
 
@@ -27,6 +28,8 @@ const Navbar = () => {
   const [refreshCounter, setRefreshCounter] = useState(0)
   const [toggleOpen, setToggleOpen] = useState(false)
   const role = sessionStorage.getItem('userRole')
+  const ref = useRef(null)
+  var rightOffset
 
   const revertBase64 = (imageBuf) => {
     let base64String = Buffer.from(imageBuf).toString('base64')
@@ -95,10 +98,23 @@ const Navbar = () => {
       <Flex
         as='nav'
         p={'20px'}
+        pl={0}
         bg={'background.50'}
         alignItems={'center'}
         h={'75px'}
       >
+        <IconButton
+          borderRadius={'50%'}
+          _hover={{ bg: 'background.100' }}
+          ml={'7px'}
+          // onClick={onToggle}
+          icon={AiOutlineMenu()}
+          w={'60px'}
+          h={'60px'}
+          fontSize={'30px'}
+          variant={'ghost'}
+        />
+        <Image alignItems={'center'} h={'75px'} src='/LOGO.png' />
         <Spacer />
 
         <HStack gap={'20px'}>
@@ -106,6 +122,7 @@ const Navbar = () => {
             notifications={notifications}
             isOpen={toggleOpen}
             onNotificationClick={handleNotificationClick}
+            rightOffset={ref.current?.offsetWidth}
           />
           <IconButton
             onClick={() => {
@@ -118,6 +135,7 @@ const Navbar = () => {
           />
           <Link as={rr_link} to={'profile'}>
             <Box
+              ref={ref}
               flexDirection={'row'}
               display={'flex'}
               alignItems={'center'}

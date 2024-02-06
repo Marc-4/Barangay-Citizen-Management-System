@@ -31,6 +31,7 @@ import DeleteAccountAlert from '../../components/popups/DeleteAccountAlert'
 import ArchiveAccountAlert from '../../components/popups/ArchiveAccountAlert'
 import RestoreAccountAlert from '../../components/popups/RestoreAccountAlert'
 import RefreshButton from '../../components/RefreshButton'
+import Pagination from '../../components/pagination'
 
 const AdminUserAccounts = () => {
   const [users, setUsers] = useState([])
@@ -204,6 +205,7 @@ const AdminUserAccounts = () => {
     setSelectedUser(null)
     onRestoreClose()
   }
+
   return (
     <>
       <RegisterAccountModal
@@ -274,15 +276,10 @@ const AdminUserAccounts = () => {
             refreshCounter={refreshCounter}
             setRefreshCounter={setRefreshCounter}
           />
-          <Button
-            mt={'10px'}
-            ml={'10px'}
-            colorScheme='facebook'
-            onClick={onRegisterOpen}
-          >
+          <Button mt={'5px'} colorScheme='facebook' onClick={onRegisterOpen}>
             Register User
           </Button>
-          <Button
+          {/* <Button
             mt={'10px'}
             ml={'10px'}
             colorScheme='facebook'
@@ -290,7 +287,7 @@ const AdminUserAccounts = () => {
             onClick={onExportOpen}
           >
             Export to PDF
-          </Button>
+          </Button> */}
         </Flex>
       </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
@@ -675,6 +672,7 @@ const AdminUserAccounts = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
+      <Pagination />
     </>
   )
 }

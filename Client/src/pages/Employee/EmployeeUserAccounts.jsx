@@ -258,7 +258,7 @@ const EmployeeUserAccounts = () => {
           >
             Register User
           </Button>
-          <Button
+          {/* <Button
             mt={'10px'}
             ml={'10px'}
             colorScheme='facebook'
@@ -266,7 +266,7 @@ const EmployeeUserAccounts = () => {
             onClick={onExportOpen}
           >
             Export to PDF
-          </Button>
+          </Button> */}
         </Flex>
       </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
