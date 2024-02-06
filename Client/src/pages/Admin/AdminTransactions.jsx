@@ -10,12 +10,15 @@ import {
   TabPanels,
   TabPanel,
   Spinner,
+  Button,
+  useDisclosure,
 } from '@chakra-ui/react'
 import TransactionCard from '../../components/cards/TransactionCard'
 import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
 import Searchbar from '../../components/Searchbar'
 import RefreshButton from '../../components/RefreshButton'
+import AddTransactionModal from '../../components/modals/AddTransactionModal'
 
 const AdminTransactions = () => {
   const [transactions, setTransactions] = useState([])
@@ -26,6 +29,11 @@ const AdminTransactions = () => {
   const [refreshCounter, setRefreshCounter] = useState(0)
   const [transactionSorted, setTransactionSorted] = useState([])
   const [pastTransactionSorted, setPastTransactionSorted] = useState([])
+  const {
+    isOpen: isTransactionOpen,
+    onOpen: onTransactionOpen,
+    onClose: onTransactionClose,
+  } = useDisclosure()
 
   useEffect(() => {
     getTransactions()
@@ -90,7 +98,7 @@ const AdminTransactions = () => {
       const route = `http://localhost:3000/api/admin/transactions/search?query=${query}&filter=${filter}`
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
-        console.log(data.payload);
+        console.log(data.payload)
         if (filter === 'PENDING') setTransactions(data.payload)
         else setPastTransactions(data.payload)
         setError(null)
@@ -105,8 +113,20 @@ const AdminTransactions = () => {
     }
   }
 
+  const handeUpdate = () => {
+    getTransactions()
+  }
+
   return (
     <>
+      <AddTransactionModal
+        {...{
+          isOpen: isTransactionOpen,
+          onClose: onTransactionClose,
+          onUpdate: handeUpdate,
+          role: 'user',
+        }}
+      />
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex flexDirection='row' gap={'10px'} mt={'15px'} mb={'15px'}>
           <Searchbar searchHandler={handleSearch} />
@@ -114,6 +134,9 @@ const AdminTransactions = () => {
             refreshCounter={refreshCounter}
             setRefreshCounter={setRefreshCounter}
           />
+          <Button mt={'5px'} colorScheme='facebook' onClick={onTransactionOpen}>
+            Add transaction
+          </Button>
         </Flex>
       </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />

@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import * as Admin from '../controllers/Admin/index.js'
+import * as User from '../controllers/User/index.js'
 import { authToken, authAdmin } from '../middlewares/index.js'
 import multer from 'multer'
 
@@ -37,6 +38,11 @@ router.get('/transaction/:id', middlewares, Admin.getTransactionController)
 router.get('/transactions/', middlewares, Admin.getAllTransactionsController)
 router.get('/transactions/search', middlewares, Admin.searchTransactionController)
 router.patch('/transaction/:id/edit', middlewares, Admin.editTransactionController)
+
+router.post('/transaction/create', middlewares, User.createUserTransactionController)
+router.get('/transactions/', middlewares, User.getUserTransactionsController)
+router.get('/transaction/:id', middlewares, User.getUserTransactionController)
+router.get('/transactions/search', middlewares, User.searchUserTransactionController)
 
 //requests
 router.get('/request/:id', middlewares, Admin.getUserRequestController)

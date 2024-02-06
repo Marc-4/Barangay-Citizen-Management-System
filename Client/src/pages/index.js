@@ -3,7 +3,6 @@ import Home from './Home.jsx'
 import NotFound from './NotFound.jsx'
 import Login from './Home.jsx'
 import unauthorized from './Unauthorized.jsx'
-import DefaultProfile from './DefaultProfile.jsx'
 
 import AdminDashboard from './Admin/AdminDashboard.jsx'
 import AdminProfile from './Admin/AdminProfile.jsx'
@@ -37,7 +36,6 @@ import UserCommunityTaxCertificate from './User/transactions/CommunityTaxCertifi
 export {
   Home,
   Register,
-  DefaultProfile,
   Login,
   NotFound,
   unauthorized,

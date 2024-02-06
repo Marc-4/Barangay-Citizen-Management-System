@@ -29,7 +29,6 @@ const Navbar = () => {
   const [toggleOpen, setToggleOpen] = useState(false)
   const role = sessionStorage.getItem('userRole')
   const ref = useRef(null)
-  var rightOffset
 
   const revertBase64 = (imageBuf) => {
     let base64String = Buffer.from(imageBuf).toString('base64')

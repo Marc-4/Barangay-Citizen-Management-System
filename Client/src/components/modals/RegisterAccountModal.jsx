@@ -116,7 +116,6 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
           <ModalBody>
             <RegisterForm
               onSubmit={(values, { setSubmitting, resetForm }) => {
-                console.log('something');
                 setTimeout(async () => {
                   await createUser(values, resetForm)
                   // console.log(values)

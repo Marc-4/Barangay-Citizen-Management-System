@@ -9,15 +9,15 @@ const createUserTransaction = async (req, res) => {
   )
     return sendError('Missing Required Fields', 404, res)
 
-    const attachment = req.file
+    // const attachment = req.file
   const formData = {
     purpose: req.body.purpose,
     income: req.body?.income,
     cost: req.body.cost,
-    attachment:{
-      data: attachment?.buffer,
-      fileName: attachment?.originalname
-    }
+    // attachment:{
+    //   data: attachment?.buffer,
+    //   fileName: attachment?.originalname
+    // }
   }
 
   if (

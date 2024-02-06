@@ -5,7 +5,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { sendError } from './utils/index.js'
 import {
-  userRouter,
+  // userRouter,
   adminRouter,
   authRouter,
   employeeRouter,
@@ -29,7 +29,7 @@ app.use(
 //routers
 app.use('/api/admin', adminRouter)
 app.use('/api/employee', employeeRouter)
-app.use('/api/user', userRouter)
+// app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
 
 app.all('*', (req, res) => {

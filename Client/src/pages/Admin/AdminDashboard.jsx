@@ -200,7 +200,7 @@ const AdminDashboard = () => {
             </Text>
           </CardBody>
         </Card>
-        <Card>
+        {/* <Card>
           <CardHeader>
             <Icon
               as={HiDocumentText}
@@ -217,7 +217,7 @@ const AdminDashboard = () => {
               Pending User Requests
             </Text>
           </CardBody>
-        </Card>
+        </Card> */}
       </SimpleGrid>
       <SimpleGrid
         id='transactions'

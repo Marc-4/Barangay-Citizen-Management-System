@@ -27,64 +27,6 @@ const router = createBrowserRouter([
         element: <page.Home />,
       },
       {
-        path: '/user',
-        element: (
-          <PrivateRoute roles={['user']}>
-            <UserLayout />
-          </PrivateRoute>
-        ),
-        children: [
-          {
-            path: 'profile',
-            element: <page.UserProfile />,
-          },
-          {
-            path: 'transactions',
-            element: <page.UserTransactions />,
-          },
-          {
-            path: 'transactions/:id',
-            element: <GenUserTransaction />,
-          },
-          {
-            path: 'book',
-            element: <page.UserBookTransaction />,
-          },
-          {
-            path: 'book/barangay_certification',
-            element: <page.UserBarangayCertification />,
-          },
-          {
-            path: 'book/barangay_clearance',
-            element: <page.UserBarangayClearance />,
-          },
-          {
-            path: 'book/community_tax_certificate',
-            element: <page.UserCommunityTaxCertificate />,
-          },
-          {
-            path: 'book/barangay_records',
-            element: <page.UserBarangayRecords />,
-          },
-          {
-            path: 'book/certificate_of_residency',
-            element: <page.UserCertificateOfResidency />,
-          },
-          {
-            path: 'book/business_clearance',
-            element: <page.UserBusinessClearance />,
-          },
-          {
-            path: 'notifications',
-            element: <page.UserNotifications />,
-          },
-          {
-            path: 'about',
-            element: <page.UserAbout />,
-          },
-        ],
-      },
-      {
         path: '/employee',
         element: (
           <PrivateRoute roles={['employee']}>
@@ -204,6 +146,64 @@ const router = createBrowserRouter([
         path: '*',
         element: <page.NotFound />,
       },
+      // {
+      //   path: '/user',
+      //   element: (
+      //     <PrivateRoute roles={['user']}>
+      //       <UserLayout />
+      //     </PrivateRoute>
+      //   ),
+      //   children: [
+      //     {
+      //       path: 'profile',
+      //       element: <page.UserProfile />,
+      //     },
+      //     {
+      //       path: 'transactions',
+      //       element: <page.UserTransactions />,
+      //     },
+      //     {
+      //       path: 'transactions/:id',
+      //       element: <GenUserTransaction />,
+      //     },
+      //     {
+      //       path: 'book',
+      //       element: <page.UserBookTransaction />,
+      //     },
+      //     {
+      //       path: 'book/barangay_certification',
+      //       element: <page.UserBarangayCertification />,
+      //     },
+      //     {
+      //       path: 'book/barangay_clearance',
+      //       element: <page.UserBarangayClearance />,
+      //     },
+      //     {
+      //       path: 'book/community_tax_certificate',
+      //       element: <page.UserCommunityTaxCertificate />,
+      //     },
+      //     {
+      //       path: 'book/barangay_records',
+      //       element: <page.UserBarangayRecords />,
+      //     },
+      //     {
+      //       path: 'book/certificate_of_residency',
+      //       element: <page.UserCertificateOfResidency />,
+      //     },
+      //     {
+      //       path: 'book/business_clearance',
+      //       element: <page.UserBusinessClearance />,
+      //     },
+      //     {
+      //       path: 'notifications',
+      //       element: <page.UserNotifications />,
+      //     },
+      //     {
+      //       path: 'about',
+      //       element: <page.UserAbout />,
+      //     },
+      //   ],
+      // },
     ],
   },
 ])

@@ -13,10 +13,6 @@ const NotificationPopup = ({
     (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
   )
 
-  useEffect(() => {
-    console.log(rightOffset)
-  })
-
   return (
     <>
       <Box

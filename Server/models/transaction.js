@@ -25,14 +25,14 @@ const transactionSchema = new mongoose.Schema({
     cost: {
       type: String,
     },
-    attachment: {
-      data: {
-        type: Buffer,
-      },
-      fileName: {
-        type: String,
-      },
-    },
+    // attachment: {
+    //   data: {
+    //     type: Buffer,
+    //   },
+    //   fileName: {
+    //     type: String,
+    //   },
+    // },
   },
   timestamp: {
     type: Date,

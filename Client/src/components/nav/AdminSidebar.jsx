@@ -149,7 +149,7 @@ const AdminSidebar = ({ onToggle, isOpen }) => {
               <Text fontSize={'xl'}>Transactions</Text>
             </Box>
           </ChakraLink>
-          <ChakraLink
+          {/* <ChakraLink
             as={NavLink}
             to='/admin/requests'
             _hover={{
@@ -171,7 +171,7 @@ const AdminSidebar = ({ onToggle, isOpen }) => {
               <Icon as={HiClipboardDocumentList} boxSize={'25px'} mr={'10px'} />
               <Text fontSize={'xl'}>Requests</Text>
             </Box>
-          </ChakraLink>
+          </ChakraLink> */}
           <ChakraLink
             as={NavLink}
             to='/admin/about'

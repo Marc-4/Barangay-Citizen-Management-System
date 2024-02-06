@@ -251,8 +251,7 @@ const AdminEmployeeAccounts = () => {
             setRefreshCounter={setRefreshCounter}
           />
           <Button
-            mt={'10px'}
-            ml={'10px'}
+            mt={'5px'}
             colorScheme='facebook'
             onClick={onRegisterOpen}
           >

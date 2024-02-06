@@ -11,7 +11,7 @@ import {
   useDisclosure,
   Image,
 } from '@chakra-ui/react'
-import RegisterModal from '../components/modals/RegisterModal'
+// import RegisterModal from '../components/modals/RegisterModal'
 import login from '../utils/login'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -136,7 +136,6 @@ const Home = () => {
                   maxW={'150px'}
                   placeholder='Select Role'
                 >
-                  <option value={'User'}>User</option>
                   <option value={'Employee'}>Employee</option>
                   <option value={'Admin'}>Admin</option>
                 </Select>
@@ -152,11 +151,11 @@ const Home = () => {
                 <Text color={'tomato'} fontSize={'xl'} fontWeight={'semibold'}>
                   {error}
                 </Text>
-                <Divider margin={'10px'} borderColor='brand.500' />
+                {/* <Divider margin={'10px'} borderColor='brand.500' />
                 <Button w={'150px'} onClick={onOpen} colorScheme='green'>
                   Register
-                </Button>
-                <RegisterModal isOpen={isOpen} onClose={onClose} />
+                </Button> */}
+                {/* <RegisterModal isOpen={isOpen} onClose={onClose} /> */}
               </Stack>
             </form>
           </Box>
