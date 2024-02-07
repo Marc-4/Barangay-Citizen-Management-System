@@ -3,6 +3,7 @@ import { sendError, sendSuccess } from '../../utils/index.js'
 const createUserTransaction = async (req, res) => {
   console.log(req.body)
   if (
+    req.body.ID === undefined ||
     req.body.transacType === undefined ||
     req.body.cost === undefined ||
     req.body.purpose === undefined
@@ -20,26 +21,26 @@ const createUserTransaction = async (req, res) => {
     // }
   }
 
-  if (
-    await Transaction.findOne({
-      accountID: req.user.id,
-      transacType: req.body.transacType,
-      status: 'PENDING',
-    })
-  )
-    return sendError('Similar Transaction is still pending', 400, res)
+  // if (
+  //   await Transaction.findOne({
+  //     accountID: req.body.ID,
+  //     transacType: req.body.transacType,
+  //     status: 'PENDING',
+  //   })
+  // )
+  //   return sendError('Similar Transaction is still pending', 400, res)
 
-    const user = await User.findById(req.user.id)
+    const user = await User.findById(req.body.ID)
   let transaction
   try {
     transaction = await Transaction.create({
-      accountID: req.user.id,
+      accountID: req.body.ID,
       userFirstName: user.profile.firstName,
       userLastName: user.profile.lastName,
       transacType: req.body.transacType,
       formData: formData,
       timestamp: Date.now(),
-      status: 'PENDING',
+      // status: 'PENDING',
     })
 
     console.log(transaction);

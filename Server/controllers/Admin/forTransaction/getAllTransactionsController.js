@@ -12,15 +12,13 @@ const getAllTransactions = async (req, res) => {
       transactions = await Transaction.countDocuments({ status: 'PENDING' })
     else if (req.query.entries == -1)
       transactions = await Transaction.countDocuments()
-    else if (req.query.filter && req.query.filter == 'PENDING')
-      transactions = await Transaction.find({ status: 'PENDING' })
-        .select('-formData')
-        .limit(req.query.entries)
-        .sort({ _id: -1 })
+    // else if (req.query.filter && req.query.filter == 'PENDING')
+    //   transactions = await Transaction.find({ status: 'PENDING' })
+    //     .select('-formData')
+    //     .limit(req.query.entries)
+    //     .sort({ _id: -1 })
     else
-      transactions = await Transaction.find({
-        status: { $ne: 'PENDING' },
-      })
+      transactions = await Transaction.find()
         .select('-formData')
         .limit(req.query.entries)
         .sort({ _id: -1 })

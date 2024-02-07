@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom'
 import {
   Modal,
   ModalOverlay,
@@ -8,6 +9,7 @@ import {
   Text,
   Heading,
   Divider,
+  useToast,
 } from '@chakra-ui/react'
 import callAPI from '../../utils/callAPI'
 import { object, string, date, mixed, number } from 'yup'
@@ -15,6 +17,9 @@ import TransactionForm from '../forms/TransactionForm'
 import { useState } from 'react'
 
 const AddTransactionModal = ({ isOpen, onClose, onUpdate }) => {
+  const { id } = useParams()
+  const toast = useToast()
+  const role = sessionStorage.getItem('userRole')
   const validationSchema = object({
     transacType: string().required('required'),
     income: number(),
@@ -22,15 +27,11 @@ const AddTransactionModal = ({ isOpen, onClose, onUpdate }) => {
     cost: number(),
   })
 
-  const role = sessionStorage.getItem('userRole')
-
-  const [success, setSuccess] = useState()
-  const [error, setError] = useState()
   const createTransaction = async (values, resetForm) => {
     try {
       const route = `http://localhost:3000/api/${role}/transaction/create`
       const body = {
-        ID: 'something',
+        ID: id,
         transacType: values.transacType,
         purpose: values.purpose,
         income: values.income,
@@ -39,19 +40,39 @@ const AddTransactionModal = ({ isOpen, onClose, onUpdate }) => {
       const response = await callAPI(body, 'POST', route)
       console.log(response.payload)
       if (response.result === 'OK') {
-        setSuccess('Successfully Recorded Transaction!')
-        setError(null)
         resetForm()
         // createNotification(response.payload)
 
-        setTimeout(() => {
-          // navigate(`/admin/transactions/${response.payload._id}`)
-          navigate('/admin/transactions')
-        }, 500)
-      } else setError(response.payload.error)
+        // navigate(`/admin/transactions/${response.payload._id}`)
+        toast({
+          title: 'success',
+          description: 'successfully recorded transaction!',
+          status: 'success',
+          duration: '5000',
+          isClosable: 'true',
+          position: 'bottom-right',
+        })
+        onUpdate
+      } else {
+        toast({
+          title: 'error',
+          description: response.payload.error,
+          status: 'error',
+          duration: '5000',
+          isClosable: 'true',
+          position: 'bottom-right',
+        })
+      }
     } catch (error) {
       console.log(error)
-      setError('Connection Error')
+      toast({
+        title: 'error',
+        description: 'connection error',
+        status: 'error',
+        duration: '5000',
+        isClosable: 'true',
+        position: 'bottom-right',
+      })
     }
   }
 
@@ -87,8 +108,6 @@ const AddTransactionModal = ({ isOpen, onClose, onUpdate }) => {
                 cost: '',
               }}
             />
-            <Text display={error ? 'block' : 'none'}>{error}</Text>
-            <Text display={success ? 'block' : 'none'}>{success}</Text>
           </ModalBody>
         </ModalContent>
       </Modal>

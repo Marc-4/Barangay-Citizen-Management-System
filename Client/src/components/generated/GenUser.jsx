@@ -8,9 +8,12 @@ import {
   TabList,
   Tab,
   TabPanel,
+  Button,
   TabPanels,
   Spinner,
+  useDisclosure
 } from '@chakra-ui/react'
+import AddTransactionModal from '../modals/AddTransactionModal'
 import TransactionCard from '../cards/TransactionCard'
 
 const GenUser = () => {
@@ -22,7 +25,11 @@ const GenUser = () => {
   const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-
+  const {
+    isOpen: isTransactionOpen,
+    onOpen: onTransactionOpen,
+    onClose: onTransactionClose,
+  } = useDisclosure()
   const role = sessionStorage.getItem('userRole')
 
   useEffect(() => {
@@ -71,8 +78,19 @@ const GenUser = () => {
     }
   }
 
+  const handeUpdate = () => {
+    getTransactions()
+  }
+
   return (
     <>
+    <AddTransactionModal
+        {...{
+          isOpen: isTransactionOpen,
+          onClose: onTransactionClose,
+          onUpdate: handeUpdate,
+        }}
+      />
       <Tabs margin={'auto'} w={'90%'} variant='line' mt={'25px'}>
         <TabList mb='1em'>
           <Tab onClick={() => setFilter('PROFILE')}>Profile</Tab>
@@ -80,6 +98,9 @@ const GenUser = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
+          <Button mt={'5px'} colorScheme='facebook' onClick={onTransactionOpen}>
+            Add transaction
+          </Button>
             <Text
               fontSize={'2xl'}
               display={accountError ? 'block' : 'none'}

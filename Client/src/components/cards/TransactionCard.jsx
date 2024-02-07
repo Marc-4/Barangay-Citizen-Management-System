@@ -23,12 +23,13 @@ const TransactionCard = ({ data, basepath }) => {
         _hover={{ textDecor: 'none' }}
       >
         <Card
+          m={'auto'}
           overflow='hidden'
           display={'flex'}
           fontSize={'md'}
           bg={'background.main'}
-          minW={'100%'}
-          h={'125px'}
+          w={'90%'}
+          h={'100px'}
           shadow={'md'}
           mb={'5px'}
           transition='all 0.2s'
@@ -63,7 +64,7 @@ const TransactionCard = ({ data, basepath }) => {
               Type: {data?.transacType ? data.transacType : data.requestType}
             </Text>
           </CardBody>
-          <CardFooter pt={'0'}>
+          {/* <CardFooter pt={'0'}>
             <Text
               fontWeight={'semibold'}
               id='status'
@@ -77,7 +78,7 @@ const TransactionCard = ({ data, basepath }) => {
             >
               {data.status}
             </Text>
-          </CardFooter>
+          </CardFooter> */}
         </Card>
       </Link>
     </>

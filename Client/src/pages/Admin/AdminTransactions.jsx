@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   Flex,
   Divider,
   Text,
@@ -10,15 +9,12 @@ import {
   TabPanels,
   TabPanel,
   Spinner,
-  Button,
-  useDisclosure,
 } from '@chakra-ui/react'
 import TransactionCard from '../../components/cards/TransactionCard'
 import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
 import Searchbar from '../../components/Searchbar'
 import RefreshButton from '../../components/RefreshButton'
-import AddTransactionModal from '../../components/modals/AddTransactionModal'
 
 const AdminTransactions = () => {
   const [transactions, setTransactions] = useState([])
@@ -29,12 +25,6 @@ const AdminTransactions = () => {
   const [refreshCounter, setRefreshCounter] = useState(0)
   const [transactionSorted, setTransactionSorted] = useState([])
   const [pastTransactionSorted, setPastTransactionSorted] = useState([])
-  const {
-    isOpen: isTransactionOpen,
-    onOpen: onTransactionOpen,
-    onClose: onTransactionClose,
-  } = useDisclosure()
-
   useEffect(() => {
     getTransactions()
     getPastTransactions()
@@ -113,20 +103,8 @@ const AdminTransactions = () => {
     }
   }
 
-  const handeUpdate = () => {
-    getTransactions()
-  }
-
   return (
     <>
-      <AddTransactionModal
-        {...{
-          isOpen: isTransactionOpen,
-          onClose: onTransactionClose,
-          onUpdate: handeUpdate,
-          role: 'user',
-        }}
-      />
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex flexDirection='row' gap={'10px'} mt={'15px'} mb={'15px'}>
           <Searchbar searchHandler={handleSearch} />
@@ -134,17 +112,15 @@ const AdminTransactions = () => {
             refreshCounter={refreshCounter}
             setRefreshCounter={setRefreshCounter}
           />
-          <Button mt={'5px'} colorScheme='facebook' onClick={onTransactionOpen}>
-            Add transaction
-          </Button>
         </Flex>
       </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
-      <Tabs margin={'auto'} w={'90%'} variant='line'>
-        <TabList mb='1em'>
+      {/* <Tabs margin={'auto'} w={'90%'} variant='line'> */}
+      {/* <TabList mb='1em'>
           <Tab onClick={() => setFilter('PENDING')}>Pending Transactions</Tab>
           <Tab onClick={() => setFilter('HISTORY')}>Transaction History</Tab>
-        </TabList>
+        </TabList> */}
+      <Box m={'auto'} w={'90%'} pt={'10px'}>
         {error ? (
           <Text
             fontSize={'2xl'}
@@ -162,28 +138,26 @@ const AdminTransactions = () => {
           size={'xl'}
           m={'auto'}
         />
-        <TabPanels>
-          <TabPanel>
-            {!isLoading && transactions.length === 0 ? (
-              <Text
-                fontWeight={'semibold'}
-                fontSize={'2xl'}
-                textAlign={'center'}
-              >
-                No Transactions
-              </Text>
-            ) : (
-              transactionSorted.map((transaction) => (
-                <TransactionCard
-                  key={transaction._id}
-                  data={transaction}
-                  basepath={'/admin/transactions'}
-                />
-              ))
-            )}
-          </TabPanel>
-          <TabPanel>
-            {!isLoading && pastTransactions.length === 0 ? (
+        {/* <TabPanels>
+          <TabPanel> */}
+        {!isLoading && transactions.length === 0 ? (
+          <Text fontWeight={'semibold'} fontSize={'2xl'} textAlign={'center'}>
+            No Transactions
+          </Text>
+        ) : (
+          transactionSorted.map((transaction) => (
+            <TransactionCard
+              key={transaction._id}
+              data={transaction}
+              basepath={'/admin/transactions'}
+            />
+          ))
+        )}
+      </Box>
+
+      {/* </TabPanel>
+          <TabPanel> */}
+      {/* {!isLoading && pastTransactions.length === 0 ? (
               <Text
                 fontWeight={'semibold'}
                 fontSize={'2xl'}
@@ -199,10 +173,10 @@ const AdminTransactions = () => {
                   basepath={'/admin/transactions'}
                 />
               ))
-            )}
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+            )} */}
+      {/* </TabPanel>
+        </TabPanels> */}
+      {/* </Tabs> */}
     </>
   )
 }
