@@ -63,7 +63,7 @@ const TransactionDetailCard = ({ title, data, name }) => {
           </Text>
           <Text textAlign={'center'}>{data.transacType}</Text>
         </Box>
-        <Box>
+        {/* <Box>
           <Text textAlign={'center'} fontWeight='bold'>
             Status:
           </Text>
@@ -80,7 +80,7 @@ const TransactionDetailCard = ({ title, data, name }) => {
           >
             {data.status}
           </Text>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
     // </VStack>
