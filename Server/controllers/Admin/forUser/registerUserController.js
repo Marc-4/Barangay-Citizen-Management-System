@@ -31,9 +31,9 @@ const registerUser = async (req, res) => {
     if (user) return sendError('Username Taken', 400, res)
 
     const profilePhoto = req.file
-    if (!profilePhoto) {
-      return sendError('Profile photo is missing', 400, res)
-    }
+    // if (!profilePhoto) {
+    //   return sendError('Profile photo is missing', 400, res)
+    // }
 
     const encryptedPass = await bcrypt.hash(req.body.password, 10)
 
@@ -58,8 +58,8 @@ const registerUser = async (req, res) => {
         subdivisionPurok: req.body.address_subdivisionPurok,
       },
       profilePhoto: {
-        data: profilePhoto.buffer,
-        fileName: profilePhoto.originalname,
+        data: profilePhoto?.buffer,
+        fileName: profilePhoto?.originalname,
       },
     }
     let newUser = await User.create({

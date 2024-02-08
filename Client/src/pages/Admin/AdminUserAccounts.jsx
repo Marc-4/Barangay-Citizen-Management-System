@@ -38,7 +38,7 @@ const AdminUserAccounts = () => {
   const [archivedUsers, setArchivedUsers] = useState([])
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
-  const [entries, setEntries] = useState(20)
+  const [entries, setEntries] = useState(10)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -46,6 +46,8 @@ const AdminUserAccounts = () => {
   const [refreshCounter, setRefreshCounter] = useState(0)
   const [sortedUsers, setSortedUsers] = useState([])
   const [sortedArchivedUsers, setSortedArchivedUsers] = useState([])
+  const [activeUserCount, setActiveUserCount] = useState()
+  const [archivedUserCount, setArchivedUserCount] = useState()
 
   const {
     isOpen: isRegisterOpen,
@@ -80,6 +82,10 @@ const AdminUserAccounts = () => {
 
   useEffect(() => {
     getUsers()
+  }, [page])
+
+  useEffect(() => {
+    getUsers()
     getArchivedUsers()
   }, [refreshCounter])
 
@@ -96,11 +102,41 @@ const AdminUserAccounts = () => {
     )
   }, [users, archivedUsers])
 
+  useEffect(() => {
+    getUsersCount()
+  }, [])
+
+  const getUsersCount = async () => {
+    const body = null
+    const method = 'GET'
+    const route = `http://localhost:3000/api/admin/users?page=&entries=${0}&filter=ACTIVE`
+    const route2 = `http://localhost:3000/api/admin/users?page=&entries=${0}&filter=ARCHIVED`
+
+    let activeCount, archivedCount
+    try {
+      activeCount = await callAPI(body, method, route)
+      archivedCount = await callAPI(body, method, route2)
+
+      if (activeCount.result === 'OK') {
+        setActiveUserCount(activeCount.payload)
+        setError(null)
+      } else setError(data.payload.err)
+
+      if (archivedCount.result === 'OK') {
+        setArchivedUserCount(archivedCount.payload)
+        setError(null)
+      } else setError(data.payload.err)
+    } catch (err) {
+      console.log(err)
+      setError('Connection Error')
+    }
+  }
+
   const getUsers = async () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?entries=${entries}&filter=ACTIVE`
+    const route = `http://localhost:3000/api/admin/users?page=${page}&entries=${entries}&filter=ACTIVE`
 
     let data
     try {
@@ -499,6 +535,11 @@ const AdminUserAccounts = () => {
                 </Table>
               </TableContainer>
             )}
+            <Pagination
+              numOfPages={Math.max(activeUserCount / entries, 1)}
+              page={page}
+              setPage={setPage}
+            />
           </TabPanel>
           <TabPanel>
             {!isLoading && archivedUsers.length === 0 ? (
@@ -668,10 +709,14 @@ const AdminUserAccounts = () => {
                 </Table>
               </TableContainer>
             )}
+            <Pagination
+              numOfPages={Math.max(archivedUserCount / entries, 1)}
+              page={page}
+              setPage={setPage}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>
-      <Pagination />
     </>
   )
 }
