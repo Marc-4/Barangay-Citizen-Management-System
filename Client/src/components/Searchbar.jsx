@@ -3,6 +3,7 @@ import {
   Button,
   Input,
   Text,
+  Box,
   InputGroup,
   InputLeftElement,
   Checkbox,
@@ -17,24 +18,33 @@ import { useState } from 'react'
 
 const Searchbar = ({ entries, page, searchHandler }) => {
   const [query, setQuery] = useState('')
-  const [searchOptions, setSearchOptions] = useState({
-    'Username': true,
-    'First Name': true,
-    'Middle Name': true,
-    'Last Name': true,
-  })
+  const [firstSearchOptions, setFirstSearchOptions] = useState([
+    'username',
+    'firstName',
+    'middleName',
+    'lastName',
+    // 'dateOfBirth',
+    'placeOfBirth',
+  ])
+  const [secondSearchOptions, setSecondSearchOptions] = useState([
+    'civilStatus',
+    'occupation',
+    'citizenship',
+    'email',
+    // 'address',
+  ])
+
+  const [sex, setSex] = useState('All')
 
   const handleSearch = () => {
+    console.log([...firstSearchOptions, ...secondSearchOptions, sex])
     if (query === '') return
-    searchHandler(query)
+    const finalArray = [...firstSearchOptions, ...secondSearchOptions]
+    searchHandler(query, finalArray, sex)
   }
   return (
     <>
-      <Flex
-        flexDir={'column'}
-        alignContent={'center'}
-        justifyContent='flex-start'
-      >
+      <Flex flexDir={'column'} alignContent={'center'} justifyContent='flex-start'>
         <InputGroup>
           <Input
             w={'300px'}
@@ -45,14 +55,9 @@ const Searchbar = ({ entries, page, searchHandler }) => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
+          onChange
           <InputLeftElement w={'70px'}>
-            <Button
-              onClick={handleSearch}
-              mt={'10px'}
-              ml={'5px'}
-              size='md'
-              colorScheme='facebook'
-            >
+            <Button onClick={handleSearch} mt={'10px'} ml={'5px'} size='md' colorScheme='facebook'>
               Search
             </Button>
           </InputLeftElement>
@@ -62,31 +67,48 @@ const Searchbar = ({ entries, page, searchHandler }) => {
             Filters
           </MenuButton>
           <MenuList minWidth='240px'>
+            <Flex>
+              <MenuOptionGroup
+                defaultValue={firstSearchOptions}
+                title='Search For:'
+                type='checkbox'
+                onChange={(e) => setFirstSearchOptions(e)}
+              >
+                <MenuItemOption value='username'>Username</MenuItemOption>
+                <MenuItemOption value='firstName'>First Name</MenuItemOption>
+                <MenuItemOption value='middleName'>Middle Name</MenuItemOption>
+                <MenuItemOption value='lastName'>Last Name</MenuItemOption>
+                {/* <MenuItemOption value='dateOfBirth'>Date Of Birth</MenuItemOption> */}
+                <MenuItemOption value='placeOfBirth'>Place Of Birth</MenuItemOption>
+              </MenuOptionGroup>
+              <MenuOptionGroup
+                defaultValue={secondSearchOptions}
+                type='checkbox'
+                onChange={(e) => setSecondSearchOptions(e)}
+              >
+                <Box mt={'39px'} />
+                <MenuItemOption value='civilStatus'>Civil Status</MenuItemOption>
+                <MenuItemOption value='occupation'>Occupation</MenuItemOption>
+                <MenuItemOption value='citizenship'>Citizenship</MenuItemOption>
+                <MenuItemOption value='email'>Email</MenuItemOption>
+                {/* <MenuItemOption value='address'>Address</MenuItemOption> */}
+              </MenuOptionGroup>
+            </Flex>
             <MenuOptionGroup
-              defaultValue={[
-                'Username',
-                'First Name',
-                'Middle Name',
-                'Last Name',
-              ]}
-              title='Search For:'
-              type='checkbox'
-            >
-              <MenuItemOption defaultChecked={true} value='Username'>
-                Username
-              </MenuItemOption>
-              <MenuItemOption value='First Name'>First Name</MenuItemOption>
-              <MenuItemOption value='Middle Name'>Middle Name</MenuItemOption>
-              <MenuItemOption value='Last Name'>Last Name</MenuItemOption>
-            </MenuOptionGroup>
-            <MenuDivider />
-            <MenuOptionGroup
-              defaultValue={['Male', 'Female']}
+              defaultValue={sex}
+              onChange={(e) => setSex(e)}
               title='Gender'
-              type='checkbox'
+              type='radio'
             >
-              <MenuItemOption value='Male'>Male</MenuItemOption>
-              <MenuItemOption value='Female'>Female</MenuItemOption>
+              <MenuItemOption type='radio' value='All'>
+                All
+              </MenuItemOption>
+              <MenuItemOption type='radio' value='Male'>
+                Male
+              </MenuItemOption>
+              <MenuItemOption type='radio' value='Female'>
+                Female
+              </MenuItemOption>
             </MenuOptionGroup>
           </MenuList>
         </Menu>

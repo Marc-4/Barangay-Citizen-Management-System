@@ -31,19 +31,23 @@ import DeleteAccountAlert from '../../components/popups/DeleteAccountAlert'
 import ArchiveAccountAlert from '../../components/popups/ArchiveAccountAlert'
 import RestoreAccountAlert from '../../components/popups/RestoreAccountAlert'
 import RefreshButton from '../../components/RefreshButton'
+import Pagination from '../../components/pagination'
 
 const AdminEmployeeAccounts = () => {
   const [employees, setEmployees] = useState([])
   const [archivedEmployees, setArchivedEmployees] = useState([])
   const [error, setError] = useState()
+  const [page, setPage] = useState(1)
   const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const cancelRef = useRef()
   const [refreshCounter, setRefreshCounter] = useState(0)
-  const [sortedEmployees, setSortedEmployees] = useState([])
-  const [sortedArchivedEmployees, setSortedArchivedEmployees] = useState([])
+  // const [employees, setemployees] = useState([])
+  // const [archivedEmployees, setarchivedEmployees] = useState([])
+  const [activeEmployeeCount, setActiveEmployeeCount] = useState()
+  const [archivedEmployeeCount, setArchivedEmployeeCount] = useState()
 
   const {
     isOpen: isRegisterOpen,
@@ -73,28 +77,66 @@ const AdminEmployeeAccounts = () => {
 
   useEffect(() => {
     getEmployees()
+  }, [page])
+
+  useEffect(() => {
+    getEmployeesCount()
+  }, [])
+
+  useEffect(() => {
+    getEmployees()
     getArchivedEmployees()
   }, [refreshCounter])
 
-  useEffect(() => {
-    setSortedEmployees(
-      [...employees].sort(
-        (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
-      )
-    )
-    setSortedArchivedEmployees(
-      [...archivedEmployees].sort(
-        (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
-      )
-    )
-  }, [employees, archivedEmployees])
+  useEffect(()=>{
+
+  }, [])
+
+  // useEffect(() => {
+  //   setemployees(
+  //     [...employees].sort(
+  //       (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
+  //     )
+  //   )
+  //   setarchivedEmployees(
+  //     [...archivedEmployees].sort(
+  //       (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
+  //     )
+  //   )
+  // }, [employees, archivedEmployees])
+
+  const getEmployeesCount = async () => {
+    const body = null
+    const method = 'GET'
+    const route = `http://localhost:3000/api/admin/employees?entries=0&filter=ACTIVE`
+    const route2 = `http://localhost:3000/api/admin/employees?entries=ARCHIVED_COUNT&filter=ARCHIVED`
+
+    let activeCount, archivedCount
+    try {
+      activeCount = await callAPI(body, method, route)
+      archivedCount = await callAPI(body, method, route2)
+
+      if (activeCount.result === 'OK') {
+        setActiveEmployeeCount(activeCount.payload)
+        setError(null)
+      } else setError(data.payload.err)
+
+      if (archivedCount.result === 'OK') {
+        setArchivedEmployeeCount(archivedCount.payload)
+        setError(null)
+      } else setError(data.payload.err)
+    } catch (err) {
+      console.log(err)
+      setError('Connection Error')
+    }
+  }
 
   const getEmployees = async () => {
     setIsLoading(true)
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/employees?entries=${entries}&filter=ACTIVE`
+      const route = `http://localhost:3000/api/admin/employees?page=${page}&entries=${entries}&filter=ACTIVE`
 
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
@@ -114,7 +156,7 @@ const AdminEmployeeAccounts = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/employees?entries=${entries}&filter=ARCHIVED`
+      const route = `http://localhost:3000/api/admin/employees?page=${page}&entries=${entries}&filter=ARCHIVED`
 
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
@@ -129,11 +171,12 @@ const AdminEmployeeAccounts = () => {
     }
   }
 
-  const handleSearch = async (query) => {
+  const handleSearch = async (query, values, sex) => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/employees/search?query=${query}&filter=${filter}`
+    const route = `http://localhost:3000/api/admin/employees/search?query=${query}&params=${values}&sex=${sex}&filter=${filter}`
+
 
     try {
       const data = await callAPI(body, method, route)
@@ -154,6 +197,7 @@ const AdminEmployeeAccounts = () => {
 
   const handeUpdate = () => {
     getEmployees()
+    getEmployeesCount()
     getArchivedEmployees()
   }
 
@@ -250,11 +294,7 @@ const AdminEmployeeAccounts = () => {
             refreshCounter={refreshCounter}
             setRefreshCounter={setRefreshCounter}
           />
-          <Button
-            mt={'5px'}
-            colorScheme='facebook'
-            onClick={onRegisterOpen}
-          >
+          <Button mt={'5px'} colorScheme='facebook' onClick={onRegisterOpen}>
             Register Employee
           </Button>
         </Flex>
@@ -339,7 +379,7 @@ const AdminEmployeeAccounts = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {sortedEmployees.map((employee) => {
+                    {employees.map((employee) => {
                       const profile = employee.profile
 
                       return (
@@ -459,6 +499,11 @@ const AdminEmployeeAccounts = () => {
                 </Table>
               </TableContainer>
             )}
+            <Pagination
+              numOfPages={Math.max(activeEmployeeCount / entries, 1)}
+              page={page}
+              setPage={setPage}
+            />
           </TabPanel>
           <TabPanel>
             {isLoading !== true && archivedEmployees.length === 0 ? (
@@ -516,7 +561,7 @@ const AdminEmployeeAccounts = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {sortedArchivedEmployees.map((employee) => {
+                    {archivedEmployees.map((employee) => {
                       const profile = employee.profile
 
                       return (
@@ -630,6 +675,11 @@ const AdminEmployeeAccounts = () => {
                 </Table>
               </TableContainer>
             )}
+            <Pagination
+              numOfPages={Math.max(archivedEmployeeCount / entries, 1)}
+              page={page}
+              setPage={setPage}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

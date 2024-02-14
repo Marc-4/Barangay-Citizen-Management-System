@@ -1,5 +1,7 @@
   import { Box, Button } from '@chakra-ui/react'
+import { useEffect } from 'react'
   const Pagination = ({ numOfPages, page, setPage }) => {
+
     const goToPage = (page) => {
       setPage(page)
     }

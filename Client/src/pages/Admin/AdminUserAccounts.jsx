@@ -38,14 +38,14 @@ const AdminUserAccounts = () => {
   const [archivedUsers, setArchivedUsers] = useState([])
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
-  const [entries, setEntries] = useState(10)
+  const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const cancelRef = useRef()
   const [refreshCounter, setRefreshCounter] = useState(0)
-  const [sortedUsers, setSortedUsers] = useState([])
-  const [sortedArchivedUsers, setSortedArchivedUsers] = useState([])
+  // const [users, setusers] = useState([])
+  // const [archivedUsers, setarchivedUsers] = useState([])
   const [activeUserCount, setActiveUserCount] = useState()
   const [archivedUserCount, setArchivedUserCount] = useState()
 
@@ -54,31 +54,11 @@ const AdminUserAccounts = () => {
     onOpen: onRegisterOpen,
     onClose: onRegisterClose,
   } = useDisclosure()
-  const {
-    isOpen: isEditOpen,
-    onOpen: onEditOpen,
-    onClose: onEditClose,
-  } = useDisclosure()
-  const {
-    isOpen: isDeleteOpen,
-    onOpen: onDeleteOpen,
-    onClose: onDeleteClose,
-  } = useDisclosure()
-  const {
-    isOpen: isExportOpen,
-    onOpen: onExportOpen,
-    onClose: onExportClose,
-  } = useDisclosure()
-  const {
-    isOpen: isArchiveOpen,
-    onOpen: onArchiveOpen,
-    onClose: onArchiveClose,
-  } = useDisclosure()
-  const {
-    isOpen: isRestoreOpen,
-    onOpen: onRestoreOpen,
-    onClose: onRestoreClose,
-  } = useDisclosure()
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
+  const { isOpen: isExportOpen, onOpen: onExportOpen, onClose: onExportClose } = useDisclosure()
+  const { isOpen: isArchiveOpen, onOpen: onArchiveOpen, onClose: onArchiveClose } = useDisclosure()
+  const { isOpen: isRestoreOpen, onOpen: onRestoreOpen, onClose: onRestoreClose } = useDisclosure()
 
   useEffect(() => {
     getUsers()
@@ -89,18 +69,18 @@ const AdminUserAccounts = () => {
     getArchivedUsers()
   }, [refreshCounter])
 
-  useEffect(() => {
-    setSortedUsers(
-      [...users].sort(
-        (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
-      )
-    )
-    setSortedArchivedUsers(
-      [...archivedUsers].sort(
-        (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
-      )
-    )
-  }, [users, archivedUsers])
+  // useEffect(() => {
+  //   setusers(
+  //     [...users].sort(
+  //       (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
+  //     )
+  //   )
+  //   setarchivedUsers(
+  //     [...archivedUsers].sort(
+  //       (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
+  //     )
+  //   )
+  // }, [users, archivedUsers])
 
   useEffect(() => {
     getUsersCount()
@@ -109,8 +89,8 @@ const AdminUserAccounts = () => {
   const getUsersCount = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?page=&entries=${0}&filter=ACTIVE`
-    const route2 = `http://localhost:3000/api/admin/users?page=&entries=${0}&filter=ARCHIVED`
+    const route = `http://localhost:3000/api/admin/users?entries=${0}&filter=ACTIVE`
+    const route2 = `http://localhost:3000/api/admin/users?entries=ARCHIVED_COUNT&filter=ARCHIVED`
 
     let activeCount, archivedCount
     try {
@@ -157,17 +137,16 @@ const AdminUserAccounts = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?entries=${entries}&filter=ARCHIVED`
+    const route = `http://localhost:3000/api/admin/users?page=${page}&entries=${entries}&filter=ARCHIVED`
 
     let data
     try {
       data = await callAPI(body, method, route)
 
       if (data.result === 'OK') {
-        console.log(data.payload)
         setArchivedUsers(data.payload)
         setError(null)
-      } else setError(data.payload.errro)
+      } else setError(data.payload.error)
     } catch (err) {
       console.log(err)
       setError('Connection Error')
@@ -176,12 +155,11 @@ const AdminUserAccounts = () => {
     }
   }
 
-  const handleSearch = async (query) => {
+  const handleSearch = async (query, values, sex) => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users/search?query=${query}&filter=${filter}`
-
+    const route = `http://localhost:3000/api/admin/users/search?query=${query}&params=${values}&sex=${sex}&filter=${filter}`
     try {
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
@@ -201,6 +179,7 @@ const AdminUserAccounts = () => {
 
   const handeUpdate = () => {
     getUsers()
+    getUsersCount()
     getArchivedUsers()
   }
 
@@ -303,24 +282,12 @@ const AdminUserAccounts = () => {
       />
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex flexDirection='row' gap={'10px'} mt={'15px'} mb={'15px'}>
-          <Searchbar
-            entries={entries}
-            page={page}
-            searchHandler={handleSearch}
-          />
-          <RefreshButton
-            refreshCounter={refreshCounter}
-            setRefreshCounter={setRefreshCounter}
-          />
+          <Searchbar entries={entries} page={page} searchHandler={handleSearch} />
+          <RefreshButton refreshCounter={refreshCounter} setRefreshCounter={setRefreshCounter} />
           <Button mt={'5px'} colorScheme='facebook' onClick={onRegisterOpen}>
             Register User
           </Button>
-          <Button
-            mt={'5px'}
-            colorScheme='facebook'
-            color={'white'}
-            onClick={onExportOpen}
-          >
+          <Button mt={'5px'} colorScheme='facebook' color={'white'} onClick={onExportOpen}>
             Export to PDF
           </Button>
         </Flex>
@@ -344,30 +311,17 @@ const AdminUserAccounts = () => {
           </Tab>
         </TabList>
         {error ? (
-          <Text
-            fontSize={'2xl'}
-            fontWeight={'semibold'}
-            color={'tomato'}
-            textAlign={'center'}
-          >
+          <Text fontSize={'2xl'} fontWeight={'semibold'} color={'tomato'} textAlign={'center'}>
             {error}
           </Text>
         ) : (
           ''
         )}
-        {isLoading ? (
-          <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
-        ) : (
-          ''
-        )}
+        {isLoading ? <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} /> : ''}
         <TabPanels>
           <TabPanel>
             {isLoading !== true && users.length === 0 ? (
-              <Text
-                fontWeight={'semibold'}
-                fontSize={'2xl'}
-                textAlign={'center'}
-              >
+              <Text fontWeight={'semibold'} fontSize={'2xl'} textAlign={'center'}>
                 No Users
               </Text>
             ) : (
@@ -418,7 +372,7 @@ const AdminUserAccounts = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {sortedUsers.map((user) => {
+                    {users.map((user) => {
                       const profile = user.profile
                       return (
                         <Tr key={user._id} fontSize={'md'}>
@@ -430,11 +384,7 @@ const AdminUserAccounts = () => {
                               wordWrap: 'break-word',
                             }}
                           >
-                            <Link
-                              as={rr_Link}
-                              color={'primary.500'}
-                              to={`${user._id}`}
-                            >
+                            <Link as={rr_Link} color={'primary.500'} to={`${user._id}`}>
                               {user._id}
                             </Link>
                           </Td>
@@ -509,22 +459,13 @@ const AdminUserAccounts = () => {
                               wordWrap: 'break-word',
                             }}
                           >
-                            <Button
-                              onClick={() => handleEditOpen(user)}
-                              colorScheme='green'
-                            >
+                            <Button onClick={() => handleEditOpen(user)} colorScheme='green'>
                               Edit
                             </Button>
-                            <Button
-                              onClick={() => handleArchiveOpen(user)}
-                              colorScheme='orange'
-                            >
+                            <Button onClick={() => handleArchiveOpen(user)} colorScheme='orange'>
                               Archive
                             </Button>
-                            <Button
-                              onClick={() => handleDeleteOpen(user)}
-                              colorScheme='red'
-                            >
+                            <Button onClick={() => handleDeleteOpen(user)} colorScheme='red'>
                               Delete
                             </Button>
                           </Td>
@@ -543,11 +484,7 @@ const AdminUserAccounts = () => {
           </TabPanel>
           <TabPanel>
             {!isLoading && archivedUsers.length === 0 ? (
-              <Text
-                fontWeight={'semibold'}
-                fontSize={'2xl'}
-                textAlign={'center'}
-              >
+              <Text fontWeight={'semibold'} fontSize={'2xl'} textAlign={'center'}>
                 No Archived Users
               </Text>
             ) : (
@@ -597,7 +534,7 @@ const AdminUserAccounts = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {sortedArchivedUsers.map((user) => {
+                    {archivedUsers.map((user) => {
                       const profile = user.profile
                       return (
                         <Tr key={user._id}>
@@ -609,11 +546,7 @@ const AdminUserAccounts = () => {
                               wordWrap: 'break-word',
                             }}
                           >
-                            <Link
-                              as={rr_Link}
-                              color={'primary.500'}
-                              to={`${user._id}`}
-                            >
+                            <Link as={rr_Link} color={'primary.500'} to={`${user._id}`}>
                               {user._id}
                             </Link>
                           </Td>
@@ -689,16 +622,10 @@ const AdminUserAccounts = () => {
                               wordWrap: 'break-word',
                             }}
                           >
-                            <Button
-                              onClick={() => handleRestoreOpen(user)}
-                              colorScheme='green'
-                            >
+                            <Button onClick={() => handleRestoreOpen(user)} colorScheme='green'>
                               Restore
                             </Button>
-                            <Button
-                              onClick={() => handleDeleteOpen(user)}
-                              colorScheme='red'
-                            >
+                            <Button onClick={() => handleDeleteOpen(user)} colorScheme='red'>
                               Delete
                             </Button>
                           </Td>
