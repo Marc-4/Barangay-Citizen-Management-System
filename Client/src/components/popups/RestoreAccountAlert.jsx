@@ -20,7 +20,7 @@ const RestoreAccountAlert = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
-  const userRole = sessionStorage.getItem('userRole')
+  const userRole = localStorage.getItem('userRole')
 
   const restoreAccount = async () => {
     try {

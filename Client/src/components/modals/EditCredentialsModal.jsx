@@ -17,7 +17,7 @@ import EditCredentialsForm from '../forms/EditCredentialsForm'
 const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const accountRole = sessionStorage.getItem('userRole')
+  const accountRole = localStorage.getItem('userRole')
 
   const validationSchema = object({
     username: string().required('required').min(5),

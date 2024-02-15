@@ -9,7 +9,7 @@ const UpcomingTransactions = () => {
   const [entries, setEntries] = useState(3)
   const [isLoading, setIsLoading] = useState(true)
 
-  const userRole = sessionStorage.getItem('userRole')
+  const userRole = localStorage.getItem('userRole')
   useEffect(() => {
     getTransactionsData()
   }, [])

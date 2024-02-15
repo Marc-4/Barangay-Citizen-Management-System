@@ -129,7 +129,7 @@ function RegisterModal({ isOpen, onClose }) {
 
       if (response.result === 'OK') {
         setError(null)
-        sessionStorage.setItem('userRole', 'user')
+        localStorage.setItem('userRole', 'user')
         navigate('/user/profile')
       } else setError(response.payload.error)
     } catch (error) {

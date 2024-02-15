@@ -21,7 +21,7 @@ const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
   const [success, setSuccess] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
-  const role = sessionStorage.getItem('userRole')
+  const role = localStorage.getItem('userRole')
 
   const editRequest = async () => {
     setIsLoading(true)

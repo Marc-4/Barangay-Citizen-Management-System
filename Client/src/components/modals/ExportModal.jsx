@@ -54,7 +54,7 @@ const ExportModal = ({ isOpen, onClose, user, onUpdate, role }) => {
   const [pageNumber, setPageNumber] = useState(1)
   const [pdfContent, setPdfContent] = useState(null)
 
-  const accountRole = sessionStorage.getItem('userRole')
+  const accountRole = localStorage.getItem('userRole')
 
   const addToExport = async () => {
     try {

@@ -30,7 +30,7 @@ const GenUser = () => {
     onOpen: onTransactionOpen,
     onClose: onTransactionClose,
   } = useDisclosure()
-  const role = sessionStorage.getItem('userRole')
+  const role = localStorage.getItem('userRole')
 
   useEffect(() => {
     getProfile()

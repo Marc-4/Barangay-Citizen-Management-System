@@ -20,7 +20,7 @@ const ArchiveAccountAlert = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
 
-  const userRole = sessionStorage.getItem('userRole')
+  const userRole = localStorage.getItem('userRole')
   
   const archiveAccount = async () => {
     try {

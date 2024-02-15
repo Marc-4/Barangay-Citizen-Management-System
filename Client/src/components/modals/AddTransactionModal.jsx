@@ -19,7 +19,7 @@ import { useState } from 'react'
 const AddTransactionModal = ({ isOpen, onClose, onUpdate }) => {
   const { id } = useParams()
   const toast = useToast()
-  const role = sessionStorage.getItem('userRole')
+  const role = localStorage.getItem('userRole')
   const validationSchema = object({
     transacType: string().required('required'),
     income: number(),

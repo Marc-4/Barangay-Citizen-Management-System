@@ -25,7 +25,7 @@ const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState('')
   const [error, setError] = useState('')
-  const sessionRole = sessionStorage.getItem('userRole')
+  const sessionRole = localStorage.getItem('userRole')
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
@@ -54,15 +54,15 @@ const Home = () => {
         console.log(data)
         if (data.payload.role === 'admin') {
           navigate('/admin/dashboard')
-          sessionStorage.setItem('userRole', 'admin')
+          localStorage.setItem('userRole', 'admin')
         }
         if (data.payload.role === 'employee') {
           navigate('/employee/dashboard')
-          sessionStorage.setItem('userRole', 'employee')
+          localStorage.setItem('userRole', 'employee')
         }
         if (data.payload.role === 'user') {
           navigate('/user/profile')
-          sessionStorage.setItem('userRole', 'user')
+          localStorage.setItem('userRole', 'user')
         }
       } else {
         console.log('ERR')

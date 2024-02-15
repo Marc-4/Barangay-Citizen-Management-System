@@ -15,7 +15,7 @@ const DeleteAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }
   // const [error, setError] = useState(null)
   // const [success, setSuccess] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const userRole = sessionStorage.getItem('userRole')
+  const userRole = localStorage.getItem('userRole')
 
   const deleteAccount = async () => {
     try {

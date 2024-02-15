@@ -27,7 +27,7 @@ const Navbar = () => {
   const [error, setError] = useState(null)
   const [refreshCounter, setRefreshCounter] = useState(0)
   const [toggleOpen, setToggleOpen] = useState(false)
-  const role = sessionStorage.getItem('userRole')
+  const role = localStorage.getItem('userRole')
   const ref = useRef(null)
 
   const revertBase64 = (imageBuf) => {
@@ -42,7 +42,7 @@ const Navbar = () => {
     try {
       const response = await callAPI(null, 'POST', route)
       if (response.result === 'OK') {
-        sessionStorage.clear()
+        localStorage.clear()
         navigate('/')
       }
     } catch (error) {

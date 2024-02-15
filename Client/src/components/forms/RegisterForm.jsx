@@ -14,7 +14,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 
 const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
   const [profilePhoto, setProfilePhoto] = useState()
-  const role = sessionStorage.getItem('userRole')
+  const role = localStorage.getItem('userRole')
   console.log(role)
   return (
     <>

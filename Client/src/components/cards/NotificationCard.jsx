@@ -3,7 +3,7 @@ import { Link as rr_Link } from 'react-router-dom'
 import callAPI from '../../utils/callAPI'
 
 const NotificationCard = ({ data, account_type, onNotificationClick }) => {
-  const role = sessionStorage.getItem('userRole')
+  const role = localStorage.getItem('userRole')
   const to =
     account_type === 'user' || role === 'user'
       ? data.notifType === 'RQ_ACCEPT' || data.notifType === 'RQ_REJECT'

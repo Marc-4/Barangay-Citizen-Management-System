@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 
-const Searchbar = ({ entries, page, searchHandler }) => {
+const Searchbar = ({ entries, page, searchHandler, options }) => {
   const [query, setQuery] = useState('')
   const [firstSearchOptions, setFirstSearchOptions] = useState([
     'username',

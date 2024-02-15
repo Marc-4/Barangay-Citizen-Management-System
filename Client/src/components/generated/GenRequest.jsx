@@ -12,7 +12,7 @@ const GenRequest = () => {
   const [account, setAccount] = useState(null)
   const [error, setError] = useState(null)
 
-  const role = sessionStorage.getItem('userRole')
+  const role = localStorage.getItem('userRole')
 
   const {
     isOpen: isAcceptOpen,

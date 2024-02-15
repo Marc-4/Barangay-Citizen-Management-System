@@ -2,7 +2,7 @@ import { VStack, Box, Heading, Divider, Text, Link } from '@chakra-ui/react'
 import { Link as rr_Link } from 'react-router-dom'
 
 const TransactionDetailCard = ({ title, data }) => {
-  const role = sessionStorage.getItem('userRole')
+  const role = localStorage.getItem('userRole')
   return (
     <VStack spacing={4} align='start'>
       <Box

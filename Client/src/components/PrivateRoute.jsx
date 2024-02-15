@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 function PrivateRoute({ children, roles }) {
-    const userRole = sessionStorage.getItem('userRole');
+    const userRole = localStorage.getItem('userRole');
    
     if (!userRole || !roles.includes(userRole)) {
      return <Navigate to={'/unauthorized'} />

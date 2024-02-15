@@ -24,7 +24,7 @@ const EditAccountModal = ({
 }) => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const accountRole = sessionStorage.getItem('userRole')
+  const accountRole = localStorage.getItem('userRole')
 
   const validationSchema = object({
     firstName: string().matches(

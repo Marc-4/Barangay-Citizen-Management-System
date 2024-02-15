@@ -12,7 +12,7 @@ import callAPI from '../../utils/callAPI'
 import { useEffect, useState } from 'react'
 
 const TransactionCard = ({ data, basepath }) => {
-  // const accountRole = sessionStorage.getItem('userRole')
+  // const accountRole = localStorage.getItem('userRole')
 
   return (
     <>
