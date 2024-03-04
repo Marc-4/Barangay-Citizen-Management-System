@@ -32,20 +32,20 @@ import ArchiveAccountAlert from '../../components/popups/ArchiveAccountAlert'
 import RestoreAccountAlert from '../../components/popups/RestoreAccountAlert'
 import RefreshButton from '../../components/RefreshButton'
 import Pagination from '../../components/pagination'
+import CustomTable from '../../components/CustomTable'
 
 const AdminEmployeeAccounts = () => {
   const [employees, setEmployees] = useState([])
   const [archivedEmployees, setArchivedEmployees] = useState([])
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
-  const [entries, setEntries] = useState(20)
+  const [archivedPage, setArchivedPage] = useState(1)
+  const [entries, setEntries] = useState(10)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const cancelRef = useRef()
   const [refreshCounter, setRefreshCounter] = useState(0)
-  // const [employees, setemployees] = useState([])
-  // const [archivedEmployees, setarchivedEmployees] = useState([])
   const [activeEmployeeCount, setActiveEmployeeCount] = useState()
   const [archivedEmployeeCount, setArchivedEmployeeCount] = useState()
 
@@ -54,30 +54,18 @@ const AdminEmployeeAccounts = () => {
     onOpen: onRegisterOpen,
     onClose: onRegisterClose,
   } = useDisclosure()
-  const {
-    isOpen: isEditOpen,
-    onOpen: onEditOpen,
-    onClose: onEditClose,
-  } = useDisclosure()
-  const {
-    isOpen: isDeleteOpen,
-    onOpen: onDeleteOpen,
-    onClose: onDeleteClose,
-  } = useDisclosure()
-  const {
-    isOpen: isArchiveOpen,
-    onOpen: onArchiveOpen,
-    onClose: onArchiveClose,
-  } = useDisclosure()
-  const {
-    isOpen: isRestoreOpen,
-    onOpen: onRestoreOpen,
-    onClose: onRestoreClose,
-  } = useDisclosure()
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
+  const { isOpen: isArchiveOpen, onOpen: onArchiveOpen, onClose: onArchiveClose } = useDisclosure()
+  const { isOpen: isRestoreOpen, onOpen: onRestoreOpen, onClose: onRestoreClose } = useDisclosure()
 
   useEffect(() => {
     getEmployees()
   }, [page])
+
+  useEffect(() => {
+    getArchivedEmployees()
+  }, [archivedPage])
 
   useEffect(() => {
     getEmployeesCount()
@@ -87,23 +75,6 @@ const AdminEmployeeAccounts = () => {
     getEmployees()
     getArchivedEmployees()
   }, [refreshCounter])
-
-  useEffect(()=>{
-
-  }, [])
-
-  // useEffect(() => {
-  //   setemployees(
-  //     [...employees].sort(
-  //       (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
-  //     )
-  //   )
-  //   setarchivedEmployees(
-  //     [...archivedEmployees].sort(
-  //       (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
-  //     )
-  //   )
-  // }, [employees, archivedEmployees])
 
   const getEmployeesCount = async () => {
     const body = null
@@ -156,7 +127,7 @@ const AdminEmployeeAccounts = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/employees?page=${page}&entries=${entries}&filter=ARCHIVED`
+      const route = `http://localhost:3000/api/admin/employees?page=${archivedPage}&entries=${entries}&filter=ARCHIVED`
 
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
@@ -176,7 +147,6 @@ const AdminEmployeeAccounts = () => {
     const body = null
     const method = 'GET'
     const route = `http://localhost:3000/api/admin/employees/search?query=${query}&params=${values}&sex=${sex}&filter=${filter}`
-
 
     try {
       const data = await callAPI(body, method, route)
@@ -290,10 +260,7 @@ const AdminEmployeeAccounts = () => {
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex flexDirection='row' gap={'10px'} mt={'15px'} mb={'15px'}>
           <Searchbar searchHandler={handleSearch} />
-          <RefreshButton
-            refreshCounter={refreshCounter}
-            setRefreshCounter={setRefreshCounter}
-          />
+          <RefreshButton refreshCounter={refreshCounter} setRefreshCounter={setRefreshCounter} />
           <Button mt={'5px'} colorScheme='facebook' onClick={onRegisterOpen}>
             Register Employee
           </Button>
@@ -306,380 +273,51 @@ const AdminEmployeeAccounts = () => {
           <Tab onClick={() => setFilter('ARCHIVED')}>Archived Employees</Tab>
         </TabList>
         {error ? (
-          <Text
-            fontSize={'2xl'}
-            fontWeight={'semibold'}
-            color={'tomato'}
-            textAlign={'center'}
-          >
+          <Text fontSize={'2xl'} fontWeight={'semibold'} color={'tomato'} textAlign={'center'}>
             {error}
           </Text>
         ) : (
           ''
         )}
-        {isLoading ? (
-          <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
-        ) : (
-          ''
-        )}
+        {isLoading ? <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} /> : ''}
         <TabPanels>
           <TabPanel>
-            {isLoading !== true && employees.length === 0 ? (
-              <Text
-                fontWeight={'semibold'}
-                fontSize={'2xl'}
-                textAlign={'center'}
-              >
+            {/* {isLoading !== true && employees.length === 0 ? (
+              <Text fontWeight={'semibold'} fontSize={'2xl'} textAlign={'center'}>
                 No Employees
               </Text>
-            ) : (
-              <TableContainer
-                display={'flex'}
-                margin={'10px'}
-                alignContent={'center'}
-                justifyContent={'center'}
-                rounded='md'
-              >
-                <Table
-                  w={'100%'}
-                  p={'10px'}
-                  rounded='md'
-                  bg='brand.400'
-                  variant={'simple'}
-                  style={{ borderCollapse: 'separate', tableLayout: 'fixed' }}
-                  borderColor={'gray.400'}
-                  borderWidth={'1px'}
-                >
-                  <Thead>
-                    <Tr>
-                      <Th p={'12px'} textAlign='center' w={'17%'}>
-                        User ID
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Username
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Last Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        First Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Middle Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center' w={'7%'}>
-                        Gender
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Date of Registration
-                      </Th>
-                      <Th p={'12px'} textAlign='center' w={'15%'}>
-                        Actions
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {employees.map((employee) => {
-                      const profile = employee.profile
-
-                      return (
-                        <Tr key={employee._id}>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            <Link
-                              as={rr_Link}
-                              color={'primary.500'}
-                              to={`${employee._id}`}
-                            >
-                              {employee._id}
-                            </Link>
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {employee.username || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.lastName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.firstName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.middleName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.sex || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {new Date(
-                              employee.dateOfCreation
-                            ).toLocaleDateString()}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            justifyContent={'center'}
-                            display={'flex'}
-                            gap={'10px'}
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            <Button
-                              colorScheme='green'
-                              onClick={() => handleEditOpen(employee)}
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                              colorScheme='orange'
-                              onClick={() => handleArchiveOpen(employee)}
-                            >
-                              Archive
-                            </Button>
-                            <Button
-                              colorScheme='red'
-                              onClick={() => handleDeleteOpen(employee)}
-                            >
-                              Delete
-                            </Button>
-                          </Td>
-                        </Tr>
-                      )
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            )}
-            <Pagination
-              numOfPages={Math.max(activeEmployeeCount / entries, 1)}
-              page={page}
-              setPage={setPage}
-            />
+            ) : ( */}
+            <>
+              <CustomTable
+                users={employees}
+                handleArchiveOpen={handleArchiveOpen}
+                handleDeleteOpen={handleDeleteOpen}
+                handleEditOpen={handleEditOpen}
+                hasEditButton={true}
+                hasArchiveButton={true}
+              />
+              <Pagination
+                numOfPages={Math.max(activeEmployeeCount / entries, 1)}
+                setPage={setPage}
+                page={page}
+              />
+            </>
           </TabPanel>
           <TabPanel>
-            {isLoading !== true && archivedEmployees.length === 0 ? (
-              <Text
-                fontWeight={'semibold'}
-                fontSize={'2xl'}
-                textAlign={'center'}
-              >
-                No Archived Employees
-              </Text>
-            ) : (
-              <TableContainer
-                display={'flex'}
-                margin={'10px'}
-                alignContent={'center'}
-                justifyContent={'center'}
-                rounded='md'
-              >
-                <Table
-                  w={'100%'}
-                  p={'10px'}
-                  rounded='md'
-                  bg='brand.400'
-                  variant={'simple'}
-                  style={{ borderCollapse: 'separate', tableLayout: 'fixed' }}
-                  borderColor={'gray.400'}
-                  borderWidth={'1px'}
-                >
-                  <Thead>
-                    <Tr>
-                      <Th p={'12px'} textAlign='center' w={'17%'}>
-                        User ID
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Username
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Last Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        First Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Middle Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center' w={'7%'}>
-                        Gender
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Date of Registration
-                      </Th>
-                      <Th p={'12px'} textAlign='center' w={'15%'}>
-                        Actions
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {archivedEmployees.map((employee) => {
-                      const profile = employee.profile
-
-                      return (
-                        <Tr key={employee._id}>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            <Link
-                              as={rr_Link}
-                              color={'primary.500'}
-                              to={`${employee._id}`}
-                            >
-                              {employee._id}
-                            </Link>
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {employee.username || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.lastName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.firstName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.middleName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.sex || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {new Date(
-                              employee.dateOfCreation
-                            ).toLocaleDateString()}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            justifyContent={'center'}
-                            display={'flex'}
-                            gap={'10px'}
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            <Button
-                              colorScheme='green'
-                              onClick={() => handleRestoreOpen(employee)}
-                            >
-                              Restore
-                            </Button>
-                            <Button
-                              colorScheme='red'
-                              onClick={() => handleDeleteOpen(employee)}
-                            >
-                              Delete
-                            </Button>
-                          </Td>
-                        </Tr>
-                      )
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            )}
-            <Pagination
-              numOfPages={Math.max(archivedEmployeeCount / entries, 1)}
-              page={page}
-              setPage={setPage}
-            />
+            <>
+              <CustomTable
+                users={archivedEmployees}
+                handleDeleteOpen={handleDeleteOpen}
+                handleRestoreOpen={handleRestoreOpen}
+                hasDeleteButton
+                hasRestoreButton
+              />
+              <Pagination
+                numOfPages={Math.max(archivedEmployeeCount / entries, 1)}
+                page={archivedPage}
+                setPage={setArchivedPage}
+              />
+            </>
           </TabPanel>
         </TabPanels>
       </Tabs>

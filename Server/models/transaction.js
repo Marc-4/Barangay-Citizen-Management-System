@@ -38,6 +38,9 @@ const transactionSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  lastEdited: {
+    type: Date
+  },
   // status: {
   //   type: String,
   //   required: true,

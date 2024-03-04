@@ -15,143 +15,117 @@ import {
   TabPanels,
   TabPanel,
   Button,
+  TableContainer,
+  Table,
+  Thead,
+  Tbody,
+  Th,
+  Td,
 } from '@chakra-ui/react'
-import {
-  Page,
-  Text as PDFText,
-  View,
-  Document,
-  StyleSheet,
-} from '@react-pdf/renderer'
-import ReactDOM from 'react-dom'
 
 import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
 import Searchbar from '../Searchbar'
-
+import { pdfjs, Document, Page } from 'react-pdf'
+import { PDFDocument, rgb } from 'pdf-lib'
 const ExportModal = ({ isOpen, onClose, user, onUpdate, role }) => {
   // pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   //   'pdfjs-dist/build/pdf.worker.min.js',
   //   import.meta.url
   // ).toString()
 
-  const styles = StyleSheet.create({
-    page: {
-      flexDirection: 'row',
-      backgroundColor: '#E4E4E4',
-    },
-    section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1,
-    },
-  })
-
-  const [error, setError] = useState('')
-  const [users, setUsers] = useState()
-  const [success, setSuccess] = useState('')
+  pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
+  const [pdfUrl, setPdfUrl] = useState('/BarangayForms.pdf')
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
-  const [pdfContent, setPdfContent] = useState(null)
-
+  const [userData, setUserData] = useState(null)
   const accountRole = localStorage.getItem('userRole')
-
-  const addToExport = async () => {
-    try {
-      const route = `http://localhost:3000/api/admin/user/${id}`
-      const response = await callAPI(null, 'GET', route)
-
-      if (response.result === 'OK') setUsers(response.payload)
-      else setError(response.payload.error)
-    } catch (error) {
-      console.log(error)
-      setError(error)
-    }
-  }
-
-  const MyDocument = () => (
-    <Document>
-      <Page size='letter' style={styles.page}>
-        <View style={styles.section}>
-          <Text>Section #1</Text>
-        </View>
-        <View style={styles.section}>
-          <Text>Section #2</Text>
-        </View>
-      </Page>
-    </Document>
-  )
-
-  const handleDownload = () => {
-    // Implement download logic here
-    // You can use the react-pdf library to generate a blob URL and trigger a download
-    // Example: window.open(pdfBlobUrl, '_blank');
-  }
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages)
   }
 
+  const goToPreviousPage = () => {
+    setPageNumber((prevPage) => Math.max(prevPage - 1, 1))
+  }
+
+  const goToNextPage = () => {
+    setPageNumber((prevPage) => Math.min(prevPage + 1, numPages))
+  }
+
+  const handlePageInputChange = (event) => {
+    const newPageNumber = parseInt(event.target.value, 10)
+    if (!isNaN(newPageNumber) && newPageNumber >= 1 && newPageNumber <= numPages) {
+      setPageNumber(newPageNumber)
+    }
+  }
+
+  const populatePdfWithData = async (templatePdfBytes, userData) => {
+    const pdfDoc = await PDFDocument.load(templatePdfBytes)
+    const form = pdfDoc.getForm()
+
+    // Access fields in the PDF form and set values based on user data
+    form.getTextField('userName').setText(userData.name)
+    form.getTextField('userEmail').setText(userData.email)
+    // Add more fields as needed
+
+    const modifiedPdfBytes = await pdfDoc.save()
+    return modifiedPdfBytes
+  }
+
+  const renderPdfWithUserData = async () => {
+    try {
+      const templatePdfBytes = await fetch('/BarangayForms.pdf').then((res) => res.arrayBuffer())
+      const modifiedPdfBytes = await populatePdfWithData(templatePdfBytes, userData)
+
+      // Convert modified PDF bytes to a Blob and create a URL for rendering
+      const modifiedPdfBlob = new Blob([modifiedPdfBytes], { type: 'application/pdf' })
+      const modifiedPdfUrl = URL.createObjectURL(modifiedPdfBlob)
+
+      setPdfUrl(modifiedPdfUrl)
+    } catch (error) {
+      console.error('Error populating PDF with user data:', error)
+    }
+  }
+
+  useEffect(() => {
+    if (userData) {
+      renderPdfWithUserData()
+    }
+  }, [userData])
+
   return (
-    <>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={'md'}
-        closeOnOverlayClick={false}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            <Heading>Export Users</Heading>
-          </ModalHeader>
-          <ModalCloseButton />
-          <Divider m={'auto'} borderColor={'brand.100'} w={'90%'} />
-          <ModalBody>
-            <Text
-              fontWeight={'semibold'}
-              fontSize={'2xl'}
-              color={'tomato'}
-              id='error_msg'
-              display={error ? 'block' : 'none'}
-            >
-              {error}
-            </Text>
-            <Text
-              fontWeight={'semibold'}
-              fontSize={'2xl'}
-              color={'green'}
-              id='success_msg'
-              display={success ? 'block' : 'none'}
-            >
-              {success}
-            </Text>
-            <Box>
-              <Tabs>
-                <TabList>
-                  <Tab>Individual</Tab>
-                  <Tab>By Household</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel>
-                    <Box>
-                      <Searchbar />
-                      <Box>
-                        <MyDocument />
-                      </Box>
-                      <Button onClick={handleDownload} mt={4}>
-                        Download
-                      </Button>
-                    </Box>
-                  </TabPanel>
-                  <TabPanel>2</TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Box>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal isOpen={isOpen} onClose={onClose} size={'2xl'} closeOnOverlayClick={false}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Export to PDF</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+            <Page pageNumber={pageNumber} />
+          </Document>
+          <p>
+            Page {pageNumber} of {numPages}
+          </p>
+          <Box>
+            <Button onClick={goToPreviousPage} disabled={pageNumber === 1}>
+              Previous Page
+            </Button>
+            <Button onClick={goToNextPage} disabled={pageNumber === numPages}>
+              Next Page
+            </Button>
+            <Text>Go to Page:</Text>
+            <input
+              type='number'
+              value={pageNumber}
+              onChange={handlePageInputChange}
+              min={1}
+              max={numPages}
+            />
+          </Box>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   )
 }
 

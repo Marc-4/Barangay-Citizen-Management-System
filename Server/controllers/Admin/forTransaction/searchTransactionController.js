@@ -5,7 +5,7 @@ import sendSuccess from '../../../utils/sendSuccess.js'
 const searchTransactions = async (req, res) => {
   console.log('searching for transactions..')
   try {
-    const { query, filter } = req.query
+    const { query } = req.query
 
     const escapedQuery = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 
@@ -17,11 +17,11 @@ const searchTransactions = async (req, res) => {
       ],
     }
 
-    if (filter === 'PENDING') {
-      queryFilter.status = 'PENDING'
-    } else if (filter === 'HISTORY') {
-      queryFilter.status = { $ne: 'PENDING' }
-    }
+    // if (filter === 'PENDING') {
+    //   queryFilter.status = 'PENDING'
+    // } else if (filter === 'HISTORY') {
+    //   queryFilter.status = { $ne: 'PENDING' }
+    // }
 
     const transactions = await Transaction.find(queryFilter)
 

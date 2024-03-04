@@ -6,7 +6,7 @@ import callAPI from '../utils/callAPI'
 const UpcomingTransactions = () => {
   const [transactions, setTransactions] = useState([])
   const [filter, setFilter] = useState('PENDING')
-  const [entries, setEntries] = useState(3)
+  const [entries, setEntries] = useState(5)
   const [isLoading, setIsLoading] = useState(true)
 
   const userRole = localStorage.getItem('userRole')

@@ -38,11 +38,10 @@ const NotificationCard = ({ data, account_type, onNotificationClick }) => {
         bg={data.status === 'UNREAD' ? 'background.main' : 'background.50'}
         h={'100px'}
         shadow={'none'}
-        mb={'5px'}
-        // borderBottom={'1px'}
-        borderColor={'secondary.main'}
-        transition='all 0.2s'
-        _hover={{ shadow: 'md', zIndex: '1', backgroundColor: 'blue.200' }}
+        // mb={'5px'}
+        borderBottom={'solid 1px rgb(0,0,0, 0.2)'}
+        transition='all 0.1s'
+        _hover={{ shadow: 'md', zIndex: '2', backgroundColor: 'background.50' }}
       >
         <CardBody flexDirection={'row'} alignItems={'center'}>
           <Text fontWeight={'semibold'} id='notif_type'>

@@ -226,7 +226,7 @@ const AdminDashboard = () => {
         p={'10px'}
         rounded={'10px'}
       >
-        <Heading>Upcoming Transactions</Heading>
+        <Heading>Recent Transactions</Heading>
         <Text
           fontSize={'2xl'}
           fontWeight={'semibold'}

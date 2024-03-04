@@ -2,6 +2,11 @@
 import { useEffect } from 'react'
   const Pagination = ({ numOfPages, page, setPage }) => {
 
+
+    // useEffect(()=>{
+    //   console.log("page:" + page);
+    // },[page])
+    
     const goToPage = (page) => {
       setPage(page)
     }
