@@ -24,10 +24,7 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
     firstName: string()
       .required('required')
       .matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols'),
-    middleName: string().matches(
-      /^[A-Za-z\s.'-]+$/,
-      'Middle Name must not contain symbols'
-    ),
+    middleName: string().matches(/^[A-Za-z\s.'-]+$/, 'Middle Name must not contain symbols'),
     lastName: string()
       .required('required')
       .matches(/^[A-Za-z\s.'-]+$/, 'Last Name must not contain symbols'),
@@ -100,12 +97,7 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
 
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={'md'}
-        closeOnOverlayClick={false}
-      >
+      <Modal isOpen={isOpen} onClose={onClose} size={'md'} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>

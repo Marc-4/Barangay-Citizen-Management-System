@@ -3,11 +3,10 @@ import { sendError, sendSuccess } from '../../../utils/index.js'
 import mongoose from 'mongoose'
 
 const editEmployee = async (req, res) => {
-  console.log('editing employee...');
-  console.log(req.body);
-  console.log(req.file);
-  if (!mongoose.isValidObjectId(req.params.id))
-    return sendError('invalid employee ID', 400, res)
+  console.log('editing employee...')
+  console.log(req.body)
+  console.log(req.file)
+  if (!mongoose.isValidObjectId(req.params.id)) return sendError('invalid employee ID', 400, res)
   if (
     req.body.firstName === undefined &&
     req.body.lastName === undefined &&
@@ -59,6 +58,9 @@ const editEmployee = async (req, res) => {
 
   const profilePhoto = req.file
 
+  if (await Employee.findOne({ 'profile.email': email }))
+    return sendError('email is already taken', 403, res)
+
   if (firstName) employee.profile.firstName = req.body.firstName
   if (lastName) employee.profile.lastName = req.body.lastName
   if (middleName) employee.profile.middleName = req.body.middleName
@@ -70,12 +72,12 @@ const editEmployee = async (req, res) => {
   if (civilStatus) employee.profile.civilStatus = req.body.civilStatus
   if (occupation) employee.profile.occupation = req.body.occupation
   if (citizenship) employee.profile.citizenship = req.body.citizenship
-  if (email) employee.profile.email = req.body.email
+  if (email != null) employee.profile.email = req.body.email
   if (address_streetName) employee.profile.address.streetName = address_streetName
   if (address_houseNumber) employee.profile.address.houseNumber = address_houseNumber
   if (address_subdivisionPurok) employee.profile.address.subdivisionPurok = address_subdivisionPurok
-  if (profilePhoto?.buffer) employee.profile.profilePhoto.data = profilePhoto.buffer 
-  if (profilePhoto?.originalname) employee.profile.profilePhoto.fileName = profilePhoto.originalname 
+  if (profilePhoto?.buffer) employee.profile.profilePhoto.data = profilePhoto.buffer
+  if (profilePhoto?.originalname) employee.profile.profilePhoto.fileName = profilePhoto.originalname
 
   try {
     await employee.save()
@@ -84,7 +86,7 @@ const editEmployee = async (req, res) => {
     return sendError('Internal Server Error', 400, res)
   }
 
-  const payload = {request: employee}
+  const payload = { request: employee }
 
   return sendSuccess(payload, 200, res)
 }

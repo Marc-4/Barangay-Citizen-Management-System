@@ -3,11 +3,10 @@ import { sendError, sendSuccess } from '../../../utils/index.js'
 import mongoose from 'mongoose'
 
 const editUser = async (req, res) => {
-  console.log('editing user...');
-  console.log(req.body);
-  console.log(req.file);
-  if (!mongoose.isValidObjectId(req.params.id))
-    return sendError('invalid user ID', 400, res)
+  console.log('editing user...')
+  console.log(req.body)
+  console.log(req.file)
+  if (!mongoose.isValidObjectId(req.params.id)) return sendError('invalid user ID', 400, res)
   if (
     req.body.firstName === undefined &&
     req.body.lastName === undefined &&
@@ -27,6 +26,7 @@ const editUser = async (req, res) => {
   )
     return sendError('Mising Required Fields', 404, res)
 
+  console.log(req.body)
   //check if user profile exists
   let user
   try {
@@ -59,7 +59,10 @@ const editUser = async (req, res) => {
 
   const profilePhoto = req.file
 
-  console.log('DOB: '+req.body.dateOfBirth);
+  console.log('DOB: ' + req.body.dateOfBirth)
+  
+  if(await User.findOne({'profile.email': email}))
+    return sendError('email is already taken', 403, res)
 
   if (firstName) user.profile.firstName = req.body.firstName
   if (lastName) user.profile.lastName = req.body.lastName
@@ -72,12 +75,12 @@ const editUser = async (req, res) => {
   if (civilStatus) user.profile.civilStatus = req.body.civilStatus
   if (occupation) user.profile.occupation = req.body.occupation
   if (citizenship) user.profile.citizenship = req.body.citizenship
-  if (email) user.profile.email = req.body.email
+  if (email != null) user.profile.email = req.body.email
   if (address_streetName) user.profile.address.streetName = address_streetName
   if (address_houseNumber) user.profile.address.houseNumber = address_houseNumber
   if (address_subdivisionPurok) user.profile.address.subdivisionPurok = address_subdivisionPurok
-  if (profilePhoto?.buffer) user.profile.profilePhoto.data = profilePhoto.buffer 
-  if (profilePhoto?.originalname) user.profile.profilePhoto.fileName = profilePhoto.originalname 
+  if (profilePhoto?.buffer) user.profile.profilePhoto.data = profilePhoto.buffer
+  if (profilePhoto?.originalname) user.profile.profilePhoto.fileName = profilePhoto.originalname
 
   try {
     await user.save()
@@ -86,7 +89,7 @@ const editUser = async (req, res) => {
     return sendError('Internal Server Error', 400, res)
   }
 
-  const payload = {request: user}
+  const payload = { request: user }
 
   return sendSuccess(payload, 200, res)
 }

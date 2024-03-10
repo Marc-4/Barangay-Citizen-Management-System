@@ -124,6 +124,7 @@ const Home = () => {
                   variant={'filled'}
                   maxW={'250px'}
                   placeholder='Password'
+                  type='password'
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 ></Input>

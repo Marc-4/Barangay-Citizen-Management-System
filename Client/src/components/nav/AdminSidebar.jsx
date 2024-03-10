@@ -199,7 +199,7 @@ const AdminSidebar = ({ onToggle, isOpen }) => {
 
         <Divider borderColor={'blackAlpha.400'} mb={'25px'} />
 
-        <Button
+        {/* <Button
           _hover={{
             bg: 'gray.300',
           }}
@@ -216,7 +216,7 @@ const AdminSidebar = ({ onToggle, isOpen }) => {
         >
           <Icon as={CiLogout} boxSize={'25px'} mr={'10px'} />
           <Text fontSize={'xl'}>Logout</Text>
-        </Button>
+        </Button> */}
       </Box>
       {/* </Slide> */}
     </>

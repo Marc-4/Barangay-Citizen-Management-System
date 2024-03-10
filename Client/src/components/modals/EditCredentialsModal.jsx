@@ -88,7 +88,7 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
               }}
               validationSchema={validationSchema}
               initialValues={{
-                username: '',
+                username: user.username,
                 old_password: '',
                 new_password: '',
               }}

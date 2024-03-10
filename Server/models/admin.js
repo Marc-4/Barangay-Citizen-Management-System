@@ -70,6 +70,7 @@ const adminSchema = new mongoose.Schema({
       },
     },
     email: {
+      unique: true,
       type: String,
     },
     profilePhoto: {

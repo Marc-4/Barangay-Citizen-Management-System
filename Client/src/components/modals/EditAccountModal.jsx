@@ -14,38 +14,22 @@ import callAPI from '../../utils/callAPI'
 import { object, string, date, mixed } from 'yup'
 import EditForm from '../forms/EditForm'
 
-const EditAccountModal = ({
-  isOpen,
-  onClose,
-  user,
-  onUpdate,
-  role,
-  editingSelf,
-}) => {
+const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role, editingSelf }) => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const accountRole = localStorage.getItem('userRole')
 
   const validationSchema = object({
-    firstName: string().matches(
-      /^[A-Za-z\s.'-]+$/,
-      'First Name must not contain symbols'
-    ),
-    middleName: string().matches(
-      /^[A-Za-z\s.'-]+$/,
-      'Middle Name must not contain symbols'
-    ),
-    lastName: string().matches(
-      /^[A-Za-z\s.'-]+$/,
-      'Last Name must not contain symbols'
-    ),
+    firstName: string().matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols'),
+    middleName: string().matches(/^[A-Za-z\s.'-]+$/, 'Middle Name must not contain symbols'),
+    lastName: string().matches(/^[A-Za-z\s.'-]+$/, 'Last Name must not contain symbols'),
     dateOfBirth: date()
       .max(new Date(), 'Date of Birth cannot be in the future')
       .min(new Date('1900-01-01'), 'Date of Birth cannot be before 1900'),
     placeOfBirth_city: string(),
     placeOfBirth_province: string(),
     placeOfBirth_country: string(),
-    sex: string(),
+    sex: string().required('Please specify the gender.'),
     civilStatus: string(),
     occupation: string(),
     citizenship: string(),
@@ -87,11 +71,10 @@ const EditAccountModal = ({
       }
 
       let route
-      console.log(editingSelf);
+      console.log(editingSelf)
       if (!editingSelf)
         route = `http://localhost:3000/api/${accountRole}/${role}/profile/${user._id}/edit`
-      if (editingSelf)
-        route = `http://localhost:3000/api/${accountRole}/account/edit`
+      if (editingSelf) route = `http://localhost:3000/api/${accountRole}/account/edit`
 
       console.log(route)
 
@@ -106,12 +89,10 @@ const EditAccountModal = ({
 
       if (responseBody.result === 'OK') {
         setError(null)
-        if (accountRole === 'user')
-          setSuccess('Successfuly Requested Profile Update!')
+        if (accountRole === 'user') setSuccess('Successfuly Requested Profile Update!')
         else setSuccess('Successfully Updated User!')
 
-        if (accountRole === 'user')
-          createNotification(responseBody.payload.request)
+        if (accountRole === 'user') createNotification(responseBody.payload.request)
         if (onUpdate) {
           onUpdate()
         }
@@ -141,12 +122,7 @@ const EditAccountModal = ({
 
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={'md'}
-        closeOnOverlayClick={false}
-      >
+      <Modal isOpen={isOpen} onClose={onClose} size={'md'} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -164,22 +140,24 @@ const EditAccountModal = ({
               }}
               validationSchema={validationSchema}
               initialValues={{
-                firstName: '',
-                middleName: '',
-                lastName: '',
-                dateOfBirth: '',
-                placeOfBirth_city: '',
-                placeOfBirth_province: '',
-                placeOfBirth_country: '',
-                sex: '',
-                civilStatus: '',
-                occupation: '',
-                citizenship: '',
-                email: '',
-                address_streetName: '',
-                address_houseNumber: '',
-                address_subdivisionPurok: '',
-                profilePhoto: '',
+                firstName: user?.profile?.firstName,
+                middleName: user?.profile?.middleName,
+                lastName: user?.profile?.lastName,
+                dateOfBirth: !isNaN(new Date(user?.profile?.dateOfBirth).getTime())
+                  ? new Date(user?.profile?.dateOfBirth).toISOString().split('T')[0]
+                  : null,
+                placeOfBirth_city: user?.profile?.placeOfBirth.city,
+                placeOfBirth_province: user?.profile?.placeOfBirth.province,
+                placeOfBirth_country: user?.profile?.placeOfBirth.country,
+                sex: user?.profile?.sex,
+                civilStatus: user?.profile?.civilStatus,
+                occupation: user?.profile?.occupation,
+                citizenship: user?.profile?.citizenship,
+                email: user?.profile?.email,
+                address_streetName: user?.profile?.address.streetName,
+                address_houseNumber: user?.profile?.address.houseNumber,
+                address_subdivisionPurok: user?.profile?.address.subdivisionPurok,
+                profilePhoto: user?.profile?.profilePhoto,
               }}
             />
             <Text

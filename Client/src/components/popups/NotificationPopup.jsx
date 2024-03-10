@@ -1,24 +1,18 @@
 import { Box, Heading, Text } from '@chakra-ui/react'
 import NotificationCard from '../cards/NotificationCard'
 import { motion } from 'framer-motion'
+import { Component, forwardRef } from 'react'
 
-const NotificationPopup = ({ notifications, isOpen, onNotificationClick, rightOffset }) => {
-  const sortedNotifications = [...notifications].sort(
-    (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-  )
+const NotificationPopup = forwardRef(
+  ({ notifications, isOpen, onNotificationClick, rightOffset }, ref) => {
+    const sortedNotifications = [...notifications].sort(
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+    )
 
-  return (
-    <>
-      {/* <motion.div
-        initial={{ height: 0, zIndex: 1, translateY: -100 }}
-        animate={{
-          height: isOpen ? '600px' : 0,
-          zIndex: isOpen ? 1 : 0,
-          translateY: isOpen ? 270 : -100,
-        }}
-        transition={{ type: 'spring' }}
-      > */}
+    return (
+      <>
         <Box
+          ref={ref}
           display={isOpen ? 'block' : 'none'}
           p={'10px'}
           zIndex={2}
@@ -52,9 +46,9 @@ const NotificationPopup = ({ notifications, isOpen, onNotificationClick, rightOf
             </Text>
           )}
         </Box>
-      {/* </motion.div> */}
-    </>
-  )
-}
+      </>
+    )
+  }
+)
 
 export default NotificationPopup

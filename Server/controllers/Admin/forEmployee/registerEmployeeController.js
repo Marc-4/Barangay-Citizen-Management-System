@@ -32,11 +32,13 @@ const registerEmployee = async (req, res) => {
     return sendError('Internal Server Error', 500, res)
   }
   if (employee) return sendError('username Taken', 400, res)
+  if (await Employee.findOne({ 'profile.email': req.body.email }))
+    return sendError('email is already taken', 403, res)
 
   const profilePhoto = req.file
-    if (!profilePhoto) {
-      return sendError('Profile photo is missing', 400, res)
-    }
+  if (!profilePhoto) {
+    return sendError('Profile photo is missing', 400, res)
+  }
 
   const encryptedPass = await bcrypt.hash(req.body.password, 10)
 
@@ -65,7 +67,7 @@ const registerEmployee = async (req, res) => {
       fileName: profilePhoto.originalname,
     },
   }
-  
+
   let newEmployee
   try {
     newEmployee = await Employee.create({

@@ -70,6 +70,7 @@ const employeeSchema = new mongoose.Schema({
       },
     },
     email: {
+      unique: true,
       type: String,
     },
     profilePhoto: {

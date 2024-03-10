@@ -29,6 +29,8 @@ const registerUser = async (req, res) => {
     // Check if username exists in db
     let user = await User.findOne({ username: req.body.username })
     if (user) return sendError('Username Taken', 400, res)
+    if (await User.findOne({ 'profile.email': req.body.email }))
+      return sendError('email is already taken', 403, res)
 
     const profilePhoto = req.file
     // if (!profilePhoto) {

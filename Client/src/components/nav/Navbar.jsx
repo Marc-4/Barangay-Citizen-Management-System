@@ -29,6 +29,29 @@ const Navbar = () => {
   const [toggleOpen, setToggleOpen] = useState(false)
   const role = localStorage.getItem('userRole')
   const ref = useRef(null)
+  const notifButtonRef = useRef(null)
+  const notifRef = useRef(null)
+
+  // Attach the event listener to the document
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // console.log(notifButtonRef.current)
+      // console.log(event.target)
+      if (
+        toggleOpen &&
+        !notifButtonRef.current.contains(event.target) &&
+        !notifRef.current.contains(event.target)
+      ) {
+        setToggleOpen(false)
+        console.log('clicked outside')
+      }
+    }
+    document.addEventListener('click', handleClickOutside)
+    // Cleanup the event listener on component unmount
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [toggleOpen, notifRef])
 
   const revertBase64 = (imageBuf) => {
     let base64String = Buffer.from(imageBuf).toString('base64')
@@ -94,14 +117,7 @@ const Navbar = () => {
 
   return (
     <>
-      <Flex
-        as='nav'
-        p={'20px'}
-        pl={0}
-        bg={'background.50'}
-        alignItems={'center'}
-        h={'75px'}
-      >
+      <Flex as='nav' p={'20px'} pl={0} bg={'background.50'} alignItems={'center'} h={'75px'}>
         <IconButton
           borderRadius={'50%'}
           _hover={{ bg: 'background.100' }}
@@ -118,12 +134,14 @@ const Navbar = () => {
 
         <HStack gap={'20px'}>
           <NotificationPopup
+            ref={notifRef}
             notifications={notifications}
             isOpen={toggleOpen}
             onNotificationClick={handleNotificationClick}
             rightOffset={ref.current?.offsetWidth}
           />
           <IconButton
+            ref={notifButtonRef}
             onClick={() => {
               setToggleOpen(!toggleOpen)
               setRefreshCounter((prevCounter) => prevCounter + 1)
@@ -133,13 +151,7 @@ const Navbar = () => {
             icon={<IoIosNotifications />}
           />
           <Link as={rr_link} to={'profile'}>
-            <Box
-              ref={ref}
-              flexDirection={'row'}
-              display={'flex'}
-              alignItems={'center'}
-              gap={'5px'}
-            >
+            <Box ref={ref} flexDirection={'row'} display={'flex'} alignItems={'center'} gap={'5px'}>
               <Image
                 border={'2px'}
                 borderColor={'secondary.main'}
