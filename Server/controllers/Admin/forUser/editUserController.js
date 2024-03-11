@@ -60,8 +60,10 @@ const editUser = async (req, res) => {
   const profilePhoto = req.file
 
   console.log('DOB: ' + req.body.dateOfBirth)
-  
-  if(await User.findOne({'profile.email': email}))
+
+  const existingUser = await User.findOne({ 'profile.email': email })
+
+  if (existingUser && existingUser._id.toString() !== user._id.toString())
     return sendError('email is already taken', 403, res)
 
   if (firstName) user.profile.firstName = req.body.firstName

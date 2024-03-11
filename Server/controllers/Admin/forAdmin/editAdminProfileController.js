@@ -57,28 +57,29 @@ const editAdmin = async (req, res) => {
 
   const profilePhoto = req.file
 
+  
+  const existingUser = await Admin.findOne({ 'profile.email': email })
+  
+  if (existingUser && existingUser._id.toString() !== admin._id.toString())
+    return sendError('email is already taken', 403, res)
+
   if (firstName) admin.profile.firstName = req.body.firstName
   if (lastName) admin.profile.lastName = req.body.lastName
   if (middleName) admin.profile.middleName = req.body.middleName
   if (dateOfBirth) admin.profile.dateOfBirth = req.body.dateOfBirth
   if (placeOfBirth_city) admin.profile.placeOfBirth.city = placeOfBirth_city
-  if (placeOfBirth_province)
-    admin.profile.placeOfBirth.province = placeOfBirth_province
-  if (placeOfBirth_country)
-    admin.profile.placeOfBirth.country = placeOfBirth_country
+  if (placeOfBirth_province) admin.profile.placeOfBirth.province = placeOfBirth_province
+  if (placeOfBirth_country) admin.profile.placeOfBirth.country = placeOfBirth_country
   if (sex) admin.profile.sex = req.body.sex
   if (civilStatus) admin.profile.civilStatus = req.body.civilStatus
   if (occupation) admin.profile.occupation = req.body.occupation
   if (citizenship) admin.profile.citizenship = req.body.citizenship
   if (email) admin.profile.email = req.body.email
   if (address_streetName) admin.profile.address.streetName = address_streetName
-  if (address_houseNumber)
-    admin.profile.address.houseNumber = address_houseNumber
-  if (address_subdivisionPurok)
-    admin.profile.address.subdivisionPurok = address_subdivisionPurok
+  if (address_houseNumber) admin.profile.address.houseNumber = address_houseNumber
+  if (address_subdivisionPurok) admin.profile.address.subdivisionPurok = address_subdivisionPurok
   if (profilePhoto?.buffer) admin.profile.profilePhoto.data = profilePhoto.buffer
-  if (profilePhoto?.originalname)
-    admin.profile.profilePhoto.fileName = profilePhoto.originalname
+  if (profilePhoto?.originalname) admin.profile.profilePhoto.fileName = profilePhoto.originalname
 
   try {
     await admin.save()
