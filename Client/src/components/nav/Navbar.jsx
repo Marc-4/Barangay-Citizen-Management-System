@@ -118,7 +118,7 @@ const Navbar = () => {
   return (
     <>
       <Flex as='nav' p={'20px'} pl={0} bg={'background.50'} alignItems={'center'} h={'75px'}>
-        <IconButton
+        {/* <IconButton
           borderRadius={'50%'}
           _hover={{ bg: 'background.100' }}
           ml={'7px'}
@@ -128,7 +128,7 @@ const Navbar = () => {
           h={'60px'}
           fontSize={'30px'}
           variant={'ghost'}
-        />
+        /> */}
         <Image alignItems={'center'} h={'75px'} src='/LOGO.png' />
         <Spacer />
 
