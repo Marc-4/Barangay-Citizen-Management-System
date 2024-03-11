@@ -1,4 +1,4 @@
 node_modules
 .env
-data
-data_old
+/Server/data
+/Server/data_old
