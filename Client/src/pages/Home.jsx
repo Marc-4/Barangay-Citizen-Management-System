@@ -11,6 +11,7 @@ import {
   useDisclosure,
   Image,
 } from '@chakra-ui/react'
+import parseToken from '../utils/parseJWT'
 // import RegisterModal from '../components/modals/RegisterModal'
 import login from '../utils/login'
 import { useEffect, useState } from 'react'
@@ -43,26 +44,31 @@ const Home = () => {
     setIsLoading(true)
 
     try {
-      const data = await login(
-        username,
-        password,
-        'http://localhost:3000/api/auth/login/' + role
-      )
+      const data = await login(username, password, 'http://localhost:3000/api/auth/login/' + role)
 
       if (data.result === 'OK') {
         console.log('OK')
         console.log(data)
-        if (data.payload.role === 'admin') {
-          navigate('/admin/dashboard')
-          localStorage.setItem('userRole', 'admin')
-        }
-        if (data.payload.role === 'employee') {
-          navigate('/employee/dashboard')
-          localStorage.setItem('userRole', 'employee')
-        }
-        if (data.payload.role === 'user') {
-          navigate('/user/profile')
-          localStorage.setItem('userRole', 'user')
+
+        const token = Cookies.get('authorization')
+        if (token) {
+          const decodedToken = parseToken(token)
+
+          switch (decodedToken.role) {
+            case 'admin':
+              navigate('/admin/dashboard')
+              break
+            case 'employee':
+              navigate('/employee/dashboard')
+              break
+            case 'user':
+              navigate('/user/dashboard')
+              break
+
+            default:
+              setError('Invalid User Role')
+          }
+          localStorage.setItem('userRole', decodedToken.role)
         }
       } else {
         console.log('ERR')
@@ -78,12 +84,7 @@ const Home = () => {
   return (
     <>
       <Container>
-        <Box
-          display={'flex'}
-          m={'25px'}
-          alignItems={'center'}
-          color={'primary.main'}
-        >
+        <Box display={'flex'} m={'25px'} alignItems={'center'} color={'primary.main'}>
           <Heading p='10px' textAlign={'center'} fontSize={'4xl'}>
             Welcome
           </Heading>
@@ -98,13 +99,7 @@ const Home = () => {
           <Image w={'200px'} src='/LOGO.png' />
         </Box>
         <Box>
-          <Box
-            boxShadow={'lg'}
-            p={'10px'}
-            rounded={'10px'}
-            bg={'background.50'}
-            padding={'25px'}
-          >
+          <Box boxShadow={'lg'} p={'10px'} rounded={'10px'} bg={'background.50'} padding={'25px'}>
             <form onSubmit={(e) => handleLogin(e)}>
               <Stack alignItems={'center'}>
                 <Input

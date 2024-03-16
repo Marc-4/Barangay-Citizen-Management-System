@@ -297,9 +297,10 @@ const AdminEmployeeAccounts = () => {
                 hasArchiveButton={true}
               />
               <Pagination
-                numOfPages={Math.max(activeEmployeeCount / entries, 1)}
+              numOfPages={Math.round(Math.max(activeEmployeeCount / entries, 1))}
                 setPage={setPage}
                 page={page}
+                setEntries={setEntries}
               />
             </>
           </TabPanel>
@@ -313,9 +314,10 @@ const AdminEmployeeAccounts = () => {
                 hasRestoreButton
               />
               <Pagination
-                numOfPages={Math.max(archivedEmployeeCount / entries, 1)}
+              numOfPages={Math.round(Math.max(archivedEmployeeCount / entries, 1))}
                 page={archivedPage}
                 setPage={setArchivedPage}
+                setEntries={setEntries}
               />
             </>
           </TabPanel>

@@ -184,8 +184,10 @@ const CustomTable = ({
                     whiteSpace: 'normal',
                     wordWrap: 'break-word',
                   }}
+                  fontWeight={'semibold'}
                   colSpan={8}
                 >
+                  
                   No users
                 </Td>
               </Tr>

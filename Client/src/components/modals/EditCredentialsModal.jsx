@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
-import { object, string } from 'yup'
+import { object, string, ref } from 'yup'
 import EditCredentialsForm from '../forms/EditCredentialsForm'
 
 const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
@@ -20,10 +20,16 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
   const accountRole = localStorage.getItem('userRole')
 
   const validationSchema = object({
-    username: string().required('required').min(5),
-    old_password: string().min(8),
-    new_password: string().min(8),
+    username: string().required('username is required').min(5),
+    old_password: string()
+      .min(8, 'password must be at least 8 characters')
+      .required('password is required'),
+    new_password: string()
+      .min(8, 'the new password must be at least 8 characters')
+      .notOneOf([ref('old_password')], 'New password must not be the same as old password'),
   })
+
+  useEffect
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -42,15 +48,14 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
       }
       console.log(body)
       let route
-        route = `http://localhost:3000/api/${accountRole}/account/credentials/edit`
+      route = `http://localhost:3000/api/${accountRole}/account/credentials/edit`
 
       const response = await callAPI(body, 'PATCH', route)
 
       if (response.result === 'OK') {
         setError(null)
         if (accountRole === 'admin') setSuccess('Successfully Updated User!')
-        if (accountRole === 'user')
-          setSuccess('Successfuly Requested Profile Update!')
+        if (accountRole === 'user') setSuccess('Successfuly Requested Profile Update!')
         if (onUpdate) {
           onUpdate()
         }
@@ -61,15 +66,9 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
     }
   }
 
-
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={'md'}
-        closeOnOverlayClick={false}
-      >
+      <Modal isOpen={isOpen} onClose={onClose} size={'md'} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -81,14 +80,14 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
             <EditCredentialsForm
               onSubmit={(values, { setSubmitting, resetForm }) => {
                 setTimeout(async () => {
-                  console.log(values);
+                  console.log(values)
                   await editCredentials(values, resetForm)
                   setSubmitting(false)
                 }, 1000)
               }}
               validationSchema={validationSchema}
               initialValues={{
-                username: user.username,
+                username: user?.username,
                 old_password: '',
                 new_password: '',
               }}

@@ -66,7 +66,7 @@ const Searchbar = ({ entries, page, searchHandler, options }) => {
           <MenuButton as={Button} colorScheme='facebook'>
             Filters
           </MenuButton>
-          <MenuList minWidth='240px'>
+          <MenuList minWidth='240px' zIndex={2}>
             <Flex>
               <MenuOptionGroup
                 defaultValue={firstSearchOptions}

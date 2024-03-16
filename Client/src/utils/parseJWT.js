@@ -1,8 +1,7 @@
 import Cookies from 'js-cookie'
 import {} from 'jsrsasign'
 
-const parseToken = () => {
-  const token = Cookies.get('authorization')
+const parseToken = (token) => {
 
   if (token) {
     var base64Url = token.split('.')[1]

@@ -45,6 +45,10 @@ const AdminProfile = () => {
     console.log(profileData)
   }
 
+  useEffect(()=>{
+    console.log(profileData);
+  })
+
   const handeUpdate = () => {
     getProfile()
   }
@@ -79,14 +83,14 @@ const AdminProfile = () => {
       >
         {error}
       </Text>
-      <Box display={'flex'} gap={'10px'} p={'10px'} mt={'25px'} ml={'80px'}>
+      {/* <Box display={'flex'} gap={'10px'} p={'10px'} mt={'25px'} ml={'80px'}>
         <Button onClick={() => onProfileOpen()} colorScheme='facebook'>
           Edit Profile
         </Button>
         <Button onClick={() => onCredentialsOpen()} colorScheme='facebook'>
           Edit Credentials
         </Button>
-      </Box>
+      </Box> */}
       {profileData && <ProfileCard data={profileData} />}
     </>
   )

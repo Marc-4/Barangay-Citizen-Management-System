@@ -31,15 +31,12 @@ const adminLogin = async (req, res) => {
     }
     if (result) {
       //token signing
-      const id = { id: admin._id }
+      const payload = { id: admin._id, role: 'admin' }
 
-      const token = JWT.sign(id, process.env.JWT_SECRET)
+      const token = JWT.sign(payload, process.env.JWT_SECRET)
       res.cookie('authorization', token)
-      const payload = {
-        token: token,
-        role: 'admin',
-      }
-      return sendSuccess(payload, 200, res)
+      
+      return sendSuccess({ token: token }, 200, res)
     } else {
       sendError('username or password incorrect', 400, res)
     }

@@ -66,7 +66,9 @@ const AdminUserAccounts = () => {
 
   useEffect(() => {
     getUsers()
-  }, [page])
+    getUsersCount()
+    console.log('active user count: ' + activeUserCount)
+  }, [page, entries])
 
   useEffect(() => {
     getArchivedUsers()
@@ -76,10 +78,6 @@ const AdminUserAccounts = () => {
     getUsers()
     getArchivedUsers()
   }, [refreshCounter])
-
-  useEffect(() => {
-    getUsersCount()
-  }, [page])
 
   //calculate count on client side function instead, this is stupid
   const getUsersCount = async () => {
@@ -316,13 +314,6 @@ const AdminUserAccounts = () => {
         {isLoading ? <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} /> : ''}
         <TabPanels>
           <TabPanel>
-            {/* {isLoading !== true && users.length === 0 ? (
-              <Text fontWeight={'semibold'} fontSize={'2xl'} textAlign={'center'}>
-                No Users
-              </Text>
-            ) : */}
-            {/* <Suspense fallback={'loading...'}> */}
-            {/* <Suspense fallback={'loading...'}> */}
             <CustomTable
               users={users}
               handleArchiveOpen={handleArchiveOpen}
@@ -331,18 +322,15 @@ const AdminUserAccounts = () => {
               hasEditButton={true}
               hasArchiveButton={true}
             />
-            {/* </Suspense> */}
-            {/* <Suspense fallback={'loading...'}> */}
+
             <Pagination
-              numOfPages={Math.max(activeUserCount / entries, 1)}
+              numOfPages={Math.round(Math.max(activeUserCount / entries, 1))}
               page={page}
               setPage={setPage}
+              setEntries={setEntries}
             />
-            {/* </Suspense> */}
-            {/* </Suspense> */}
           </TabPanel>
           <TabPanel>
-            {/* <Suspense fallback={'loading...'}> */}
             <CustomTable
               users={archivedUsers}
               handleDeleteOpen={handleDeleteOpen}
@@ -350,14 +338,13 @@ const AdminUserAccounts = () => {
               hasRestoreButton={true}
               hasDeleteButton={true}
             />
-            {/* </Suspense> */}
-            {/* <Suspense fallback={'loading...'}> */}
+
             <Pagination
-              numOfPages={Math.max(archivedUserCount / entries, 1)}
+              numOfPages={Math.round(Math.max(archivedUserCount / entries, 1))}
               page={archivedPage}
               setPage={setArchivedPage}
+              setEntries={setEntries}
             />
-            {/* </Suspense> */}
           </TabPanel>
         </TabPanels>
       </Tabs>
