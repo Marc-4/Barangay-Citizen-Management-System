@@ -10,12 +10,6 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
     console.log(initialValues)
     setProfilePhoto(initialValues?.profilePhoto)
   }, [])
-  // const revertBase64 = (imageBuf) => {
-  //   console.log(profilePhoto)
-  //   let base64String = Buffer.from(imageBuf).toString('base64')
-
-  //   return `data:image/png;base64,${base64String}`
-  // }
 
   return (
     <>
@@ -125,6 +119,7 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
               w={'100%'}
               colorScheme='green'
               type='submit'
+              isLoading={isSubmitting}
               isDisabled={isSubmitting}
             >
               Confirm Update

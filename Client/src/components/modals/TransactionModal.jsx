@@ -15,22 +15,14 @@ import { useState } from 'react'
 import callAPI from '../../utils/callAPI'
 import { useParams } from 'react-router-dom'
 
-const TransactionModal = ({
-  isOpen,
-  onClose,
-  transaction,
-  onUpdate,
-  status,
-}) => {
+const TransactionModal = ({ isOpen, onClose, transaction, onUpdate, status }) => {
   const { id } = useParams()
   const [error, setError] = useState()
   const [success, setSuccess] = useState()
   const [message, setMessage] = useState(
     status === 'ACCEPTED'
       ? `Go to the barangay hall to get your requested document(s). Prepare a sum of ${
-          transaction?.formData?.cost
-            ? 'P' + transaction?.formData?.cost
-            : '[amount]'
+          transaction?.formData?.cost ? 'P' + transaction?.formData?.cost : '[amount]'
         } to pay to the treasurer.`
       : `Invalid requirements.`
   )
@@ -92,15 +84,8 @@ const TransactionModal = ({
       <Modal size={'xl'} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader
-            pb={0}
-            textAlign={'center'}
-            fontSize={'3xl'}
-            fontWeight={'bold'}
-          >
-            {status === 'ACCEPTED'
-              ? 'Accept User Transaction'
-              : 'Reject User Transaction'}
+          <ModalHeader pb={0} textAlign={'center'} fontSize={'3xl'} fontWeight={'bold'}>
+            {status === 'ACCEPTED' ? 'Accept User Transaction' : 'Reject User Transaction'}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -120,6 +105,7 @@ const TransactionModal = ({
               {status === 'ACCEPTED' ? (
                 <Button
                   isDisabled={isLoading}
+                  isLoading={isLoading}
                   onClick={(e) => {
                     setMessage()
                     editTransaction()
@@ -132,6 +118,7 @@ const TransactionModal = ({
               ) : (
                 <Button
                   isDisabled={isLoading}
+                  isLoading={isLoading}
                   onClick={() => editTransaction()}
                   colorScheme='red'
                   type='submit'

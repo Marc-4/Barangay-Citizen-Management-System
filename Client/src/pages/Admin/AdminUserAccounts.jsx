@@ -68,6 +68,7 @@ const AdminUserAccounts = () => {
     getUsers()
     getUsersCount()
     console.log('active user count: ' + activeUserCount)
+    console.log(users)
   }, [page, entries])
 
   useEffect(() => {
@@ -77,6 +78,7 @@ const AdminUserAccounts = () => {
   useEffect(() => {
     getUsers()
     getArchivedUsers()
+    console.log(users)
   }, [refreshCounter])
 
   //calculate count on client side function instead, this is stupid

@@ -8,7 +8,7 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Button,
-  Text
+  Text,
 } from '@chakra-ui/react'
 
 const DeleteAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }) => {
@@ -28,7 +28,7 @@ const DeleteAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }
         if (onUpdate) {
           onUpdate()
         }
-      } 
+      }
       // else setError(response.payload.error)
     } catch (error) {
       console.log(error)
@@ -40,11 +40,7 @@ const DeleteAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }
 
   return (
     <>
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
+      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
@@ -52,17 +48,22 @@ const DeleteAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure you want to delete {user?.username}? This action is
-              permanent.
+              Are you sure you want to delete {user?.username}? This action is permanent.
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button isDisabled={submitting} ref={cancelRef} onClick={onClose}>
+              <Button
+                isDisabled={submitting}
+                isLoading={submitting}
+                ref={cancelRef}
+                onClick={onClose}
+              >
                 Cancel
               </Button>
               <Button
                 colorScheme='red'
                 isDisabled={submitting}
+                isLoading={submitting}
                 onClick={async () => {
                   await deleteAccount()
                   onClose()
@@ -72,7 +73,7 @@ const DeleteAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }
                 Delete
               </Button>
             </AlertDialogFooter>
-              {/* <Text display={error ? 'block' : 'none'}>{error}</Text> */}
+            {/* <Text display={error ? 'block' : 'none'}>{error}</Text> */}
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>

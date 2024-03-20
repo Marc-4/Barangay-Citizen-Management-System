@@ -126,6 +126,7 @@ const BarangayClearance = () => {
 
                 <Button
                   isDisabled={loading}
+                  isLoading={loading}
                   size={'md'}
                   m={'auto'}
                   w={'250px'}

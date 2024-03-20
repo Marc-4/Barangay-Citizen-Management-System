@@ -31,12 +31,12 @@ const BarangayCertification = () => {
       const route = `http://localhost:3000/api/user/transaction/create`
       const body = {
         transacType: 'BRGY_CERT',
-          purpose: purpose,
-          income: '',
-          cost: 150,
+        purpose: purpose,
+        income: '',
+        cost: 150,
       }
       const response = await callAPI(body, 'POST', route)
-      console.log(response.payload);
+      console.log(response.payload)
       if (response.result === 'OK') {
         setSuccess('Successfully Booked Transaction!')
         setError(null)
@@ -77,7 +77,7 @@ const BarangayCertification = () => {
   }
 
   const createNotification = async (transaction) => {
-    console.log(transaction);
+    console.log(transaction)
     try {
       const body = {
         notifType: 'TRANSACTION',
@@ -125,6 +125,7 @@ const BarangayCertification = () => {
 
                 <Button
                   isDisabled={loading}
+                  isLoading={loading}
                   size={'md'}
                   m={'auto'}
                   w={'250px'}

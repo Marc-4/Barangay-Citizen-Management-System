@@ -7,11 +7,12 @@ import {
   Tabs,
   TabList,
   Tab,
+  Box,
   TabPanel,
   Button,
   TabPanels,
   Spinner,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react'
 import AddTransactionModal from '../modals/AddTransactionModal'
 import TransactionCard from '../cards/TransactionCard'
@@ -84,7 +85,7 @@ const GenUser = () => {
 
   return (
     <>
-    <AddTransactionModal
+      <AddTransactionModal
         {...{
           isOpen: isTransactionOpen,
           onClose: onTransactionClose,
@@ -98,9 +99,11 @@ const GenUser = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-          <Button mt={'5px'} colorScheme='facebook' onClick={onTransactionOpen}>
-            Add transaction
-          </Button>
+            <Box display={'flex'} w={'950px'} margin={'auto'}>
+              <Button mt={'5px'} colorScheme='facebook' onClick={onTransactionOpen}>
+                Add transaction
+              </Button>
+            </Box>
             <Text
               fontSize={'2xl'}
               display={accountError ? 'block' : 'none'}
@@ -110,11 +113,7 @@ const GenUser = () => {
             >
               {accountError}
             </Text>
-            <Spinner
-              m={'auto'}
-              size={'xl'}
-              display={isLoading ? 'block' : 'none'}
-            />
+            <Spinner m={'auto'} size={'xl'} display={isLoading ? 'block' : 'none'} />
             {isLoading ? null : !account ? (
               <Text fontSize={'2xl'}>This user has no Profile.</Text>
             ) : (

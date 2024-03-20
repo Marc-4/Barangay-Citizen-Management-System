@@ -2,14 +2,11 @@ import { VStack, Box, Heading, Divider, Text, Link } from '@chakra-ui/react'
 import { Link as rr_Link } from 'react-router-dom'
 
 const TransactionDetailCard = ({ title, data, name }) => {
-  console.log(name)
   return (
     // <VStack spacing={4} align='start'>
     <Box
-      w={'1000px'}
+      w={'100%'}
       id='transaction_details'
-      marginTop={'25px'}
-      marginBottom={'25px'}
       pl={'10px'}
       p={'25px'}
       rounded={'10px'}
@@ -33,16 +30,8 @@ const TransactionDetailCard = ({ title, data, name }) => {
               <Text textAlign={'center'} fontWeight='bold'>
                 Requestor:
               </Text>
-              <Link
-                color={'brand.500'}
-                as={rr_Link}
-                to={`/admin/users/${data.accountID}`}
-              >
-                <Text
-                  color={'primary.main'}
-                  fontWeight={'semibold'}
-                  textAlign={'center'}
-                >
+              <Link color={'brand.500'} as={rr_Link} to={`/admin/users/${data.accountID}`}>
+                <Text color={'primary.main'} fontWeight={'semibold'} textAlign={'center'}>
                   {name === 'undefined, undefined' ? 'no data' : name}
                 </Text>
               </Link>
@@ -53,10 +42,9 @@ const TransactionDetailCard = ({ title, data, name }) => {
           <Text textAlign={'center'} fontWeight='bold'>
             Date:
           </Text>
-          <Text textAlign={'center'}>
-            {new Date(data.timestamp).toLocaleDateString()}
-          </Text>
+          <Text textAlign={'center'}>{new Date(data.timestamp).toLocaleDateString()}</Text>
         </Box>
+
         <Box>
           <Text textAlign={'center'} fontWeight='bold'>
             Transaction Type:

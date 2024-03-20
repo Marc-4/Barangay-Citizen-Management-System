@@ -20,23 +20,23 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role, editingSelf }
   const accountRole = localStorage.getItem('userRole')
 
   const validationSchema = object({
-    firstName: string().matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols'),
-    middleName: string().matches(/^[A-Za-z\s.'-]+$/, 'Middle Name must not contain symbols'),
-    lastName: string().matches(/^[A-Za-z\s.'-]+$/, 'Last Name must not contain symbols'),
+    firstName: string().matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols').required("required"),
+    middleName: string().matches(/^[A-Za-z\s.'-]+$/, 'Middle Name must not contain symbols').required("required"),
+    lastName: string().matches(/^[A-Za-z\s.'-]+$/, 'Last Name must not contain symbols').required("required"),
     dateOfBirth: date()
       .max(new Date(), 'Date of Birth cannot be in the future')
-      .min(new Date('1900-01-01'), 'Date of Birth cannot be before 1900'),
-    placeOfBirth_city: string(),
-    placeOfBirth_province: string(),
-    placeOfBirth_country: string(),
-    sex: string().required('Please specify the gender.'),
-    civilStatus: string(),
-    occupation: string(),
-    citizenship: string(),
+      .min(new Date('1900-01-01'), 'Date of Birth cannot be before 1900').required("required"),
+    placeOfBirth_city: string().required("required"),
+    placeOfBirth_province: string().required("required"),
+    placeOfBirth_country: string().required("required"),
+    sex: string().required('Please specify the gender.').required("required"),
+    civilStatus: string().required("required"),
+    occupation: string().required("required"),
+    citizenship: string().required("required"),
     email: string().email(),
-    address_streetName: string(),
-    address_houseNumber: string(),
-    address_subdivisionPurok: string(),
+    address_streetName: string().required("required"),
+    address_houseNumber: string().required("required"),
+    address_subdivisionPurok: string().required("required"),
     profilePhoto: mixed(),
   })
 

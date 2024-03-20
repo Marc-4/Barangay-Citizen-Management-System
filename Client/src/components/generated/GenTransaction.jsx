@@ -5,32 +5,23 @@ import callAPI from '../../utils/callAPI'
 import TransactionDetailCard from '../cards/TransactionDetailCard'
 import TransactionContentCard from '../cards/TransactionContentCard'
 import TransactionModal from '../modals/TransactionModal'
+import EditTransactionModal from '../modals/EditTransactionModal'
 
 const GenTransaction = () => {
   const { id } = useParams()
   const [transactionData, setTransactionData] = useState(null)
   const [ownerAccount, setOwnerAccount] = useState(null)
   const [error, setError] = useState(null)
-  
-  const role = localStorage.getItem('userRole')
-  const {
-    isOpen: isAcceptOpen,
-    onOpen: onAcceptOpen,
-    onClose: onAcceptClose,
-  } = useDisclosure()
-  const {
-    isOpen: isRejectOpen,
-    onOpen: onRejectOpen,
-    onClose: onRejectClose,
-  } = useDisclosure()
 
+  const role = localStorage.getItem('userRole')
+  const { isOpen: isAcceptOpen, onOpen: onAcceptOpen, onClose: onAcceptClose } = useDisclosure()
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
+  const { isOpen: isRejectOpen, onOpen: onRejectOpen, onClose: onRejectClose } = useDisclosure()
 
   useEffect(() => {
-    fetchTransactionData();
-    console.log('fetching transaction..');
-
-  }, [id]);
-
+    fetchTransactionData()
+    console.log('fetching transaction..')
+  }, [id])
 
   const fetchTransactionData = async () => {
     try {
@@ -49,19 +40,27 @@ const GenTransaction = () => {
     }
   }
 
-  const handleUpdate = () =>{
+  const handleUpdate = () => {
     fetchTransactionData()
   }
 
   return (
     <>
+      <EditTransactionModal
+        {...{
+          isOpen: isEditOpen,
+          onClose: onEditClose,
+          transaction: transactionData,
+          onUpdate: handleUpdate,
+        }}
+      />
       <TransactionModal
         {...{
           isOpen: isAcceptOpen,
           onClose: onAcceptClose,
           transaction: transactionData,
           onUpdate: handleUpdate,
-          status: 'ACCEPTED'
+          status: 'ACCEPTED',
         }}
       />
       <TransactionModal
@@ -70,31 +69,27 @@ const GenTransaction = () => {
           onClose: onRejectClose,
           transaction: transactionData,
           onUpdate: handleUpdate,
-          status: 'REJECTED'
+          status: 'REJECTED',
         }}
       />
-      <Box borderRadius={'10px'} maxW={'1000px'} padding={'25px'} m={'auto'}>
+      <Box borderRadius={'10px'} maxW={'950px'} m={'auto'}>
         {error && (
-          <Text
-            fontSize={'2xl'}
-            color={'tomato'}
-            fontWeight={'semibold'}
-            textAlign={'center'}
-          >
+          <Text fontSize={'2xl'} color={'tomato'} fontWeight={'semibold'} textAlign={'center'}>
             {error}
           </Text>
         )}
         {transactionData && (
           <>
-            <VStack spacing={4} justifyContent={'center'}>
+            <VStack spacing={4} justifyContent={'center'} p={'25px'}>
+              <Box w={'950px'} m={'auto'}>
+                <Button colorScheme='green' onClick={() => onEditOpen()}>
+                  Edit Transaction
+                </Button>
+              </Box>
               <TransactionDetailCard
                 title='Transaction Details'
                 data={transactionData}
-                name={
-                  transactionData.userFirstName +
-                  ', ' +
-                  transactionData.userLastName
-                }
+                name={transactionData.userFirstName + ', ' + transactionData.userLastName}
               />
               <TransactionContentCard
                 title='Form Data'
@@ -107,7 +102,9 @@ const GenTransaction = () => {
                 <Button onClick={() => onAcceptOpen()} colorScheme='green'>
                   Accept
                 </Button>
-                <Button onClick={()=> onRejectOpen()} colorScheme='red'>Reject</Button>
+                <Button onClick={() => onRejectOpen()} colorScheme='red'>
+                  Reject
+                </Button>
               </Box>
             ) : (
               ''

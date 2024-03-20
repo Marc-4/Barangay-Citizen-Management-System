@@ -89,6 +89,7 @@ const EditCredentialsForm = ({ onSubmit, validationSchema, initialValues }) => {
               w={'100%'}
               colorScheme='green'
               type='submit'
+              isLoading={isSubmitting}
               isDisabled={isSubmitting}
             >
               Confirm Update

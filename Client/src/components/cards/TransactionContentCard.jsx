@@ -1,13 +1,4 @@
-import {
-  VStack,
-  Box,
-  Heading,
-  Divider,
-  Text,
-  Input,
-  Textarea,
-  Button,
-} from '@chakra-ui/react'
+import { VStack, Box, Heading, Divider, Text, Input, Textarea, Button } from '@chakra-ui/react'
 import { Buffer } from 'buffer'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/TextLayer.css'
@@ -52,17 +43,26 @@ const TransactionContentCard = ({ title, data, profile }) => {
         <Box
           minW={'600px'}
           id='profile_details'
-          marginTop={'25px'}
-          marginBottom={'25px'}
+        
           pl={'10px'}
           p={'25px'}
           rounded={'10px'}
           bg={'gray.300'}
           textColor={'brand.100'}
         >
-          <Heading textAlign={'center'} fontSize={'2xl'} marginBottom={'25px'}>
-            {title}
-          </Heading>
+          <Box
+            w={'100%'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            display={'flex'}
+            gap={'10px'}
+            mb={'15px'}
+          >
+            <Heading textAlign={'center'} fontSize={'2xl'}>
+              {title}
+            </Heading>
+          </Box>
+
           <Divider w='100%' borderColor={'brand.100'} marginBottom={'25px'} />
           <Box>
             <Text fontWeight='bold'>Purpose:</Text>
@@ -71,28 +71,25 @@ const TransactionContentCard = ({ title, data, profile }) => {
               value={data?.purpose}
               isReadOnly={true}
               borderColor={'primary.main'}
-              _hover={{borderColor:'secondary.main'}}
+              _hover={{ borderColor: 'secondary.main' }}
             />
           </Box>
           <Box>
-            {data?.income ? (
-              <Box>
-                <Text fontWeight='bold'>Income:</Text>
-                <Text>{data?.income}</Text>
-              </Box>
-            ) : (
-              ''
-            )}
+            
             <Box display={'flex'} gap={'5px'}>
               <Text fontWeight='bold'>Cost:</Text>
-              <Text>{data?.cost}</Text>
+              <Text>{data?.cost || 'N/A'}</Text>
+            </Box>
+            <Box display={'flex'} gap={'5px'}>
+              <Text fontWeight='bold'>Income:</Text>
+              <Text>{data?.income || 'N/A'}</Text>
             </Box>
           </Box>
           <Box>
             <Text fontWeight='bold'>Attachments:</Text>
 
             {data?.attachment ? (
-              <VStack w={'100%'} overflow={'auto'} >
+              <VStack w={'100%'} overflow={'auto'}>
                 <Document file={revertBase64(data.attachment.data)}>
                   <Page pageNumber={1} style={{ width: '100%' }} />
                 </Document>

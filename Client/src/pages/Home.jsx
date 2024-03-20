@@ -139,6 +139,7 @@ const Home = () => {
                   w={'250px'}
                   mt={'10px'}
                   isDisabled={isLoading}
+                  isLoading={isLoading}
                   colorScheme='blue'
                   type='submit'
                 >

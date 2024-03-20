@@ -20,6 +20,7 @@ const AddTransactionModal = ({ isOpen, onClose, onUpdate }) => {
   const { id } = useParams()
   const toast = useToast()
   const role = localStorage.getItem('userRole')
+  
   const validationSchema = object({
     transacType: string().required('required'),
     income: number(),
@@ -52,7 +53,7 @@ const AddTransactionModal = ({ isOpen, onClose, onUpdate }) => {
           isClosable: 'true',
           position: 'bottom-right',
         })
-        onUpdate
+        onUpdate()
       } else {
         toast({
           title: 'error',

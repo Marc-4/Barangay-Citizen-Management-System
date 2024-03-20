@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import UpcomingTransactions from '../../components/UpcomingTransactions'
-import { BsFillPersonBadgeFill } from "react-icons/bs";
+import { BsFillPersonBadgeFill } from 'react-icons/bs'
 import { FaUser, FaUserCog } from 'react-icons/fa'
 import { HiDocumentText, HiClipboardDocumentList } from 'react-icons/hi2'
 import callAPI from '../../utils/callAPI'
@@ -19,16 +19,15 @@ const AdminDashboard = () => {
   const [totalUsers, setTotalUsers] = useState('-')
   const [totalEmployees, setTotalEmployees] = useState('-')
   const [lifetimeTransactions, setLifetimeTransactions] = useState('-')
-  const [totalPendingRequests, setPendingRequests] = useState('-')
-  const [totalPendingTransactions, setPendingTransactions] = useState('-')
+  // const [totalPendingRequests, setPendingRequests] = useState('-')
+  // const [totalPendingTransactions, setPendingTransactions] = useState('-')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     getUsers()
     getEmployees()
-    getRequests()
-    getTransactions()
+    // getRequests()
     getAllTransactions()
   }, [])
 
@@ -69,42 +68,24 @@ const AdminDashboard = () => {
       setIsLoading(false)
     }
   }
-  const getRequests = async () => {
-    setIsLoading(true)
-    const body = null
-    const method = 'GET'
-    const route = `http://localhost:3000/api/admin/requests/?entries=0`
-    try {
-      const data = await callAPI(body, method, route)
-      if (data && data.result === 'OK') {
-        setPendingRequests(data.payload)
-        setError(null)
-      }
-    } catch (error) {
-      console.log(error)
-      setError('Connection Error')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-  const getTransactions = async () => {
-    setIsLoading(true)
-    const body = null
-    const method = 'GET'
-    const route = `http://localhost:3000/api/admin/transactions/?entries=0`
-    try {
-      const data = await callAPI(body, method, route)
-      if (data && data.result === 'OK') {
-        setError(null)
-        setPendingTransactions(data.payload)
-      }
-    } catch (error) {
-      console.log(error)
-      setError('Connection Error')
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  // const getRequests = async () => {
+  //   setIsLoading(true)
+  //   const body = null
+  //   const method = 'GET'
+  //   const route = `http://localhost:3000/api/admin/requests/?entries=0`
+  //   try {
+  //     const data = await callAPI(body, method, route)
+  //     if (data && data.result === 'OK') {
+  //       setPendingRequests(data.payload)
+  //       setError(null)
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //     setError('Connection Error')
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
 
   const getAllTransactions = async () => {
     setIsLoading(true)
@@ -128,6 +109,8 @@ const AdminDashboard = () => {
   return (
     <>
       <SimpleGrid
+      m={'auto'}
+        w={'87%'}
         id='stats_table'
         spacing={'50px'}
         minChildWidth={'250px'}
@@ -136,12 +119,7 @@ const AdminDashboard = () => {
       >
         <Card>
           <CardHeader>
-            <Icon
-              as={FaUser}
-              boxSize={'10'}
-              display={'inline-block'}
-              mr={'15px'}
-            ></Icon>
+            <Icon as={FaUser} boxSize={'10'} display={'inline-block'} mr={'15px'}></Icon>
             <Heading display={'inline-block'}>{totalUsers}</Heading>
           </CardHeader>
           <CardBody>
@@ -182,24 +160,6 @@ const AdminDashboard = () => {
             </Text>
           </CardBody>
         </Card>
-        <Card>
-          <CardHeader>
-            <Icon
-              as={HiDocumentText}
-              boxSize={'10'}
-              display={'inline-block'}
-              mr={'15px'}
-            ></Icon>
-            <Heading display={'inline-block'}>
-              {totalPendingTransactions}
-            </Heading>
-          </CardHeader>
-          <CardBody>
-            <Text fontSize={'xl'} fontWeight={'semibold'}>
-              Pending Transactions
-            </Text>
-          </CardBody>
-        </Card>
         {/* <Card>
           <CardHeader>
             <Icon
@@ -219,13 +179,7 @@ const AdminDashboard = () => {
           </CardBody>
         </Card> */}
       </SimpleGrid>
-      <SimpleGrid
-        id='transactions'
-        textAlign={'center'}
-        spacing={'4'}
-        p={'10px'}
-        rounded={'10px'}
-      >
+      <SimpleGrid id='transactions' textAlign={'center'} spacing={'4'} p={'10px'} rounded={'10px'}>
         <Heading>Recent Transactions</Heading>
         <Text
           fontSize={'2xl'}
@@ -235,12 +189,7 @@ const AdminDashboard = () => {
         >
           {error}
         </Text>
-        <Spinner
-          display={isLoading ? 'block' : 'none'}
-          m={'auto'}
-          size={'xl'}
-          mt={'25px'}
-        />
+        <Spinner display={isLoading ? 'block' : 'none'} m={'auto'} size={'xl'} mt={'25px'} />
         <UpcomingTransactions />
       </SimpleGrid>
     </>

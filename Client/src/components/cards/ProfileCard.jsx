@@ -7,25 +7,28 @@ import {
   Text,
   Stack,
   Spacer,
+  Input,
+  Button,
 } from '@chakra-ui/react'
 
 import { Buffer } from 'buffer'
+import { useState } from 'react'
 
-const ProfileCard = (data) => {
+const ProfileCard = (data, onProfileOpen) => {
   const revertBase64 = (imageBuf) => {
     let base64String = Buffer.from(imageBuf).toString('base64')
 
     return `data:image/png;base64,${base64String}`
   }
 
+  const [isEditing, setIsEditing] = useState(false)
+
+  //validate request data
+  //send request to db
+  const sendRequest = () => {}
   return (
     <>
-      <Container
-        borderRadius={'10px'}
-        maxW={'1000px'}
-        padding={'25px'}
-        textColor={'brand.100'}
-      >
+      <Container borderRadius={'10px'} maxW={'1000px'} padding={'25px'} textColor={'brand.100'}>
         <Box
           id='profile_photo'
           display={'flex'}
@@ -59,248 +62,333 @@ const ProfileCard = (data) => {
             <Text fontSize={'3xl'} fontWeight={'semibold'}>
               {data
                 ? data.data.profile
-                  ? `${data.data.profile?.lastName || ''}, ${
-                      data.data.profile?.firstName || ''
-                    } ${data.data.profile?.middleName || ''}`
+                  ? `${data.data.profile?.lastName || ''}, ${data.data.profile?.firstName || ''} ${
+                      data.data.profile?.middleName || ''
+                    }`
                   : 'N/A'
                 : 'Loading...'}
             </Text>
-            <Text fontSize={'xl'}>Username: {data.data.username}</Text>
-            <Text color={'brand.400'}>#{data.data._id}</Text>
+            <Text fontSize={'xl'} fontWeight={'semibold'}>
+              Username: {data.data.username}
+            </Text>
+            <Text color={'gray.400'}>#{data.data._id}</Text>
             <Spacer mt={'50px'} mb={'45px'} />
-            <Text fontSize={'xl'}>
-              Registered On:{' '}
-              {new Date(data.data.dateOfCreation).toLocaleDateString()}
+            <Text fontSize={'md'}>
+              Registered On: {new Date(data.data.dateOfCreation).toDateString()}
             </Text>
           </Stack>
         </Box>
 
-        <Box id='profile_details' pl={'10px'} p={'25px'} rounded={'10px'}>
-          <Heading marginBottom={'25px'}>Profile Details</Heading>
-          <Flex pl={'10px'} justify={'space-between'} wrap={'wrap'}>
+        <Box
+          bg={'gray.100'}
+          id='profile_details'
+          pl={'10px'}
+          p={'25px'}
+          mt={'25px'}
+          rounded={'10px'}
+          shadow={'md'}
+        >
+          <Box display={'flex'} gap={'10px'} alignItems={'normal'}>
+            <Heading marginBottom={'25px'}>General Information</Heading>
+            {/* <Button
+              display={!isEditing ? 'block' : 'none'}
+              colorScheme='green'
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </Button> */}
+          </Box>
+          <Flex pl={'10px'} justify={'space-between'} gap={'10px'} wrap={'wrap'} flexDir={'column'}>
+            <Box bg={'white'} p={'10px'} rounded={'10px'} shadow={'base'}>
+              <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                Name
+              </Heading>
+              <Box id='name' w={'100%'} marginBottom={'25px'} display={'flex'} gap={'10px'}>
+                <div>
+                  <Heading
+                    mr={'10px'}
+                    display={'inline-block'}
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mb={'5px'}
+                  >
+                    First Name
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={data ? `${data.data.profile?.firstName || 'N/A'}` : 'Loading...'}
+                  />
+                </div>
+                <div>
+                  <Heading
+                    mr={'10px'}
+                    display={'inline-block'}
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mb={'5px'}
+                  >
+                    Last Name
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={data ? `${data.data.profile?.lastName || 'N/A'}` : 'Loading...'}
+                  />
+                </div>
+                <div>
+                  <Heading
+                    mr={'10px'}
+                    display={'inline-block'}
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mb={'5px'}
+                  >
+                    Middle Name
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={data ? `${data.data.profile?.middleName || 'N/A'}` : 'Loading...'}
+                  />
+                </div>
+              </Box>
+              <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                Date of Birth
+              </Heading>
+              <Box
+                id='date_of_birth'
+                w={'100%'}
+                marginBottom={'25px'}
+                display={'flex'}
+                gap={'10px'}
+              >
+                <div>
+                  <Input
+                    type='date'
+                    readOnly
+                    value={
+                      data
+                        ? `${
+                            data.data.profile?.dateOfBirth
+                              ? new Date(data.data.profile?.dateOfBirth)
+                                  .toISOString('en-US', {
+                                    month: 'long',
+                                  })
+                                  .split('T')[0] || ''
+                              : 'N/A'
+                          }`
+                        : 'Loading...'
+                    }
+                  />
+                </div>
+              </Box>
+              <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                Place Of Birth
+              </Heading>
+              <Box
+                id='place_of_birth'
+                w={'100%'}
+                marginBottom={'25px'}
+                display={'flex'}
+                gap={'10px'}
+              >
+                <div>
+                  <Heading
+                    mr={'10px'}
+                    display={'inline-block'}
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mb={'5px'}
+                  >
+                    City
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={
+                      data
+                        ? data.data.profile
+                          ? `${data.data.profile?.placeOfBirth?.city}`
+                          : 'N/A'
+                        : 'Loading...'
+                    }
+                  />
+                </div>
+                <div>
+                  <Heading
+                    mr={'10px'}
+                    display={'inline-block'}
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mb={'5px'}
+                  >
+                    Province
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={
+                      data
+                        ? data.data.profile
+                          ? `${data.data.profile?.placeOfBirth?.province}`
+                          : 'N/A'
+                        : 'Loading...'
+                    }
+                  />
+                </div>
+                <div>
+                  <Heading
+                    mr={'10px'}
+                    display={'inline-block'}
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mb={'5px'}
+                  >
+                    Country
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={
+                      data
+                        ? data.data.profile
+                          ? `${data.data.profile?.placeOfBirth?.country}`
+                          : 'N/A'
+                        : 'Loading...'
+                    }
+                  />
+                </div>
+              </Box>
+            </Box>
+
             <Box
+              justifyContent={'center'}
+              bg={'white'}
               p={'10px'}
               rounded={'10px'}
-              bg={'primary.100'}
+              shadow={'base'}
+              display={'flex'}
+              gap={'10px'}
             >
-              <Box id='name' w={'250px'} marginBottom={'25px'}>
-                <div>
-                  <Heading fontSize={'2xl'}>Name</Heading>
-                  <Heading
-                    mr={'10px'}
-                    display={'inline-block'}
-                    fontSize={'large'}
-                    fontWeight={'semibold'}
-                  >
-                    First Name:
-                  </Heading>
-                  <Text display={'inline-block'}>
-                    {data
-                      ? `${data.data.profile?.firstName || 'N/A'}`
-                      : 'Loading...'}
-                  </Text>
-                </div>
-                <div>
-                  <Heading
-                    mr={'10px'}
-                    display={'inline-block'}
-                    fontSize={'large'}
-                    fontWeight={'semibold'}
-                  >
-                    Last Name:
-                  </Heading>
-                  <Text display={'inline-block'}>
-                    {data
-                      ? `${data.data.profile?.lastName || 'N/A'}`
-                      : 'Loading...'}
-                  </Text>
-                </div>
-                <div>
-                  <Heading
-                    mr={'10px'}
-                    display={'inline-block'}
-                    fontSize={'large'}
-                    fontWeight={'semibold'}
-                  >
-                    Middle Name:
-                  </Heading>
-                  <Text display={'inline-block'}>
-                    {data
-                      ? `${data.data.profile?.middleName || 'N/A'}`
-                      : 'Loading...'}
-                  </Text>
-                </div>
-              </Box>
-              <Box id='date_of_birth' w={'250px'} marginBottom={'25px'}>
-                <Heading fontSize={'2xl'}>Date Of Birth</Heading>
-                <Heading
-                  mr={'10px'}
-                  display={'inline-block'}
-                  fontSize={'large'}
-                  fontWeight={'semibold'}
-                >
-                  Month:
+              <Box>
+                <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                  Gender
                 </Heading>
-                <Text display={'inline-block'}>
-                  {data
-                    ? `${
-                        data.data.profile?.dateOfBirth
-                          ? new Date(
-                              data.data.profile?.dateOfBirth
-                            ).toLocaleDateString('en-US', {
-                              month: 'long',
-                            }) || ''
+                <Box id='Sex' w={'200px'} marginBottom={'25px'}>
+                  <Input
+                    readOnly
+                    value={
+                      data
+                        ? data.data.profile
+                          ? `${data.data.profile?.sex}`
                           : 'N/A'
-                      }`
-                    : 'Loading...'}
-                </Text>
-                <br />
-                <Heading
-                  mr={'10px'}
-                  display={'inline-block'}
-                  fontSize={'large'}
-                  fontWeight={'semibold'}
-                >
-                  Day:
-                </Heading>
-                <Text display={'inline-block'}>
-                  {' '}
-                  {data
-                    ? `${
-                        data.data.profile?.dateOfBirth
-                          ? new Date(
-                              data.data.profile?.dateOfBirth
-                            ).toLocaleDateString('en-US', {
-                              day: '2-digit',
-                            }) || 'N/A'
-                          : 'N/A'
-                      }`
-                    : 'Loading...'}
-                </Text>{' '}
-                <br />
-                <Heading
-                  mr={'10px'}
-                  display={'inline-block'}
-                  fontSize={'large'}
-                  fontWeight={'semibold'}
-                >
-                  Year:
-                </Heading>
-                <Text display={'inline-block'}>
-                  {' '}
-                  {data
-                    ? `${
-                        data.data.profile?.dateOfBirth
-                          ? new Date(
-                              data.data.profile?.dateOfBirth
-                            ).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                            }) || 'N/A'
-                          : 'N/A'
-                      }`
-                    : 'Loading...'}
-                </Text>
-              </Box>
-              <Box id='place_of_birth' w={'200px'} marginBottom={'25px'}>
-                <Heading fontSize={'2xl'}>Place Of Birth</Heading>
-                <Text>
-                  {data
-                    ? data.data.profile
-                      ? `${
-                          data.data.profile?.placeOfBirth?.city +
-                          ' ' +
-                          data.data.profile?.placeOfBirth?.province +
-                          ', ' +
-                          data.data.profile?.placeOfBirth?.country
-                        }`
-                      : 'N/A'
-                    : 'Loading...'}
-                </Text>
-              </Box>
-            </Box>
-            <Box bg={'primary.100'} p={'10px'} rounded={'10px'}>
-              <Box id='Sex' w={'200px'} marginBottom={'25px'}>
-                <Heading fontSize={'2xl'}>Gender</Heading>
-                <Text>
-                  {data ? `${data.data.profile?.sex || 'N/A'}` : 'Loading...'}
-                </Text>
+                        : 'Loading...'
+                    }
+                  />
+                </Box>
               </Box>
               <Box id='civil_status' w={'200px'} marginBottom={'25px'}>
-                <Heading fontSize={'2xl'}>Civil Status</Heading>
-                <Text>
-                  {data
-                    ? `${data.data.profile?.civilStatus || 'N/A'}`
-                    : 'Loading...'}
-                </Text>
+                <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                  Civil Status
+                </Heading>
+                <Input
+                  readOnly
+                  value={
+                    data
+                      ? data.data.profile
+                        ? `${data.data.profile?.civilStatus}`
+                        : 'N/A'
+                      : 'Loading...'
+                  }
+                />
               </Box>
               <Box id='occupation' w={'200px'} marginBottom={'25px'}>
-                <Heading fontSize={'2xl'}>Occupation</Heading>
-                <Text>
-                  {data
-                    ? `${data.data.profile?.occupation || 'N/A'}`
-                    : 'Loading...'}
-                </Text>
+                <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                  Occupation
+                </Heading>
+                <Input
+                  readOnly
+                  value={data ? `${data.data.profile?.occupation || 'N/A'}` : 'Loading...'}
+                />
               </Box>
               <Box id='citizenship' w={'200px'} marginBottom={'25px'}>
-                <Heading fontSize={'2xl'}>Citizenship</Heading>
-                <Text>
-                  {data
-                    ? `${data.data.profile?.citizenship || 'N/A'}`
-                    : 'Loading...'}
-                </Text>
+                <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                  Citizenship
+                </Heading>
+                <Input
+                  readOnly
+                  value={data ? `${data.data.profile?.citizenship || 'N/A'}` : 'Loading...'}
+                />
               </Box>
             </Box>
-            <Box bg={'primary.100'} p={'10px'} rounded={'10px'}>
+            <Box bg={'white'} p={'10px'} rounded={'10px'} shadow={'base'}>
               <Box id='email' w={'200px'} marginBottom={'25px'}>
-                <Heading fontSize={'2xl'}>E-mail</Heading>
-                <Text>
-                  {data ? `${data.data.profile?.email || 'N/A'}` : 'Loading...'}
-                </Text>
+                <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                  Email
+                </Heading>
+                <Input
+                  type='email'
+                  readOnly
+                  value={data ? `${data.data.profile?.email || 'N/A'}` : 'Loading...'}
+                />
               </Box>
-              <Box id='residency' w={'250px'} marginBottom={'25px'}>
-                <Heading fontSize={'2xl'}>Address</Heading>
-                <Heading
-                  fontSize={'large'}
-                  fontWeight={'semibold'}
-                  mr={'10px'}
-                  display={'inline-block'}
-                >
-                  House Number:
-                </Heading>
-                <Text display={'inline-block'}>
-                  {data
-                    ? `${data.data.profile?.address.houseNumber || 'N/A'}`
-                    : 'Loading...'}
-                </Text>{' '}
-                <br />
-                <Heading
-                  fontSize={'large'}
-                  fontWeight={'semibold'}
-                  mr={'10px'}
-                  display={'inline-block'}
-                >
-                  Street:
-                </Heading>
-                <Text display={'inline-block'}>
-                  {data
-                    ? `${data.data.profile?.address.streetName || 'N/A'}`
-                    : 'Loading...'}
-                </Text>{' '}
-                <br />
-                <Heading
-                  fontSize={'large'}
-                  fontWeight={'semibold'}
-                  mr={'10px'}
-                  display={'inline-block'}
-                >
-                  Subdivision/Purok:
-                </Heading>
-                <Text display={'inline-block'}>
-                  {data
-                    ? `${data.data.profile?.address.subdivisionPurok || 'N/A'}`
-                    : 'Loading...'}
-                </Text>{' '}
-                <br />
+              <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                Address
+              </Heading>
+              <Box id='residency' w={'100%'} marginBottom={'25px'} display={'flex'} gap={'10px'}>
+                <div>
+                  <Heading
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mr={'10px'}
+                    display={'inline-block'}
+                  >
+                    House Number
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={
+                      data ? `${data.data.profile?.address.houseNumber || 'N/A'}` : 'Loading...'
+                    }
+                  />
+                </div>
+                <div>
+                  <Heading
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mr={'10px'}
+                    display={'inline-block'}
+                  >
+                    Street
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={
+                      data ? `${data.data.profile?.address.streetName || 'N/A'}` : 'Loading...'
+                    }
+                  />
+                </div>
+                <div>
+                  <Heading
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mr={'10px'}
+                    display={'inline-block'}
+                  >
+                    Subdivision/Purok
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={
+                      data
+                        ? `${data.data.profile?.address.subdivisionPurok || 'N/A'}`
+                        : 'Loading...'
+                    }
+                  />
+                </div>
+              </Box>
+              <Box display={isEditing ? 'flex' : 'none'} gap={'10px'} justifyContent={'end'}>
+                <Button colorScheme='green' onClick={() => sendRequest()}>
+                  Save
+                </Button>
+                <Button colorScheme='orange' onClick={() => setIsEditing(false)}>
+                  Cancel
+                </Button>
               </Box>
             </Box>
           </Flex>

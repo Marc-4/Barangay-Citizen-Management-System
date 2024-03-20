@@ -143,6 +143,7 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
               w={'100%'}
               colorScheme='blue'
               type='submit'
+              isLoading={isSubmitting}
               isDisabled={isSubmitting}
             >
               Register

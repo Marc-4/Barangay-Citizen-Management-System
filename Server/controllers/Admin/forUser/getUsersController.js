@@ -6,13 +6,13 @@ const getUsers = async (req, res) => {
   if (req.query.entries === undefined) sendError('Missing Required Fields', 404, res)
 
   var skip = (req.query.page - 1) * req.query.entries
-  
+
   if (req.query.page % 1 != 0) skip++
 
   // console.log('page: ' + req.query.page)
   // console.log('entries: ' + req.query.entries)
   // console.log('skip: ' + skip)
-  
+
   let users = []
 
   try {
@@ -23,6 +23,7 @@ const getUsers = async (req, res) => {
     else if (req.query.filter && req.query.filter == 'ARCHIVED')
       users = await User.find({ active: false })
         .select('-password')
+        .select('-profile.profilePhoto')
         .skip(skip)
         .limit(req.query.entries)
         // .sort({ _id: -1 })
@@ -30,6 +31,7 @@ const getUsers = async (req, res) => {
     else if (req.query.filter && req.query.filter == 'ACTIVE')
       users = await User.find({ active: true })
         .select('-password')
+        .select('-profile.profilePhoto')
         .skip(skip)
         .limit(req.query.entries)
         // .sort({ _id: -1 })

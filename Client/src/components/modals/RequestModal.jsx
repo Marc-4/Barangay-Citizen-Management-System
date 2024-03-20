@@ -157,6 +157,7 @@ const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
               {status === 'ACCEPTED' ? (
                 <Button
                   isDisabled={isLoading}
+                  isLoading={isLoading}
                   onClick={() => editRequest()}
                   colorScheme='blue'
                   type='submit'
@@ -166,7 +167,8 @@ const RequestModal = ({ isOpen, onClose, onUpdate, status }) => {
               ) : (
                 <Button
                   isDisabled={isLoading}
-                  onClick={() => editRequest()}
+                  isLoading={isLoading}
+              onClick={() => editRequest()}
                   colorScheme='red'
                   type='submit'
                 >

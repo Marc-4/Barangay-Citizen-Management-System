@@ -9,11 +9,7 @@ const AdminProfile = () => {
   const [profileData, setProfileData] = useState()
   const [error, setError] = useState()
 
-  const {
-    isOpen: isProfileOpen,
-    onOpen: onProfileOpen,
-    onClose: onProfileClose,
-  } = useDisclosure()
+  const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure()
 
   const {
     isOpen: isCredentialsOpen,
@@ -45,8 +41,8 @@ const AdminProfile = () => {
     console.log(profileData)
   }
 
-  useEffect(()=>{
-    console.log(profileData);
+  useEffect(() => {
+    console.log(profileData)
   })
 
   const handeUpdate = () => {
@@ -62,7 +58,7 @@ const AdminProfile = () => {
           onUpdate: handeUpdate,
           user: profileData,
           role: 'admin',
-          editingSelf: true
+          editingSelf: true,
         }}
       />
       <EditCredentialsModal
@@ -83,15 +79,15 @@ const AdminProfile = () => {
       >
         {error}
       </Text>
-      {/* <Box display={'flex'} gap={'10px'} p={'10px'} mt={'25px'} ml={'80px'}>
+      <Box m={'auto'} display={'flex'} width={'950px'} gap={'10px'} p={'10px'} mt={'25px'} pb={0} >
         <Button onClick={() => onProfileOpen()} colorScheme='facebook'>
           Edit Profile
         </Button>
         <Button onClick={() => onCredentialsOpen()} colorScheme='facebook'>
           Edit Credentials
         </Button>
-      </Box> */}
-      {profileData && <ProfileCard data={profileData} />}
+      </Box>
+      {profileData && <ProfileCard data={profileData} onProfileOpen={onProfileOpen} />}
     </>
   )
 }

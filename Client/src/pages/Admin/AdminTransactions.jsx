@@ -124,7 +124,7 @@ const AdminTransactions = () => {
     <>
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex flexDirection='row' gap={'10px'} mt={'15px'} mb={'15px'}>
-          <Searchbar searchHandler={handleSearch} />
+          {/* <Searchbar searchHandler={handleSearch} /> */}
           <RefreshButton refreshCounter={refreshCounter} setRefreshCounter={setRefreshCounter} />
         </Flex>
       </Box>

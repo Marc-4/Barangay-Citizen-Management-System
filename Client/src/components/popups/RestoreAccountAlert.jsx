@@ -10,14 +10,7 @@ import {
   Button,
 } from '@chakra-ui/react'
 
-const RestoreAccountAlert = ({
-  isOpen,
-  onClose,
-  user,
-  cancelRef,
-  onUpdate,
-  role,
-}) => {
+const RestoreAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }) => {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
   const userRole = localStorage.getItem('userRole')
@@ -43,28 +36,28 @@ const RestoreAccountAlert = ({
 
   return (
     <>
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
+      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
               Restore User
             </AlertDialogHeader>
 
-            <AlertDialogBody>
-              Are you sure you want to restore {user?.username}?
-            </AlertDialogBody>
+            <AlertDialogBody>Are you sure you want to restore {user?.username}?</AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button isDisabled={submitting} ref={cancelRef} onClick={onClose}>
+              <Button
+                isDisabled={submitting}
+                isLoading={submitting}
+                ref={cancelRef}
+                onClick={onClose}
+              >
                 Cancel
               </Button>
               <Button
                 colorScheme='green'
                 isDisabled={submitting}
+                isLoading={submitting}
                 onClick={async () => {
                   await restoreAccount()
                   onClose()
