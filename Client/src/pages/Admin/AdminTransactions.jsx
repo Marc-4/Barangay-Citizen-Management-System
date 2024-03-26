@@ -13,10 +13,9 @@ import {
 import TransactionCard from '../../components/cards/TransactionCard'
 import { useEffect, useState } from 'react'
 import callAPI from '../../utils/callAPI'
-import Searchbar from '../../components/Searchbar'
+import TransactionSearchbar from '../../components/TransactionSearchbar'
 import RefreshButton from '../../components/RefreshButton'
 import Pagination from '../../components/pagination'
-import transaction from '../../../../Server/models/transaction'
 
 const AdminTransactions = () => {
   const [transactions, setTransactions] = useState([])
@@ -124,7 +123,7 @@ const AdminTransactions = () => {
     <>
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex flexDirection='row' gap={'10px'} mt={'15px'} mb={'15px'}>
-          {/* <Searchbar searchHandler={handleSearch} /> */}
+          <TransactionSearchbar searchHandler={handleSearch} />
           <RefreshButton refreshCounter={refreshCounter} setRefreshCounter={setRefreshCounter} />
         </Flex>
       </Box>
