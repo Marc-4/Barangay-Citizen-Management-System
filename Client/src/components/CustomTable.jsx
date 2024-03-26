@@ -1,4 +1,15 @@
-import { Link, TableContainer, Table, Td, Thead, Tbody, Tr, Th, Button } from '@chakra-ui/react'
+import {
+  Link,
+  TableContainer,
+  Table,
+  Td,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Button,
+  Checkbox,
+} from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { Link as rr_Link } from 'react-router-dom'
 const CustomTable = ({
@@ -11,6 +22,7 @@ const CustomTable = ({
   hasRestoreButton,
   hasDeleteButton,
   hasArchiveButton,
+  forFilter,
 }) => {
   return (
     <>
@@ -35,6 +47,11 @@ const CustomTable = ({
         >
           <Thead>
             <Tr>
+              {forFilter && (
+                <Th p={'0'} textAlign='center' w={'5%'}>
+                  Select
+                </Th>
+              )}
               <Th p={'12px'} textAlign='center' w={'17%'}>
                 User ID
               </Th>
@@ -50,15 +67,19 @@ const CustomTable = ({
               <Th p={'12px'} textAlign='center'>
                 Middle Name
               </Th>
-              <Th p={'12px'} textAlign='center' w={'7%'}>
+              <Th p={'12px'} textAlign='center'>
                 Gender
               </Th>
-              <Th p={'12px'} textAlign='center'>
-                Date of Registration
-              </Th>
-              <Th p={'12px'} textAlign='center' w={'15%'}>
-                Actions
-              </Th>
+              {!forFilter && (
+                <>
+                  <Th p={'12px'} textAlign='center'>
+                    Date of Registration
+                  </Th>
+                  <Th p={'12px'} textAlign='center' w={'15%'}>
+                    Actions
+                  </Th>
+                </>
+              )}
             </Tr>
           </Thead>
           <Tbody>
@@ -67,6 +88,18 @@ const CustomTable = ({
                 const profile = user.profile
                 return (
                   <Tr key={user._id} fontSize={'md'}>
+                    {forFilter && (
+                      <Td
+                        p={'0px'}
+                        textAlign='center'
+                        style={{
+                          whiteSpace: 'normal',
+                          wordWrap: 'break-word',
+                        }}
+                      >
+                        <Checkbox size={'lg'} />
+                      </Td>
+                    )}
                     <Td
                       p={'12px'}
                       textAlign='center'
@@ -129,49 +162,53 @@ const CustomTable = ({
                     >
                       {profile?.sex || 'N/A'}
                     </Td>
-                    <Td
-                      p={'12px'}
-                      textAlign='center'
-                      style={{
-                        whiteSpace: 'normal',
-                        wordWrap: 'break-word',
-                      }}
-                    >
-                      {new Date(user.dateOfCreation).toLocaleDateString()}
-                    </Td>
-                    <Td
-                      p={'12px'}
-                      textAlign='center'
-                      justifyContent={'center'}
-                      display={'flex'}
-                      gap={'10px'}
-                      style={{
-                        whiteSpace: 'normal',
-                        wordWrap: 'break-word',
-                      }}
-                    >
-                      {/* RESTORE AND DELETE BUTTON CASE */}
-                      {hasEditButton && (
-                        <Button onClick={() => handleEditOpen(user)} colorScheme='green'>
-                          Edit
-                        </Button>
-                      )}
-                      {hasArchiveButton && (
-                        <Button onClick={() => handleArchiveOpen(user)} colorScheme='orange'>
-                          Archive
-                        </Button>
-                      )}
-                      {hasRestoreButton && (
-                        <Button onClick={() => handleRestoreOpen(user)} colorScheme='green'>
-                          Restore
-                        </Button>
-                      )}
-                      {hasDeleteButton && (
-                        <Button onClick={() => handleDeleteOpen(user)} colorScheme='red'>
-                          Delete
-                        </Button>
-                      )}
-                    </Td>
+                    {!forFilter && (
+                      <>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {new Date(user.dateOfCreation).toLocaleDateString()}
+                        </Td>
+                        <Td
+                          p={'12px'}
+                          textAlign='center'
+                          justifyContent={'center'}
+                          display={'flex'}
+                          gap={'10px'}
+                          style={{
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                          }}
+                        >
+                          {/* RESTORE AND DELETE BUTTON CASE */}
+                          {hasEditButton && (
+                            <Button onClick={() => handleEditOpen(user)} colorScheme='green'>
+                              Edit
+                            </Button>
+                          )}
+                          {hasArchiveButton && (
+                            <Button onClick={() => handleArchiveOpen(user)} colorScheme='orange'>
+                              Archive
+                            </Button>
+                          )}
+                          {hasRestoreButton && (
+                            <Button onClick={() => handleRestoreOpen(user)} colorScheme='green'>
+                              Restore
+                            </Button>
+                          )}
+                          {hasDeleteButton && (
+                            <Button onClick={() => handleDeleteOpen(user)} colorScheme='red'>
+                              Delete
+                            </Button>
+                          )}
+                        </Td>
+                      </>
+                    )}
                   </Tr>
                 )
               })
@@ -187,7 +224,6 @@ const CustomTable = ({
                   fontWeight={'semibold'}
                   colSpan={8}
                 >
-                  
                   No users
                 </Td>
               </Tr>
