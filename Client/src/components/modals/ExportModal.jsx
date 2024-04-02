@@ -11,6 +11,12 @@ import {
   Select,
   useToast,
   Toast,
+  MenuList,
+  MenuOptionGroup,
+  MenuItemOption,
+  Menu,
+  MenuButton,
+  Flex,
 } from '@chakra-ui/react'
 
 import { useState, useEffect } from 'react'
@@ -36,6 +42,16 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
   const toast = useToast()
   const [refreshCounter, setRefreshCounter] = useState(0)
   const [pdfText, setPdfText] = useState('')
+  const [includedFields, setIncludedFields] = useState([
+    'name',
+    'dateOfBirth',
+    'sex',
+    'civilStatus',
+    'occupation',
+    'citizenship',
+    'placeOfBirth',
+    'address',
+  ])
 
   useEffect(() => {
     setUserList(users)
@@ -113,11 +129,11 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
       else copiedPages = await pdfDoc.copyPages(familyPDF, [0])
 
       const [page] = copiedPages
-      
+
       pdfDoc.removePage(0)
       pdfDoc.addPage(page)
 
-      if (type == 'single') drawPDF4(pdfDoc, selectedUsers[0])
+      if (type == 'single') drawPDF4(pdfDoc, selectedUsers[0], includedFields)
 
       const modifiedPdfBytes = await pdfDoc.save()
       const modifiedPdfBlob = new Blob([modifiedPdfBytes], { type: 'application/pdf' })
@@ -136,6 +152,10 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
       })
     }
   }
+
+  useEffect(() => {
+    console.log('included fields:', includedFields)
+  }, [includedFields])
 
   // const downloadPdf = async () => {
   //   try {
@@ -204,9 +224,35 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
             selectedUsers={selectedUsers}
             setSelectedUsers={setSelectedUsers}
           />
-          <Button onClick={populate} colorScheme='facebook' mr={4}>
-            Populate PDF
-          </Button>
+          <Menu closeOnSelect={false}>
+            <MenuButton as={Button} colorScheme='facebook' w={'200px'}>
+              Filters
+            </MenuButton>
+            <MenuList w={'fit-content'}>
+              <MenuOptionGroup
+                defaultValue={includedFields}
+                title='fields to include'
+                type='checkbox'
+                onChange={(e) => setIncludedFields(e)}
+              >
+                <MenuItemOption value='name'>name</MenuItemOption>
+
+                <MenuItemOption value='dateOfBirth'>date of birth</MenuItemOption>
+                <MenuItemOption value='placeOfBirth'>place of birth</MenuItemOption>
+                <MenuItemOption value='sex'>sex</MenuItemOption>
+ 
+                <MenuItemOption value='civilStatus'>civil status</MenuItemOption>
+                <MenuItemOption value='citizenship'>citizenship</MenuItemOption>
+                <MenuItemOption value='occupation'>occupation</MenuItemOption>
+                <MenuItemOption value='address'>address</MenuItemOption>
+              </MenuOptionGroup>
+            </MenuList>
+          </Menu>
+          <Box mt={'10px'}>
+            <Button onClick={populate} colorScheme='facebook' mr={4}>
+              Populate PDF
+            </Button>
+          </Box>
           <Box display={'flex'} w={'100%'} justifyContent={'center'}>
             <Document
               rotate={pdfUrl == '/BarangayForms-4.pdf' ? 90 : 0}
