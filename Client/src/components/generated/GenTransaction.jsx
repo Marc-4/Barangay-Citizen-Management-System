@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Text, Box, VStack, Button, useDisclosure } from '@chakra-ui/react'
+import { Text, Box, VStack, Button, useDisclosure, Spinner } from '@chakra-ui/react'
 import callAPI from '../../utils/callAPI'
 import TransactionDetailCard from '../cards/TransactionDetailCard'
 import TransactionContentCard from '../cards/TransactionContentCard'
@@ -54,7 +54,7 @@ const GenTransaction = () => {
           onUpdate: handleUpdate,
         }}
       />
-      <TransactionModal
+      {/* <TransactionModal
         {...{
           isOpen: isAcceptOpen,
           onClose: onAcceptClose,
@@ -71,14 +71,14 @@ const GenTransaction = () => {
           onUpdate: handleUpdate,
           status: 'REJECTED',
         }}
-      />
+      /> */}
       <Box borderRadius={'10px'} maxW={'950px'} m={'auto'}>
         {error && (
           <Text fontSize={'2xl'} color={'tomato'} fontWeight={'semibold'} textAlign={'center'}>
             {error}
           </Text>
         )}
-        {transactionData && (
+        {transactionData ? (
           <>
             <VStack spacing={4} justifyContent={'center'} p={'25px'}>
               <Box w={'950px'} m={'auto'}>
@@ -97,7 +97,7 @@ const GenTransaction = () => {
                 profile={ownerAccount?.profile}
               />
             </VStack>
-            {transactionData.status === 'PENDING' ? (
+            {/* {transactionData.status === 'PENDING' ? (
               <Box display={'flex'} justifyContent={'center'} gap={'10px'}>
                 <Button onClick={() => onAcceptOpen()} colorScheme='green'>
                   Accept
@@ -108,8 +108,10 @@ const GenTransaction = () => {
               </Box>
             ) : (
               ''
-            )}
+            )} */}
           </>
+        ) : (
+          <Spinner mt={'50px'} boxSize={'20'} />
         )}
       </Box>
     </>

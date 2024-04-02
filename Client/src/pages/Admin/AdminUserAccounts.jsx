@@ -82,6 +82,7 @@ const AdminUserAccounts = () => {
   }, [refreshCounter])
 
   //calculate count on client side function instead, this is stupid
+  //nvm im stupid
   const getUsersCount = async () => {
     const body = null
     const method = 'GET'
@@ -283,9 +284,9 @@ const AdminUserAccounts = () => {
           <Button mt={'5px'} colorScheme='facebook' onClick={onRegisterOpen}>
             Register User
           </Button>
-          {/* <Button mt={'5px'} colorScheme='facebook' color={'white'} onClick={onExportOpen}>
+          <Button mt={'5px'} colorScheme='facebook' color={'white'} onClick={onExportOpen}>
             Export to PDF
-          </Button> */}
+          </Button>
         </Flex>
       </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />

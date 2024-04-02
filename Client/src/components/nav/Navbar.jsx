@@ -133,14 +133,14 @@ const Navbar = () => {
         <Spacer />
 
         <HStack gap={'20px'}>
-          <NotificationPopup
+          {/* <NotificationPopup
             ref={notifRef}
             notifications={notifications}
             isOpen={toggleOpen}
             onNotificationClick={handleNotificationClick}
             rightOffset={ref.current?.offsetWidth}
-          />
-          <IconButton
+          /> */}
+          {/* <IconButton
             ref={notifButtonRef}
             onClick={() => {
               setToggleOpen(!toggleOpen)
@@ -149,7 +149,7 @@ const Navbar = () => {
             color={'primary.main'}
             fontSize={'30px'}
             icon={<IoIosNotifications />}
-          />
+          /> */}
           <Link as={rr_link} to={'profile'}>
             <Box ref={ref} flexDirection={'row'} display={'flex'} alignItems={'center'} gap={'5px'}>
               <Image

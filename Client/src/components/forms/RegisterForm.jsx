@@ -96,6 +96,7 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
               </RadioGroup>
               <Text as={ErrorMessage} name='sex' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Civil Status</Heading>
+              {/* make to select component */}
               <Input as={Field} type='text' name='civilStatus' placeholder='Civil Status' />
               <Text as={ErrorMessage} name='civilStatus' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Occupation</Heading>

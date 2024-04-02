@@ -38,7 +38,7 @@ app.all('*', (req, res) => {
 })
 
 //db connection
-mongoose.connect(process.env.DB_URI_LOCAL, { useNewURLParser: true, dbName: 'BRMS' })
+mongoose.connect(process.env.DB_URI, { useNewURLParser: true, dbName: 'BRMS' })
 
 const db = mongoose.connection
 db.on('error', (error) => console.log(error))

@@ -6,21 +6,8 @@ import {
   ModalHeader,
   ModalCloseButton,
   Text,
-  Heading,
   Box,
-  Divider,
-  Tabs,
-  Tab,
-  TabList,
-  TabPanels,
-  TabPanel,
   Button,
-  TableContainer,
-  Table,
-  Thead,
-  Tbody,
-  Th,
-  Td,
   Select,
   useToast,
   Toast,
@@ -30,24 +17,25 @@ import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
 import Searchbar from '../Searchbar'
 import { pdfjs, Document, Page } from 'react-pdf'
+import { View } from '@react-pdf/renderer'
 import { PDFDocument, rgb, rotateInPlace } from 'pdf-lib'
 import CustomTable from '../CustomTable'
 import RefreshButton from '../RefreshButton'
-const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
-  // pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  //   'pdfjs-dist/build/pdf.worker.min.js',
-  //   import.meta.url
-  // ).toString()
+import { drawPDF4 } from '../../utils/drawPdfText'
 
+const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
   pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
 
   const pdfUrls = { ' ': '', single: '/BarangayForms-5.pdf', family: '/BarangayForms-4.pdf' }
   const [pdfUrl, setPdfUrl] = useState('')
   const [numPages, setNumPages] = useState(null)
   const [userList, setUserList] = useState(users)
+  const [selectedUsers, setSelectedUsers] = useState([])
   const [pageNumber, setPageNumber] = useState(1)
+  const [type, setType] = useState()
   const toast = useToast()
   const [refreshCounter, setRefreshCounter] = useState(0)
+  const [pdfText, setPdfText] = useState('')
 
   useEffect(() => {
     setUserList(users)
@@ -55,6 +43,9 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
 
   useEffect(() => {
     setUserList(users)
+    setPdfUrl('')
+    setSelectedUsers([])
+    setType()
   }, [refreshCounter])
 
   const onDocumentLoadSuccess = ({ numPages }) => {
@@ -73,34 +64,6 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
     const newPageNumber = parseInt(event.target.value, 10)
     if (!isNaN(newPageNumber) && newPageNumber >= 1 && newPageNumber <= numPages) {
       setPageNumber(newPageNumber)
-    }
-  }
-
-  const populatePdfWithData = async (templatePdfBytes, userData) => {
-    const pdfDoc = await PDFDocument.load(templatePdfBytes)
-    const form = pdfDoc.getForm()
-
-    // Access fields in the PDF form and set values based on user data
-    form.getTextField('userName').setText(userData.name)
-    form.getTextField('userEmail').setText(userData.email)
-    // Add more fields as needed
-
-    const modifiedPdfBytes = await pdfDoc.save()
-    return modifiedPdfBytes
-  }
-
-  const renderPdfWithUserData = async () => {
-    try {
-      const templatePdfBytes = await fetch(pdfUrl).then((res) => res.arrayBuffer())
-      const modifiedPdfBytes = await populatePdfWithData(templatePdfBytes, userData)
-
-      // Convert modified PDF bytes to a Blob and create a URL for rendering
-      const modifiedPdfBlob = new Blob([modifiedPdfBytes], { type: 'application/pdf' })
-      const modifiedPdfUrl = URL.createObjectURL(modifiedPdfBlob)
-
-      setPdfUrl(modifiedPdfUrl)
-    } catch (error) {
-      console.error('Error populating PDF with user data:', error)
     }
   }
 
@@ -135,15 +98,81 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
       })
     }
   }
+  // render data to pdf try using react-pdf
+  const populate = async () => {
+    let bytes = await fetch(pdfUrls.single).then((res) => res.arrayBuffer())
+    const singlePDF = await PDFDocument.load(bytes)
+    bytes = await fetch(pdfUrls.family).then((res) => res.arrayBuffer())
+    const familyPDF = await PDFDocument.load(bytes)
+    try {
+      const existingPdfBytes = await fetch(pdfUrl).then((res) => res.arrayBuffer())
+      const pdfDoc = await PDFDocument.load(existingPdfBytes)
+      let copiedPages
 
-  // useEffect(() => {
-  //   if (userList) {
-  //     renderPdfWithUserData()
+      if (type == 'single') copiedPages = await pdfDoc.copyPages(singlePDF, [0])
+      else copiedPages = await pdfDoc.copyPages(familyPDF, [0])
+
+      const [page] = copiedPages
+      
+      pdfDoc.removePage(0)
+      pdfDoc.addPage(page)
+
+      if (type == 'single') drawPDF4(pdfDoc, selectedUsers[0])
+
+      const modifiedPdfBytes = await pdfDoc.save()
+      const modifiedPdfBlob = new Blob([modifiedPdfBytes], { type: 'application/pdf' })
+      // Create a URL for the modified PDF blob
+      const modifiedPdfUrl = URL.createObjectURL(modifiedPdfBlob)
+      setPdfUrl(modifiedPdfUrl)
+    } catch (error) {
+      console.log('Error populating pdf', error)
+      toast({
+        title: 'error',
+        description: 'make sure you have selected a pdf type and at least 1 user.',
+        status: 'error',
+        duration: '3000',
+        isClosable: 'true',
+        position: 'bottom-right',
+      })
+    }
+  }
+
+  // const downloadPdf = async () => {
+  //   try {
+  //     const existingPdfBytes = await fetch(pdfUrl).then((res) => res.arrayBuffer())
+
+  //     const pdfDoc = await PDFDocument.load(existingPdfBytes)
+  //     const pages = pdfDoc.getPages()
+  //     const firstPage = pages[0]
+
+  //     // Add the additional text to the existing PDF
+  //     firstPage.drawText(staticData.region, {
+  //       x: 122,
+  //       y: firstPage.getHeight() - 65,
+  //       size: 12,
+  //     })
+
+  //     // Save the modified PDF
+  //     const modifiedPdfBytes = await pdfDoc.save()
+
+  //     // Create a blob from the modified PDF bytes
+  //     const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' })
+
+  //     // Download the blob as a PDF file
+  //     const url = window.URL.createObjectURL(blob)
+  //     const a = document.createElement('a')
+  //     a.href = url
+  //     a.download = 'modified_pdf.pdf'
+  //     document.body.appendChild(a)
+  //     a.click()
+  //     document.body.removeChild(a)
+  //   } catch (error) {
+  //     console.error('Error downloading PDF:', error)
   //   }
-  // }, [userList])
+  // }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'6xl'} closeOnOverlayClick={false}>
+    <Modal isOpen={isOpen} onClose={onClose} size={'full'} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontSize={'3xl'} fontWeight={'bold'}>
@@ -157,7 +186,9 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
             <Select
               w={'200px'}
               placeholder='Select Type of PDF'
+              value={type}
               onChange={(e) => {
+                setType(e.target.value)
                 setPdfUrl(pdfUrls[e.target.value])
               }}
             >
@@ -166,15 +197,29 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
             </Select>
           </Box>
 
-          <CustomTable forFilter users={userList} />
-          <Document
-            rotate={pdfUrl == '/BarangayForms-4.pdf' ? 90 : 0}
-            file={pdfUrl}
-            onLoadSuccess={onDocumentLoadSuccess}
-          >
-            <Page pageNumber={pageNumber} />
-          </Document>
-          {pdfUrl != '' && pdfUrl != null && (
+          <CustomTable
+            forFilter
+            type={type}
+            users={userList}
+            selectedUsers={selectedUsers}
+            setSelectedUsers={setSelectedUsers}
+          />
+          <Button onClick={populate} colorScheme='facebook' mr={4}>
+            Populate PDF
+          </Button>
+          <Box display={'flex'} w={'100%'} justifyContent={'center'}>
+            <Document
+              rotate={pdfUrl == '/BarangayForms-4.pdf' ? 90 : 0}
+              file={pdfUrl}
+              onLoadSuccess={onDocumentLoadSuccess}
+            >
+              <Page pageNumber={pageNumber} scale={1.5} />
+            </Document>
+          </Box>
+          {/* <Button onClick={downloadPdf} colorScheme='blue'>
+            Download PDF
+          </Button> */}
+          {/* {pdfUrl != '' && pdfUrl != null && (
             <Box>
               <p>
                 Page {pageNumber} of {numPages}
@@ -194,7 +239,7 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
                 max={numPages}
               />
             </Box>
-          )}
+          )} */}
         </ModalBody>
       </ModalContent>
     </Modal>

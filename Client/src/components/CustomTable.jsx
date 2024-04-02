@@ -10,7 +10,7 @@ import {
   Button,
   Checkbox,
 } from '@chakra-ui/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link as rr_Link } from 'react-router-dom'
 const CustomTable = ({
   users,
@@ -23,7 +23,13 @@ const CustomTable = ({
   hasDeleteButton,
   hasArchiveButton,
   forFilter,
+  selectedUsers,
+  setSelectedUsers,
+  type,
 }) => {
+  useEffect(()=>{
+    console.log(selectedUsers);
+  }, [selectedUsers])
   return (
     <>
       <TableContainer
@@ -97,7 +103,24 @@ const CustomTable = ({
                           wordWrap: 'break-word',
                         }}
                       >
-                        <Checkbox size={'lg'} />
+                        <Checkbox
+                          isChecked={selectedUsers.some((u) => u._id === user._id)}
+                          onChange={() => {
+                            setSelectedUsers((prevUsers) => {
+                              if (type === 'single') {
+                                if (!prevUsers.some((u) => u._id === user._id)) return [user]
+                                else return prevUsers.filter((u) => u._id !== user._id)
+                              }
+                              // Check if the user already exists in the array based on id
+                              if (!prevUsers.some((u) => u._id === user._id))
+                                // If the user does not exist, append it to the array
+                                return [...prevUsers, user]
+                              // If the user already exists, return the previous state unchanged
+                              else return prevUsers.filter((u) => u._id !== user._id)
+                            })
+                          }}
+                          size={'lg'}
+                        />
                       </Td>
                     )}
                     <Td

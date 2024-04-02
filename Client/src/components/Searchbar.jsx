@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 
-const Searchbar = ({ entries, page, searchHandler, options }) => {
+const Searchbar = ({ entries, page, searchHandler, options, forFilter }) => {
   const [query, setQuery] = useState('')
   const [firstSearchOptions, setFirstSearchOptions] = useState([
     'username',
@@ -39,6 +39,7 @@ const Searchbar = ({ entries, page, searchHandler, options }) => {
   const handleSearch = () => {
     console.log([...firstSearchOptions, ...secondSearchOptions, sex])
     if (query === '') return
+    console.log('query: ' + query);
     const finalArray = [...firstSearchOptions, ...secondSearchOptions]
     searchHandler(query, finalArray, sex)
   }
@@ -63,7 +64,7 @@ const Searchbar = ({ entries, page, searchHandler, options }) => {
           </InputLeftElement>
         </InputGroup>
         <Menu closeOnSelect={false}>
-          <MenuButton as={Button} colorScheme='facebook'>
+          <MenuButton as={Button} colorScheme='facebook' w={'300px'}>
             Filters
           </MenuButton>
           <MenuList minWidth='240px' zIndex={2}>

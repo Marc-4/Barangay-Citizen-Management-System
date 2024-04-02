@@ -7,13 +7,13 @@ const searchUser = async (req, res) => {
   try {
     const { query, filter, params, sex } = req.query
 
+    console.log('Dirty Query: ' + query);
     const paramsArray = params.split(',')
     const escapedQuery = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 
     console.log('Query: ' + escapedQuery)
     console.log('sex: ' + sex.toLowerCase());
 
-    // Check if 'username' is present in paramsArray.
     const hasUsername = paramsArray.includes('username')
 
     const queryFilter = {
