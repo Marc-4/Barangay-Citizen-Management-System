@@ -38,7 +38,7 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
   const [userList, setUserList] = useState(users)
   const [selectedUsers, setSelectedUsers] = useState([])
   const [pageNumber, setPageNumber] = useState(1)
-  const [type, setType] = useState()
+  const [type, setType] = useState('')
   const toast = useToast()
   const [refreshCounter, setRefreshCounter] = useState(0)
   const [pdfText, setPdfText] = useState('')
@@ -61,7 +61,7 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
     setUserList(users)
     setPdfUrl('')
     setSelectedUsers([])
-    setType()
+    setType('')
   }, [refreshCounter])
 
   const onDocumentLoadSuccess = ({ numPages }) => {
@@ -157,39 +157,25 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
     console.log('included fields:', includedFields)
   }, [includedFields])
 
-  // const downloadPdf = async () => {
-  //   try {
-  //     const existingPdfBytes = await fetch(pdfUrl).then((res) => res.arrayBuffer())
+  const downloadPdf = async () => {
+    try {
+      const existingPdfBytes = await fetch(pdfUrl).then((res) => res.arrayBuffer())
 
-  //     const pdfDoc = await PDFDocument.load(existingPdfBytes)
-  //     const pages = pdfDoc.getPages()
-  //     const firstPage = pages[0]
+      // Create a blob from the modified PDF bytes
+      const blob = new Blob([existingPdfBytes], { type: 'application/pdf' })
 
-  //     // Add the additional text to the existing PDF
-  //     firstPage.drawText(staticData.region, {
-  //       x: 122,
-  //       y: firstPage.getHeight() - 65,
-  //       size: 12,
-  //     })
-
-  //     // Save the modified PDF
-  //     const modifiedPdfBytes = await pdfDoc.save()
-
-  //     // Create a blob from the modified PDF bytes
-  //     const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' })
-
-  //     // Download the blob as a PDF file
-  //     const url = window.URL.createObjectURL(blob)
-  //     const a = document.createElement('a')
-  //     a.href = url
-  //     a.download = 'modified_pdf.pdf'
-  //     document.body.appendChild(a)
-  //     a.click()
-  //     document.body.removeChild(a)
-  //   } catch (error) {
-  //     console.error('Error downloading PDF:', error)
-  //   }
-  // }
+      // Download the blob as a PDF file
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'BarangayForm.pdf'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    } catch (error) {
+      console.error('Error downloading PDF:', error)
+    }
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={'full'} closeOnOverlayClick={false}>
@@ -240,7 +226,7 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
                 <MenuItemOption value='dateOfBirth'>date of birth</MenuItemOption>
                 <MenuItemOption value='placeOfBirth'>place of birth</MenuItemOption>
                 <MenuItemOption value='sex'>sex</MenuItemOption>
- 
+
                 <MenuItemOption value='civilStatus'>civil status</MenuItemOption>
                 <MenuItemOption value='citizenship'>citizenship</MenuItemOption>
                 <MenuItemOption value='occupation'>occupation</MenuItemOption>
@@ -249,11 +235,17 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
             </MenuList>
           </Menu>
           <Box mt={'10px'}>
-            <Button onClick={populate} colorScheme='facebook' mr={4}>
+            <Button onClick={populate} colorScheme='facebook'>
               Populate PDF
             </Button>
           </Box>
-          <Box display={'flex'} w={'100%'} justifyContent={'center'}>
+          <Box
+            display={'flex'}
+            flexDir={'column'}
+            w={'100%'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
             <Document
               rotate={pdfUrl == '/BarangayForms-4.pdf' ? 90 : 0}
               file={pdfUrl}
@@ -261,10 +253,14 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
             >
               <Page pageNumber={pageNumber} scale={1.5} />
             </Document>
+            <Box>
+              {pdfUrl && (
+                <Button onClick={downloadPdf} colorScheme='blue'>
+                  Download PDF
+                </Button>
+              )}
+            </Box>
           </Box>
-          {/* <Button onClick={downloadPdf} colorScheme='blue'>
-            Download PDF
-          </Button> */}
           {/* {pdfUrl != '' && pdfUrl != null && (
             <Box>
               <p>
