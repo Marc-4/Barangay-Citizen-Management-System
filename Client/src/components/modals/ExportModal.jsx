@@ -247,10 +247,7 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
             justifyContent={'center'}
             alignItems={'center'}
           >
-            <Document
-              file={pdfUrl}
-              onLoadSuccess={onDocumentLoadSuccess}
-            >
+            <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
               <Page pageNumber={pageNumber} scale={1.5} />
             </Document>
             <Box>

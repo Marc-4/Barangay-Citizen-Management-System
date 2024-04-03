@@ -5,7 +5,7 @@ const staticData = {
   province: 'BUKIDNON',
   city: 'MALAYBALAY',
   barangay: '2',
-  date: new Date().toLocaleString(),
+  date: new Date().toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
 }
 
 export const drawPDF4 = (pdf, user, filter) => {
@@ -69,6 +69,7 @@ export const drawPDF4 = (pdf, user, filter) => {
   if (filter.some((field) => field == 'dateOfBirth')) {
     const date = new Date(user.profile.dateOfBirth)
     let year = date.getFullYear().toString().toUpperCase()
+
     let month = (date.getMonth() + 1).toString().toUpperCase()
     let day = date.getDate().toString().toUpperCase()
     if (month.length == 1) month = '0' + month
@@ -165,6 +166,10 @@ export const drawPDF4 = (pdf, user, filter) => {
       xPos += defaultPdfOptions.size + letterSpacing
     }
   }
+  xPos = 110
+  yPos = height - 412
+  firstPage.moveTo(xPos, yPos)
+  firstPage.drawText(staticData.date, defaultPdfOptions)
 }
 
 export const drawPDF5 = (pdf, user, filter) => {
@@ -190,7 +195,118 @@ export const drawPDF5 = (pdf, user, filter) => {
   yPos = 122
   firstPage.moveTo(yPos, xPos)
   firstPage.drawText(staticData.barangay, { rotate: degrees(90), ...defaultPdfOptions })
+  xPos = 870
+  yPos = 137
+  firstPage.moveTo(yPos, xPos)
+  firstPage.drawText(staticData.date, { rotate: degrees(90), ...defaultPdfOptions })
 
-  if (filter.some((field) => field == 'name')) {
+  yPos = 237
+  for (let i = 0; i < user.length; i++) {
+    if (filter.some((field) => field == 'name')) {
+      xPos = 100
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(user[i].profile.lastName.toUpperCase(), {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+      })
+
+      xPos = 200
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(user[i].profile.firstName.toUpperCase(), {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+      })
+
+      xPos = 300
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(user[i].profile.middleName.toUpperCase(), {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+      })
+    }
+
+    if (filter.some((field) => field == 'address')) {
+      xPos = 462
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(user[i].profile.address.streetName.toUpperCase(), {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+      })
+      xPos = 555
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(user[i].profile.address.subdivisionPurok.toUpperCase(), {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+      })
+    }
+
+    if (filter.some((field) => field == 'placeOfBirth')) {
+      xPos = 652
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(user[i].profile.placeOfBirth.city.toUpperCase(), {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+      })
+    }
+
+    if (filter.some((field) => field == 'dateOfBirth')) {
+      const date = new Date(user[i].profile.dateOfBirth)
+      const formattedDate = date.toLocaleDateString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric',
+      })
+      xPos = 736
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(formattedDate, {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+      })
+    }
+
+    if (filter.some((field) => field == 'sex')) {
+      xPos = 805
+      firstPage.moveTo(yPos, xPos)
+      if (user[i].profile.sex == 'male')
+        firstPage.drawText('M', {
+          rotate: degrees(90),
+          ...defaultPdfOptions,
+        })
+      else
+        firstPage.drawText('F', {
+          rotate: degrees(90),
+          ...defaultPdfOptions,
+        })
+    }
+
+    if (filter.some((field) => field == 'civilStatus')) {
+      xPos = 825
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(user[i].profile.civilStatus.toUpperCase(), {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+        size: 8,
+      })
+    }
+
+    if (filter.some((field) => field == 'citizenship')) {
+      xPos = 865
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(user[i].profile.citizenship.toUpperCase(), {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+        size: 9,
+      })
+    }
+
+    if (filter.some((field) => field == 'occupation')) {
+      xPos = 908
+      firstPage.moveTo(yPos, xPos)
+      firstPage.drawText(user[i].profile.occupation.toUpperCase(), {
+        rotate: degrees(90),
+        ...defaultPdfOptions,
+      })
+    }
+    yPos += 25
   }
 }
