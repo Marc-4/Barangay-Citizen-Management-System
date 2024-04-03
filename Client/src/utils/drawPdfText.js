@@ -1,3 +1,4 @@
+import { degrees } from 'pdf-lib'
 const defaultPdfOptions = { size: 12, letterSpacing: 30 }
 const staticData = {
   region: 'X',
@@ -7,8 +8,6 @@ const staticData = {
   date: new Date().toLocaleString(),
 }
 
-//TODO
-//FILTER WHICH DATA TO RENDER
 export const drawPDF4 = (pdf, user, filter) => {
   const pages = pdf.getPages()
   const firstPage = pages[0]
@@ -66,6 +65,7 @@ export const drawPDF4 = (pdf, user, filter) => {
     }
   }
 
+  yPos = height - 157
   if (filter.some((field) => field == 'dateOfBirth')) {
     const date = new Date(user.profile.dateOfBirth)
     let year = date.getFullYear().toString().toUpperCase()
@@ -75,7 +75,6 @@ export const drawPDF4 = (pdf, user, filter) => {
     if (day.length == 1) day = '0' + day
 
     xPos = 150
-    yPos = height - 157
     firstPage.moveTo(xPos, yPos)
     for (const char of month) {
       firstPage.drawText(char, { x: xPos, ...defaultPdfOptions })
@@ -168,4 +167,30 @@ export const drawPDF4 = (pdf, user, filter) => {
   }
 }
 
-export const drawPDF5 = () => {}
+export const drawPDF5 = (pdf, user, filter) => {
+  const pages = pdf.getPages()
+  const firstPage = pages[0]
+  const height = firstPage.getHeight()
+  const letterSpacing = 5
+  let lastXPos
+  let xPos = 240
+  let yPos = 70
+
+  firstPage.moveTo(yPos, xPos)
+  firstPage.drawText(staticData.region, { rotate: degrees(90), ...defaultPdfOptions })
+  xPos = 220
+  yPos = 88
+  firstPage.moveTo(yPos, xPos)
+  firstPage.drawText(staticData.province, { rotate: degrees(90), ...defaultPdfOptions })
+  xPos = 210
+  yPos = 105
+  firstPage.moveTo(yPos, xPos)
+  firstPage.drawText(staticData.city, { rotate: degrees(90), ...defaultPdfOptions })
+  xPos = 245
+  yPos = 122
+  firstPage.moveTo(yPos, xPos)
+  firstPage.drawText(staticData.barangay, { rotate: degrees(90), ...defaultPdfOptions })
+
+  if (filter.some((field) => field == 'name')) {
+  }
+}
