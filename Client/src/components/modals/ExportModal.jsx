@@ -27,7 +27,7 @@ import { View } from '@react-pdf/renderer'
 import { PDFDocument, rgb, rotateInPlace } from 'pdf-lib'
 import CustomTable from '../CustomTable'
 import RefreshButton from '../RefreshButton'
-import { drawPDF4 } from '../../utils/drawPdfText'
+import { drawPDF4, drawPDF5 } from '../../utils/drawPdfText'
 
 const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
   pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
@@ -134,6 +134,7 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
       pdfDoc.addPage(page)
 
       if (type == 'single') drawPDF4(pdfDoc, selectedUsers[0], includedFields)
+      else drawPDF5(pdfDoc, selectedUsers, includedFields)
 
       const modifiedPdfBytes = await pdfDoc.save()
       const modifiedPdfBlob = new Blob([modifiedPdfBytes], { type: 'application/pdf' })
@@ -247,7 +248,6 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
             alignItems={'center'}
           >
             <Document
-              rotate={pdfUrl == '/BarangayForms-4.pdf' ? 90 : 0}
               file={pdfUrl}
               onLoadSuccess={onDocumentLoadSuccess}
             >
