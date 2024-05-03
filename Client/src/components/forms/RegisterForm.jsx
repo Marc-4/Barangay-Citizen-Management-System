@@ -77,7 +77,7 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
                 component='div'
                 color={'tomato'}
               />
-              <Heading fontSize={'xl'}>Gender</Heading>
+              <Heading fontSize={'xl'}>Sex</Heading>
               <RadioGroup name='sex' display={'flex'} flexDirection={'column'}>
                 <Field>
                   {({ field }) => (

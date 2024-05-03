@@ -60,7 +60,7 @@ const OwnerProfileCard = ({ title, data }) => {
           <Text>{data?.email || 'N/A'}</Text>
         </Box>
         <Box>
-          <Text fontWeight='bold'>Gender:</Text>
+          <Text fontWeight='bold'>Sex:</Text>
           <Text>{data?.sex || 'N/A'}</Text>
         </Box>
         <Box>

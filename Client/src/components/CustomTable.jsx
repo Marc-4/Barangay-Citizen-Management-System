@@ -167,7 +167,7 @@ const CustomTable = ({
                   alignItems={'center'}
                   _hover={{ cursor: 'pointer' }}
                 >
-                  <span>Gender</span>
+                  <span>Sex</span>
                   {renderSortingIcon('sex')}
                 </Box>
               </Th>

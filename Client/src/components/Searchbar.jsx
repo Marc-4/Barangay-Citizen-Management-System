@@ -98,7 +98,7 @@ const Searchbar = ({ entries, page, searchHandler, options, forFilter }) => {
             <MenuOptionGroup
               defaultValue={sex}
               onChange={(e) => setSex(e)}
-              title='Gender'
+              title='Sex'
               type='radio'
             >
               <MenuItemOption type='radio' value='All'>

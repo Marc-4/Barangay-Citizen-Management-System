@@ -265,7 +265,7 @@ const ProfileCard = (data, onProfileOpen) => {
             >
               <Box>
                 <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
-                  Gender
+                  Sex
                 </Heading>
                 <Box id='Sex' w={'200px'} marginBottom={'25px'}>
                   <Input

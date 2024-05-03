@@ -19,6 +19,7 @@ const editUser = async (req, res) => {
     req.body.civilStatus === undefined &&
     req.body.occupation === undefined &&
     req.body.citizenship === undefined &&
+    req.body.phone_number === undefined ||
     req.body.email === undefined &&
     req.body.address_streetName === undefined &&
     req.body.address_houseNumber === undefined &&
@@ -51,6 +52,7 @@ const editUser = async (req, res) => {
     civilStatus,
     occupation,
     citizenship,
+    phone_number,
     email,
     address_streetName,
     address_houseNumber,
@@ -81,6 +83,7 @@ const editUser = async (req, res) => {
   if (civilStatus) user.profile.civilStatus = req.body.civilStatus
   if (occupation) user.profile.occupation = req.body.occupation
   if (citizenship) user.profile.citizenship = req.body.citizenship
+  if (phone_number) user.profile.phone_number = req.body.phone_number
   if (email != null) user.profile.email = req.body.email
   if (address_streetName) user.profile.address.streetName = address_streetName
   if (address_houseNumber) user.profile.address.houseNumber = address_houseNumber

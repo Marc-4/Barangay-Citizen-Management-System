@@ -45,7 +45,7 @@ const GenUser = () => {
       const route = `http://localhost:3000/api/${role}/user/${id}`
       const response = await callAPI(null, method, route)
 
-      console.log('account: ', response.payload);
+      console.log('account: ', response.payload)
       if (response.result === 'OK') {
         setAccountError(null)
         setAccount(response.payload)
@@ -100,25 +100,26 @@ const GenUser = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Box display={'flex'} w={'950px'} margin={'auto'}>
-              <Button mt={'5px'} colorScheme='facebook' onClick={onTransactionOpen}>
-                Add transaction
-              </Button>
-            </Box>
-            <Text
-              fontSize={'2xl'}
-              display={accountError ? 'block' : 'none'}
-              color={'tomato'}
-              fontWeight={'semibold'}
-              textAlign={'center'}
-            >
-              {accountError}
-            </Text>
-            <Spinner m={'auto'} size={'xl'} display={isLoading ? 'block' : 'none'} />
-            {isLoading ? null : !account ? (
-              <Text fontSize={'2xl'}>This user has no Profile.</Text>
-            ) : (
-              <ProfileCard data={account} />
+            {isLoading && <Spinner m={'auto'} mt={'5rem'} display={'flex'} size={'xl'} />}
+            {isLoading == false && account && (
+              <>
+                <Box display={'flex'} w={'950px'} margin={'auto'}>
+                  <Button mt={'5px'} colorScheme='facebook' onClick={onTransactionOpen}>
+                    Add transaction
+                  </Button>
+                </Box>
+                <Text
+                  fontSize={'2xl'}
+                  display={accountError ? 'block' : 'none'}
+                  color={'tomato'}
+                  fontWeight={'semibold'}
+                  textAlign={'center'}
+                >
+                  {accountError}
+                </Text>
+
+                <ProfileCard data={account} />
+              </>
             )}
           </TabPanel>
           <TabPanel>

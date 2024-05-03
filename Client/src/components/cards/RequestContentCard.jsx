@@ -88,7 +88,7 @@ const ContentCard = ({ title, data, profile }) => {
               color={data?.sex ? 'brand.300' : 'brand.100'}
               fontWeight='bold'
             >
-              Gender:
+              Sex:
             </Text>
             <Text>{data?.sex || profile?.sex}</Text>
           </Box>

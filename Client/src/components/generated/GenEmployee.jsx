@@ -49,7 +49,7 @@ const GenEmployee = () => {
       >
         {accountError}
       </Text>
-      <Spinner m={'auto'} size={'xl'} display={isLoading ? 'block' : 'none'} />
+      <Spinner m={'auto'}  mt={'5rem'} size={'xl'} display={isLoading ? 'block' : 'none'} />
       {isLoading ? null : !account ? (
         <Text fontSize={'2xl'}>This Employee has no Profile.</Text>
       ) : (

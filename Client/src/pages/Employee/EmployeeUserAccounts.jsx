@@ -351,7 +351,7 @@ const EmployeeUserAccounts = () => {
                         Middle Name
                       </Th>
                       <Th p={'12px'} textAlign='center' w={'7%'}>
-                        Gender
+                        Sex
                       </Th>
                       <Th p={'12px'} textAlign='center'>
                         Date of Registration
@@ -519,7 +519,7 @@ const EmployeeUserAccounts = () => {
                         Middle Name
                       </Th>
                       <Th p={'12px'} textAlign='center' w={'7%'}>
-                        Gender
+                        Sex
                       </Th>
                       <Th p={'12px'} textAlign='center'>
                         Date of Registration

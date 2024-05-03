@@ -17,6 +17,7 @@ const registerEmployee = async (req, res) => {
     req.body.civilStatus === undefined ||
     req.body.occupation === undefined ||
     req.body.citizenship === undefined ||
+    req.body.phone_number === undefined ||
     req.body.email === undefined ||
     req.body.phone_number === undefined ||
     req.body.address_streetName === undefined ||

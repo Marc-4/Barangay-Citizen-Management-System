@@ -20,23 +20,33 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role, editingSelf }
   const accountRole = localStorage.getItem('userRole')
 
   const validationSchema = object({
-    firstName: string().matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols').required("required"),
-    middleName: string().matches(/^[A-Za-z\s.'-]+$/, 'Middle Name must not contain symbols').required("required"),
-    lastName: string().matches(/^[A-Za-z\s.'-]+$/, 'Last Name must not contain symbols').required("required"),
+    firstName: string()
+      .matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols')
+      .required('required'),
+    middleName: string()
+      .matches(/^[A-Za-z\s.'-]+$/, 'Middle Name must not contain symbols')
+      .required('required'),
+    lastName: string()
+      .matches(/^[A-Za-z\s.'-]+$/, 'Last Name must not contain symbols')
+      .required('required'),
     dateOfBirth: date()
       .max(new Date(), 'Date of Birth cannot be in the future')
-      .min(new Date('1900-01-01'), 'Date of Birth cannot be before 1900').required("required"),
-    placeOfBirth_city: string().required("required"),
-    placeOfBirth_province: string().required("required"),
-    placeOfBirth_country: string().required("required"),
-    sex: string().required('Please specify the gender.').required("required"),
-    civilStatus: string().required("required"),
-    occupation: string().required("required"),
-    citizenship: string().required("required"),
+      .min(new Date('1900-01-01'), 'Date of Birth cannot be before 1900')
+      .required('required'),
+    placeOfBirth_city: string().required('required'),
+    placeOfBirth_province: string().required('required'),
+    placeOfBirth_country: string().required('required'),
+    sex: string().required('Please specify the Sex.').required('required'),
+    civilStatus: string().required('required'),
+    occupation: string().required('required'),
+    citizenship: string().required('required'),
+    phone_number: string()
+      .required('required')
+      .matches(/^09\d{9}$/, 'phone number must follow format "09xxxxxxxxx"'),
     email: string().email(),
-    address_streetName: string().required("required"),
-    address_houseNumber: string().required("required"),
-    address_subdivisionPurok: string().required("required"),
+    address_streetName: string().required('required'),
+    address_houseNumber: string().required('required'),
+    address_subdivisionPurok: string().required('required'),
     profilePhoto: mixed(),
   })
 
@@ -153,6 +163,7 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role, editingSelf }
                 civilStatus: user?.profile?.civilStatus,
                 occupation: user?.profile?.occupation,
                 citizenship: user?.profile?.citizenship,
+                phone_number: user?.profile?.phone_number,
                 email: user?.profile?.email,
                 address_streetName: user?.profile?.address.streetName,
                 address_houseNumber: user?.profile?.address.houseNumber,

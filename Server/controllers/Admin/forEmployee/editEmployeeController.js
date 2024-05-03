@@ -8,21 +8,22 @@ const editEmployee = async (req, res) => {
   console.log(req.file)
   if (!mongoose.isValidObjectId(req.params.id)) return sendError('invalid employee ID', 400, res)
   if (
-    req.body.firstName === undefined &&
-    req.body.lastName === undefined &&
-    req.body.middleName === undefined &&
-    req.body.dateOfBirth === undefined &&
-    req.body.placeOfBirth_city === undefined &&
-    req.body.placeOfBirth_province === undefined &&
-    req.body.placeOfBirth_country === undefined &&
-    req.body.sex === undefined &&
-    req.body.civilStatus === undefined &&
-    req.body.occupation === undefined &&
-    req.body.citizenship === undefined &&
-    req.body.email === undefined &&
-    req.body.address_streetName === undefined &&
-    req.body.address_houseNumber === undefined &&
-    req.body.address_subdivisionPurok === undefined
+    (req.body.firstName === undefined &&
+      req.body.lastName === undefined &&
+      req.body.middleName === undefined &&
+      req.body.dateOfBirth === undefined &&
+      req.body.placeOfBirth_city === undefined &&
+      req.body.placeOfBirth_province === undefined &&
+      req.body.placeOfBirth_country === undefined &&
+      req.body.sex === undefined &&
+      req.body.civilStatus === undefined &&
+      req.body.occupation === undefined &&
+      req.body.citizenship === undefined &&
+      req.body.phone_number === undefined) ||
+    (req.body.email === undefined &&
+      req.body.address_streetName === undefined &&
+      req.body.address_houseNumber === undefined &&
+      req.body.address_subdivisionPurok === undefined)
   )
     return sendError('Mising Required Fields', 404, res)
 
@@ -50,6 +51,7 @@ const editEmployee = async (req, res) => {
     civilStatus,
     occupation,
     citizenship,
+    phone_number,
     email,
     address_streetName,
     address_houseNumber,
@@ -74,6 +76,7 @@ const editEmployee = async (req, res) => {
   if (civilStatus) employee.profile.civilStatus = req.body.civilStatus
   if (occupation) employee.profile.occupation = req.body.occupation
   if (citizenship) employee.profile.citizenship = req.body.citizenship
+  if (phone_number) user.profile.phone_number = req.body.phone_number
   if (email != null) employee.profile.email = req.body.email
   if (address_streetName) employee.profile.address.streetName = address_streetName
   if (address_houseNumber) employee.profile.address.houseNumber = address_houseNumber

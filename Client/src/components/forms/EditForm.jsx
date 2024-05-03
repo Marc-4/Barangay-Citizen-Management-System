@@ -73,10 +73,10 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
                 component='div'
                 color={'tomato'}
               />
-              <Heading fontSize={'xl'}>Gender</Heading>
+              <Heading fontSize={'xl'}>Sex</Heading>
               <Field name='sex'>
                 {({ field }) => (
-                  <Select {...field} placeholder='Select gender'>
+                  <Select {...field} placeholder='Select Sex'>
                     <option value='male'>Male</option>
                     <option value='female'>Female</option>
                   </Select>
@@ -92,7 +92,10 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
               <Heading fontSize={'xl'}>Citizenship</Heading>
               <Input as={Field} type='text' name='citizenship' placeholder='citizenship' />
               <Text as={ErrorMessage} name='citizenship' component='div' color={'tomato'} />
+              <Heading fontSize={'xl'}>Phone Number</Heading>
+              <Input as={Field} type='text' name='phone_number' placeholder='Phone Number' />
               <Heading fontSize={'xl'}>Email</Heading>
+              <Text as={ErrorMessage} name='phone_number' component='div' color={'tomato'} />
               <Input as={Field} type='email' name='email' placeholder='email' />
               <Text as={ErrorMessage} name='email' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Address</Heading>
