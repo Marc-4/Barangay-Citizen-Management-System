@@ -19,6 +19,7 @@ const registerUser = async (req, res) => {
       req.body.civilStatus === undefined ||
       req.body.occupation === undefined ||
       req.body.citizenship === undefined ||
+      req.body.phone_number === undefined ||
       req.body.email === undefined ||
       req.body.address_streetName === undefined ||
       req.body.address_houseNumber === undefined ||
@@ -53,6 +54,7 @@ const registerUser = async (req, res) => {
       civilStatus: req.body.civilStatus,
       occupation: req.body.occupation,
       citizenship: req.body.citizenship,
+      phone_number: req.body.phone_number,
       email: req.body.email,
       address: {
         streetName: req.body.address_streetName,
@@ -60,8 +62,8 @@ const registerUser = async (req, res) => {
         subdivisionPurok: req.body.address_subdivisionPurok,
       },
       profilePhoto: {
-        data: profilePhoto?.buffer,
-        fileName: profilePhoto?.originalname,
+        data: profilePhoto?.buffer || null,
+        fileName: profilePhoto?.originalname || '',
       },
     }
     let newUser = await User.create({

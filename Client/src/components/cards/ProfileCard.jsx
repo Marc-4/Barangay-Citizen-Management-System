@@ -23,8 +23,6 @@ const ProfileCard = (data, onProfileOpen) => {
 
   const [isEditing, setIsEditing] = useState(false)
 
-  //validate request data
-  //send request to db
   const sendRequest = () => {}
   return (
     <>
@@ -53,7 +51,7 @@ const ProfileCard = (data, onProfileOpen) => {
             borderRadius={'full'}
             fallbackSrc='https://via.placeholder.com/250'
             src={
-              data.data.profile?.profilePhoto
+              data.data.profile?.profilePhoto?.data
                 ? revertBase64(data.data.profile.profilePhoto.data)
                 : null
             }
@@ -317,15 +315,27 @@ const ProfileCard = (data, onProfileOpen) => {
               </Box>
             </Box>
             <Box bg={'white'} p={'10px'} rounded={'10px'} shadow={'base'}>
-              <Box id='email' w={'200px'} marginBottom={'25px'}>
-                <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
-                  Email
-                </Heading>
-                <Input
-                  type='email'
-                  readOnly
-                  value={data ? `${data.data.profile?.email || 'N/A'}` : 'Loading...'}
-                />
+              <Box display={'flex'} gap={'3'}>
+                <Box id='email' w={'200px'} marginBottom={'25px'}>
+                  <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                    Phone Number
+                  </Heading>
+                  <Input
+                    type='text'
+                    readOnly
+                    value={data ? `${data.data.profile?.phone_number || 'N/A'}` : 'Loading...'}
+                  />
+                </Box>
+                <Box id='email' w={'200px'} marginBottom={'25px'}>
+                  <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
+                    Email
+                  </Heading>
+                  <Input
+                    type='email'
+                    readOnly
+                    value={data ? `${data.data.profile?.email || 'N/A'}` : 'Loading...'}
+                  />
+                </Box>
               </Box>
               <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
                 Address

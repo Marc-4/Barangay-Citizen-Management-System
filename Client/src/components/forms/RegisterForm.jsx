@@ -105,10 +105,11 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
               <Heading fontSize={'xl'}>Citizenship</Heading>
               <Input as={Field} type='text' name='citizenship' placeholder='citizenship' />
               <Text as={ErrorMessage} name='citizenship' component='div' color={'tomato'} />
+              <Heading fontSize={'xl'}>Phone Number</Heading>
+              <Input as={Field} type='text' name='phone_number' placeholder='Phone Number' />
+              <Text as={ErrorMessage} name='phone_number' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Email</Heading>
               <Input as={Field} type='email' name='email' placeholder='email' />
-              <Text as={ErrorMessage} name='email' component='div' color={'tomato'} />
-              <Text as={ErrorMessage} name='email' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Address</Heading>
               <Input as={Field} type='text' name='address_streetName' placeholder='Street Name' />
               <Text as={ErrorMessage} name='address_streetName' component='div' color={'tomato'} />
@@ -127,14 +128,14 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
                 color={'tomato'}
               />
             </Box>
-            {role === null ? (
+            {/* {role === null ? (
               <ReCAPTCHA
                 sitekey='6LcLQywpAAAAAGJJwgJxWQAY40QFBLsLAJDwgXra'
                 onChange={(value) => setFieldValue('g_recaptcha_response', value)}
               />
             ) : (
               ''
-            )}
+            )} */}
 
             <Field type='hidden' name='g_recaptcha_response' />
             <Text as={ErrorMessage} name='g_recaptcha_response' component='div' color={'tomato'} />

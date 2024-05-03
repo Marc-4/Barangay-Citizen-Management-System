@@ -18,6 +18,7 @@ const registerEmployee = async (req, res) => {
     req.body.occupation === undefined ||
     req.body.citizenship === undefined ||
     req.body.email === undefined ||
+    req.body.phone_number === undefined ||
     req.body.address_streetName === undefined ||
     req.body.address_houseNumber === undefined ||
     req.body.address_subdivisionPurok === undefined
@@ -36,9 +37,9 @@ const registerEmployee = async (req, res) => {
     return sendError('email is already taken', 403, res)
 
   const profilePhoto = req.file
-  if (!profilePhoto) {
-    return sendError('Profile photo is missing', 400, res)
-  }
+  // if (!profilePhoto) {
+  //   return sendError('Profile photo is missing', 400, res)
+  // }
 
   const encryptedPass = await bcrypt.hash(req.body.password, 10)
 
@@ -56,6 +57,7 @@ const registerEmployee = async (req, res) => {
     civilStatus: req.body.civilStatus,
     occupation: req.body.occupation,
     citizenship: req.body.citizenship,
+    phone_number: req.body.phone_number,
     email: req.body.email,
     address: {
       streetName: req.body.address_streetName,
@@ -63,8 +65,8 @@ const registerEmployee = async (req, res) => {
       subdivisionPurok: req.body.address_subdivisionPurok,
     },
     profilePhoto: {
-      data: profilePhoto.buffer,
-      fileName: profilePhoto.originalname,
+      data: profilePhoto?.buffer || null,
+      fileName: profilePhoto?.originalname || '',
     },
   }
 

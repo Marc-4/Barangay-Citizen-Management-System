@@ -41,7 +41,6 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
   const [type, setType] = useState('')
   const toast = useToast()
   const [refreshCounter, setRefreshCounter] = useState(0)
-  const [pdfText, setPdfText] = useState('')
   const [includedFields, setIncludedFields] = useState([
     'name',
     'dateOfBirth',
@@ -57,6 +56,8 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
     setUserList(users)
   }, [users])
 
+
+
   useEffect(() => {
     setUserList(users)
     setPdfUrl('')
@@ -68,20 +69,20 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
     setNumPages(numPages)
   }
 
-  const goToPreviousPage = () => {
-    setPageNumber((prevPage) => Math.max(prevPage - 1, 1))
-  }
+  // const goToPreviousPage = () => {
+  //   setPageNumber((prevPage) => Math.max(prevPage - 1, 1))
+  // }
 
-  const goToNextPage = () => {
-    setPageNumber((prevPage) => Math.min(prevPage + 1, numPages))
-  }
+  // const goToNextPage = () => {
+  //   setPageNumber((prevPage) => Math.min(prevPage + 1, numPages))
+  // }
 
-  const handlePageInputChange = (event) => {
-    const newPageNumber = parseInt(event.target.value, 10)
-    if (!isNaN(newPageNumber) && newPageNumber >= 1 && newPageNumber <= numPages) {
-      setPageNumber(newPageNumber)
-    }
-  }
+  // const handlePageInputChange = (event) => {
+  //   const newPageNumber = parseInt(event.target.value, 10)
+  //   if (!isNaN(newPageNumber) && newPageNumber >= 1 && newPageNumber <= numPages) {
+  //     setPageNumber(newPageNumber)
+  //   }
+  // }
 
   const filterTable = async (query, values, sex) => {
     const route = `http://localhost:3000/api/admin/users/search?query=${query}&params=${values}&sex=${sex}`
@@ -177,6 +178,49 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
       console.error('Error downloading PDF:', error)
     }
   }
+  const sortColumnAscending = (column) => {
+    console.log('sorting asc...')
+    users.sort((a, b) => {
+      if (column === 'subdivisionPurok') {
+        return a.profile.address[column].localeCompare(b.profile.address[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else if (column !== '_id' && column !== 'username' && column !== 'dateOfCreation') {
+        // Use case-insensitive comparison
+        return a.profile[column].localeCompare(b.profile[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else {
+        // Compare directly if column is id or username
+        return a[column].localeCompare(b[column], undefined, { sensitivity: 'base' })
+      }
+    })
+  }
+
+  const sortColumnDescending = (column) => {
+    console.log('sorting desc...')
+
+    users.sort((a, b) => {
+      if (column === 'subdivisionPurok') {
+        return b.profile.address[column].localeCompare(a.profile.address[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else if (column !== '_id' && column !== 'username' && column !== 'dateOfCreation') {
+        // Use case-insensitive comparison
+        return b.profile[column].localeCompare(a.profile[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else {
+        // Compare directly if column is id or username
+        return b[column].localeCompare(a[column], undefined, { sensitivity: 'base' })
+      }
+    })
+  }
+
+  const resetColumn = () => {
+    console.log('resetting column...')
+    setUserList([...users])
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={'full'} closeOnOverlayClick={false}>
@@ -210,15 +254,18 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
             users={userList}
             selectedUsers={selectedUsers}
             setSelectedUsers={setSelectedUsers}
+            sortColumnAsc={sortColumnAscending}
+            sortColumnDesc={sortColumnDescending}
+            resetColumn={resetColumn}
           />
           <Menu closeOnSelect={false}>
             <MenuButton as={Button} colorScheme='facebook' w={'200px'}>
-              Filters
+              Fields to Include
             </MenuButton>
             <MenuList w={'fit-content'}>
               <MenuOptionGroup
                 defaultValue={includedFields}
-                title='fields to include'
+                title='Select Fields: '
                 type='checkbox'
                 onChange={(e) => setIncludedFields(e)}
               >

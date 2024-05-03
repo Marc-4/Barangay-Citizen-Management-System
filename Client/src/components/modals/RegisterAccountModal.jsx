@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
-import { object, string, date, mixed } from 'yup'
+import { object, string, date, mixed, number } from 'yup'
 import RegisterForm from '../forms/RegisterForm'
 
 const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
@@ -39,11 +39,14 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
     civilStatus: string().required('required'),
     occupation: string().required('required'),
     citizenship: string().required('required'),
+    phone_number: string()
+      .required('required')
+      .matches(/^09\d{9}$/, 'phone number must follow format "09xxxxxxxxx"'),
     email: string().email(),
     address_streetName: string().required('required'),
     address_houseNumber: string().required('required'),
     address_subdivisionPurok: string().required('required'),
-    profilePhoto: mixed().required('required'),
+    profilePhoto: mixed(),
   })
 
   useEffect(() => {
@@ -129,6 +132,7 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
                 civilStatus: '',
                 occupation: '',
                 citizenship: '',
+                phone_number: '',
                 email: '',
                 address_streetName: '',
                 address_houseNumber: '',

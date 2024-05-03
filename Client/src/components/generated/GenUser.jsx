@@ -45,6 +45,7 @@ const GenUser = () => {
       const route = `http://localhost:3000/api/${role}/user/${id}`
       const response = await callAPI(null, method, route)
 
+      console.log('account: ', response.payload);
       if (response.result === 'OK') {
         setAccountError(null)
         setAccount(response.payload)

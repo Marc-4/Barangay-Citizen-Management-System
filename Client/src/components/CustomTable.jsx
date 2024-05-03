@@ -9,9 +9,12 @@ import {
   Th,
   Button,
   Checkbox,
+  Box,
+  Flex,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Link as rr_Link } from 'react-router-dom'
+import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa'
 const CustomTable = ({
   users,
   handleArchiveOpen,
@@ -26,10 +29,54 @@ const CustomTable = ({
   selectedUsers,
   setSelectedUsers,
   type,
+  sortColumnAsc,
+  sortColumnDesc,
 }) => {
-  useEffect(()=>{
-    console.log(selectedUsers);
+  // const keys = [
+  //   '_id',
+  //   'username',
+  //   'lastName',
+  //   'firstName',
+  //   'middleName',
+  //   'sex',
+  //   'dateOfCreation',
+  //   'subdivisionPurok',
+  // ]
+
+  //stupid but hey its there
+  const [sortCounters, setSortCounters] = useState({})
+  const [hasSorted, setHasSorted] = useState(false)
+
+  useEffect(() => {
+    console.log(selectedUsers)
   }, [selectedUsers])
+
+  const sortColumn = (key) => {
+    const currentCounter = sortCounters[key] || 0
+    const newCounter = (currentCounter + 1) % 2
+
+    setSortCounters({ ...sortCounters, [key]: newCounter })
+
+    if (newCounter === 0) {
+      sortColumnDesc(key, users)
+    } else {
+      sortColumnAsc(key, users)
+    }
+  }
+
+  const renderSortingIcon = (key) => {
+    const counter = sortCounters[key] || 0
+
+    if (hasSorted == false) {
+      return setHasSorted(true)
+    }
+    if (hasSorted && counter === 0) {
+      return <FaSortAmountDown />
+    } else if (hasSorted && counter === 1) {
+      return <FaSortAmountUp />
+    }
+  }
+
   return (
     <>
       <TableContainer
@@ -58,30 +105,106 @@ const CustomTable = ({
                   Select
                 </Th>
               )}
-              <Th p={'12px'} textAlign='center' w={'17%'}>
-                User ID
+              <Th p={'12px'} onClick={() => sortColumn('_id')} textAlign='center' w={'17%'}>
+                <Box
+                  userSelect={'none'}
+                  display='flex'
+                  gap={1}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  <span>User ID</span>
+                  {renderSortingIcon('_id')}
+                </Box>
               </Th>
-              <Th p={'12px'} textAlign='center'>
-                Username
+              <Th p={'12px'} onClick={() => sortColumn('username')} textAlign='center'>
+                <Box
+                  userSelect={'none'}
+                  display='flex'
+                  gap={1}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  <span>Username</span>
+                  {renderSortingIcon('username')}
+                </Box>
               </Th>
-              <Th p={'12px'} textAlign='center'>
-                Last Name
+              <Th p={'12px'} onClick={() => sortColumn('lastName')} textAlign='center'>
+                <Box
+                  userSelect={'none'}
+                  display='flex'
+                  gap={1}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  <span>Last name</span>
+                  {renderSortingIcon('lastName')}
+                </Box>
               </Th>
-              <Th p={'12px'} textAlign='center'>
-                First Name
+              <Th p={'12px'} onClick={() => sortColumn('firstName')} textAlign='center'>
+                <Box
+                  userSelect={'none'}
+                  display='flex'
+                  gap={1}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  <span>First name</span>
+                  {renderSortingIcon('firstName')}
+                </Box>
               </Th>
-              <Th p={'12px'} textAlign='center'>
-                Middle Name
+
+              <Th p={'12px'} onClick={() => sortColumn('sex')} textAlign='center'>
+                <Box
+                  userSelect={'none'}
+                  display='flex'
+                  gap={1}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  <span>Gender</span>
+                  {renderSortingIcon('sex')}
+                </Box>
               </Th>
-              <Th p={'12px'} textAlign='center'>
-                Gender
+              <Th p={'12px'} onClick={() => sortColumn('subdivisionPurok')} textAlign='center'>
+                <Box
+                  userSelect={'none'}
+                  display='flex'
+                  gap={1}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  <span>Purok</span>
+                  {renderSortingIcon('subdivisionPurok')}
+                </Box>
               </Th>
               {!forFilter && (
                 <>
-                  <Th p={'12px'} textAlign='center'>
-                    Date of Registration
+                  <Th
+                    p={'12px'}
+                    onClick={() => sortColumn('dateOfCreation')}
+                    textAlign='center'
+                    w={'15%'}
+                  >
+                    <Box
+                      userSelect={'none'}
+                      display='flex'
+                      gap={1}
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                      _hover={{ cursor: 'pointer' }}
+                    >
+                      <span>Registration Date</span>
+                      {renderSortingIcon('dateOfCreation', 50)}
+                    </Box>
                   </Th>
-                  <Th p={'12px'} textAlign='center' w={'15%'}>
+                  <Th p={'12px'} userSelect={'none'} textAlign='center' w={'15%'}>
                     Actions
                   </Th>
                 </>
@@ -173,7 +296,7 @@ const CustomTable = ({
                         wordWrap: 'break-word',
                       }}
                     >
-                      {profile?.middleName || 'N/A'}
+                      {profile?.sex || 'N/A'}
                     </Td>
                     <Td
                       p={'12px'}
@@ -183,7 +306,7 @@ const CustomTable = ({
                         wordWrap: 'break-word',
                       }}
                     >
-                      {profile?.sex || 'N/A'}
+                      {profile?.address.subdivisionPurok || 'N/A'}
                     </Td>
                     {!forFilter && (
                       <>

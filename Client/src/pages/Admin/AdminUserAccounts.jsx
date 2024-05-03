@@ -48,8 +48,6 @@ const AdminUserAccounts = () => {
   const [isLoading, setIsLoading] = useState(true)
   const cancelRef = useRef()
   const [refreshCounter, setRefreshCounter] = useState(0)
-  // const [users, setusers] = useState([])
-  // const [archivedUsers, setarchivedUsers] = useState([])
   const [activeUserCount, setActiveUserCount] = useState()
   const [archivedUserCount, setArchivedUserCount] = useState()
 
@@ -119,7 +117,8 @@ const AdminUserAccounts = () => {
     try {
       data = await callAPI(body, method, route)
       if (data.result === 'OK') {
-        setUsers(data.payload)
+        const payload = data.payload
+        setUsers(payload)
         setError(null)
       } else setError(data.payload.err)
     } catch (err) {
@@ -172,6 +171,44 @@ const AdminUserAccounts = () => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const sortColumnAscending = (column, users) => {
+    console.log('sorting asc...')
+    users.sort((a, b) => {
+      if (column === 'subdivisionPurok') {
+        return a.profile.address[column].localeCompare(b.profile.address[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else if (column !== '_id' && column !== 'username' && column !== 'dateOfCreation') {
+        // Use case-insensitive comparison
+        return a.profile[column].localeCompare(b.profile[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else {
+        // Compare directly if column is id or username
+        return a[column].localeCompare(b[column], undefined, { sensitivity: 'base' })
+      }
+    })
+  }
+
+  const sortColumnDescending = (column, users) => {
+    console.log('sorting desc...')
+    users.sort((a, b) => {
+      if (column === 'subdivisionPurok') {
+        return b.profile.address[column].localeCompare(a.profile.address[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else if (column !== '_id' && column !== 'username' && column !== 'dateOfCreation') {
+        // Use case-insensitive comparison
+        return b.profile[column].localeCompare(a.profile[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else {
+        // Compare directly if column is id or username
+        return b[column].localeCompare(a[column], undefined, { sensitivity: 'base' })
+      }
+    })
   }
 
   const handeUpdate = () => {
@@ -324,6 +361,8 @@ const AdminUserAccounts = () => {
               handleEditOpen={handleEditOpen}
               hasEditButton={true}
               hasArchiveButton={true}
+              sortColumnDesc={sortColumnDescending}
+              sortColumnAsc={sortColumnAscending}
             />
 
             <Pagination
@@ -340,6 +379,8 @@ const AdminUserAccounts = () => {
               handleRestoreOpen={handleRestoreOpen}
               hasRestoreButton={true}
               hasDeleteButton={true}
+              sortColumnDesc={sortColumnDescending}
+              sortColumnAsc={sortColumnAscending}
             />
 
             <Pagination

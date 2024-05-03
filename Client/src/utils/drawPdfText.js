@@ -307,6 +307,6 @@ export const drawPDF5 = (pdf, user, filter) => {
         ...defaultPdfOptions,
       })
     }
-    yPos += 25
+    yPos += 23
   }
 }

@@ -58,6 +58,9 @@ const userSchema = new mongoose.Schema({
     citizenship: {
       type: String,
     },
+    phone_number: {
+      type: Number
+    },
     address: {
       streetName: {
         type: String,
