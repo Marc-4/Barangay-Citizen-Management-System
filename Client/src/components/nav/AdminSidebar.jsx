@@ -19,12 +19,7 @@ import {
   Icon,
   Spacer,
 } from '@chakra-ui/react'
-import {
-  MdOutlineMenu,
-  MdSettings,
-  MdDashboard,
-  MdQuestionMark,
-} from 'react-icons/md'
+import { MdOutlineMenu, MdSettings, MdDashboard, MdQuestionMark } from 'react-icons/md'
 import { CiLogout } from 'react-icons/ci'
 import { HiDocument, HiClipboardDocumentList } from 'react-icons/hi2'
 import { FaUser } from 'react-icons/fa'
@@ -36,17 +31,8 @@ const AdminSidebar = ({ onToggle, isOpen }) => {
     <>
       {/* <Slide in={isOpen} direction={'left'}> */}
       <Box bg='background.50' h={'100%'} w={'300px'}>
-        <Flex
-          minW={'210px'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-        >
-          <Box
-            display={'flex'}
-            ml={'25px'}
-            justifyContent={'left'}
-            width={'100%'}
-          ></Box>
+        <Flex minW={'210px'} justifyContent={'space-between'} alignItems={'center'}>
+          <Box display={'flex'} ml={'25px'} justifyContent={'left'} width={'100%'}></Box>
           {/* <CloseButton m={'5px'} mt={'10px'} onClick={onToggle} /> */}
         </Flex>
         <VStack

@@ -10,13 +10,13 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import UpcomingTransactions from '../../components/UpcomingTransactions'
-import { FaUser, FaUserCog, FaUserSlash } from 'react-icons/fa'
+import { BsFillPersonBadgeFill } from 'react-icons/bs'
+import { FaUser, FaUserCog } from 'react-icons/fa'
 import { HiDocumentText, HiClipboardDocumentList } from 'react-icons/hi2'
 import callAPI from '../../utils/callAPI'
 
 const EmployeeDashboard = () => {
   const [totalUsers, setTotalUsers] = useState('-')
-  const [totalEmployees, setTotalEmployees] = useState('-')
   const [lifetimeTransactions, setLifetimeTransactions] = useState('-')
   const [totalPendingRequests, setPendingRequests] = useState('-')
   const [totalPendingTransactions, setPendingTransactions] = useState('-')
@@ -108,6 +108,8 @@ const EmployeeDashboard = () => {
   return (
     <>
       <SimpleGrid
+        m={'auto'}
+        w={'87%'}
         id='stats_table'
         spacing={'50px'}
         minChildWidth={'250px'}
@@ -116,12 +118,7 @@ const EmployeeDashboard = () => {
       >
         <Card>
           <CardHeader>
-            <Icon
-              as={FaUser}
-              boxSize={'10'}
-              display={'inline-block'}
-              mr={'15px'}
-            ></Icon>
+            <Icon as={FaUser} boxSize={'10'} display={'inline-block'} mr={'15px'}></Icon>
             <Heading display={'inline-block'}>{totalUsers}</Heading>
           </CardHeader>
           <CardBody>
@@ -130,6 +127,7 @@ const EmployeeDashboard = () => {
             </Text>
           </CardBody>
         </Card>
+
         <Card>
           <CardHeader>
             <Icon
@@ -146,25 +144,7 @@ const EmployeeDashboard = () => {
             </Text>
           </CardBody>
         </Card>
-        <Card>
-          <CardHeader>
-            <Icon
-              as={HiDocumentText}
-              boxSize={'10'}
-              display={'inline-block'}
-              mr={'15px'}
-            ></Icon>
-            <Heading display={'inline-block'}>
-              {totalPendingTransactions}
-            </Heading>
-          </CardHeader>
-          <CardBody>
-            <Text fontSize={'xl'} fontWeight={'semibold'}>
-              Pending Transactions
-            </Text>
-          </CardBody>
-        </Card>
-        <Card>
+        {/* <Card>
           <CardHeader>
             <Icon
               as={HiDocumentText}
@@ -181,16 +161,10 @@ const EmployeeDashboard = () => {
               Pending User Requests
             </Text>
           </CardBody>
-        </Card>
+        </Card> */}
       </SimpleGrid>
-      <SimpleGrid
-        id='transactions'
-        textAlign={'center'}
-        spacing={'4'}
-        p={'10px'}
-        rounded={'10px'}
-      >
-        <Heading>Upcoming Transactions</Heading>
+      <SimpleGrid id='transactions' textAlign={'center'} spacing={'4'} p={'10px'} rounded={'10px'}>
+        <Heading>Recent Transactions</Heading>
         <Text
           fontSize={'2xl'}
           fontWeight={'semibold'}
@@ -199,12 +173,7 @@ const EmployeeDashboard = () => {
         >
           {error}
         </Text>
-        <Spinner
-          display={isLoading ? 'block' : 'none'}
-          m={'auto'}
-          size={'xl'}
-          mt={'25px'}
-        />
+        <Spinner display={isLoading ? 'block' : 'none'} m={'auto'} size={'xl'} mt={'25px'} />
         <UpcomingTransactions />
       </SimpleGrid>
     </>

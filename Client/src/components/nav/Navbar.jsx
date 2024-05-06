@@ -20,12 +20,12 @@ import { Buffer } from 'buffer'
 
 const Navbar = () => {
   const navigate = useNavigate()
-  const [notifications, setNotifications] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  // const [notifications, setNotifications] = useState([])
+  // const [isLoading, setIsLoading] = useState(true)
   const [image, setImage] = useState()
   const [username, setUsername] = useState()
   const [error, setError] = useState(null)
-  const [refreshCounter, setRefreshCounter] = useState(0)
+  // const [refreshCounter, setRefreshCounter] = useState(0)
   const [toggleOpen, setToggleOpen] = useState(false)
   const role = localStorage.getItem('userRole')
   const ref = useRef(null)
@@ -74,9 +74,9 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    getNotifications()
+    // getNotifications()
     getUser()
-  }, [refreshCounter])
+  }, [])
 
   const getUser = async () => {
     try {
@@ -93,27 +93,24 @@ const Navbar = () => {
     }
   }
 
-  const getNotifications = async () => {
-    setIsLoading(true)
-    try {
-      const route = `http://localhost:3000/api/${role}/notifications?entries=20`
-      const response = await callAPI(null, 'GET', route)
+  // const getNotifications = async () => {
+  //   setIsLoading(true)
+  //   try {
+  //     const route = `http://localhost:3000/api/${role}/notifications?entries=20`
+  //     const response = await callAPI(null, 'GET', route)
 
-      if (response.result === 'OK') {
-        setError(null)
-        setNotifications(response.payload)
-      } else setError(response.payload.error)
-    } catch (err) {
-      console.log(err)
-      setError('Error fetching Notifications')
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  //     if (response.result === 'OK') {
+  //       setError(null)
+  //       setNotifications(response.payload)
+  //     } else setError(response.payload.error)
+  //   } catch (err) {
+  //     console.log(err)
+  //     setError('Error fetching Notifications')
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
 
-  const handleNotificationClick = () => {
-    setToggleOpen(false)
-  }
 
   return (
     <>

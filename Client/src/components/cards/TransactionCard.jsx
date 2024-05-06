@@ -8,14 +8,14 @@ const TransactionCard = ({ data, basepath }) => {
 
   return (
     <>
-      <Link as={rr_link} w={'95%'} to={`${basepath}/${data._id}`} _hover={{ textDecor: 'none' }}>
+      <Link as={rr_link} w={'90%'} to={`${basepath}/${data._id}`} _hover={{ textDecor: 'none' }}>
         <Card
           m={'auto'}
           overflow='hidden'
           display={'flex'}
           fontSize={'md'}
           bg={'background.main'}
-          w={'90%'}
+          w={'full'}
           h={'100px'}
           // shadow={'md'}
           // mb={'5px'}

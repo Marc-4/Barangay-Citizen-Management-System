@@ -76,7 +76,7 @@ const editEmployee = async (req, res) => {
   if (civilStatus) employee.profile.civilStatus = req.body.civilStatus
   if (occupation) employee.profile.occupation = req.body.occupation
   if (citizenship) employee.profile.citizenship = req.body.citizenship
-  if (phone_number) user.profile.phone_number = req.body.phone_number
+  if (phone_number) employee.profile.phone_number = req.body.phone_number
   if (email != null) employee.profile.email = req.body.email
   if (address_streetName) employee.profile.address.streetName = address_streetName
   if (address_houseNumber) employee.profile.address.houseNumber = address_houseNumber

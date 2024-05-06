@@ -20,7 +20,7 @@ import {
   TabPanels,
   TabPanel,
 } from '@chakra-ui/react'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, Suspense, lazy, startTransition } from 'react'
 import callAPI from '../../utils/callAPI'
 import Searchbar from '../../components/Searchbar'
 import { Link as rr_Link } from 'react-router-dom'
@@ -31,64 +31,51 @@ import DeleteAccountAlert from '../../components/popups/DeleteAccountAlert'
 import ArchiveAccountAlert from '../../components/popups/ArchiveAccountAlert'
 import RestoreAccountAlert from '../../components/popups/RestoreAccountAlert'
 import RefreshButton from '../../components/RefreshButton'
+import Pagination from '../../components/pagination'
+import CustomTable from '../../components/CustomTable'
 
 const EmployeeUserAccounts = () => {
   const [users, setUsers] = useState([])
   const [archivedUsers, setArchivedUsers] = useState([])
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
-  const [entries, setEntries] = useState(20)
+  const [archivedPage, setArchivedPage] = useState(1)
+  const [entries, setEntries] = useState(10)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const cancelRef = useRef()
   const [refreshCounter, setRefreshCounter] = useState(0)
-  const [sortedUsers, setSortedUsers] = useState([])
-  const [sortedArchivedUsers, setSortedArchivedUsers] = useState([])
+  const [activeUserCount, setActiveUserCount] = useState()
+  const [archivedUserCount, setArchivedUserCount] = useState()
 
   const {
     isOpen: isRegisterOpen,
     onOpen: onRegisterOpen,
     onClose: onRegisterClose,
   } = useDisclosure()
-  const {
-    isOpen: isEditOpen,
-    onOpen: onEditOpen,
-    onClose: onEditClose,
-  } = useDisclosure()
-  const {
-    isOpen: isExportOpen,
-    onOpen: onExportOpen,
-    onClose: onExportClose,
-  } = useDisclosure()
-  const {
-    isOpen: isArchiveOpen,
-    onOpen: onArchiveOpen,
-    onClose: onArchiveClose,
-  } = useDisclosure()
-  const {
-    isOpen: isRestoreOpen,
-    onOpen: onRestoreOpen,
-    onClose: onRestoreClose,
-  } = useDisclosure()
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
+  const { isOpen: isExportOpen, onOpen: onExportOpen, onClose: onExportClose } = useDisclosure()
+  const { isOpen: isArchiveOpen, onOpen: onArchiveOpen, onClose: onArchiveClose } = useDisclosure()
+  const { isOpen: isRestoreOpen, onOpen: onRestoreOpen, onClose: onRestoreClose } = useDisclosure()
+
+  useEffect(() => {
+    getUsers()
+    getUsersCount()
+    console.log('active user count: ' + activeUserCount)
+    console.log(users)
+  }, [page, entries])
+
+  useEffect(() => {
+    getArchivedUsers()
+  }, [archivedPage])
 
   useEffect(() => {
     getUsers()
     getArchivedUsers()
+    console.log(users)
   }, [refreshCounter])
-
-  useEffect(() => {
-    setSortedUsers(
-      [...users].sort(
-        (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
-      )
-    )
-    setSortedArchivedUsers(
-      [...archivedUsers].sort(
-        (a, b) => new Date(b.dateOfCreation) - new Date(a.dateOfCreation)
-      )
-    )
-  }, [users, archivedUsers])
 
   const getUsers = async () => {
     setIsLoading(true)
@@ -108,6 +95,32 @@ const EmployeeUserAccounts = () => {
       setError('Connection Error')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const getUsersCount = async () => {
+    const body = null
+    const method = 'GET'
+    const route = `http://localhost:3000/api/employee/users?entries=${0}&filter=ACTIVE`
+    const route2 = `http://localhost:3000/api/employee/users?entries=ARCHIVED_COUNT&filter=ARCHIVED`
+
+    let activeCount, archivedCount
+    try {
+      activeCount = await callAPI(body, method, route)
+      archivedCount = await callAPI(body, method, route2)
+
+      if (activeCount.result === 'OK') {
+        setActiveUserCount(activeCount.payload)
+        setError(null)
+      } else setError(data.payload.err)
+
+      if (archivedCount.result === 'OK') {
+        setArchivedUserCount(archivedCount.payload)
+        setError(null)
+      } else setError(data.payload.err)
+    } catch (err) {
+      console.log(err)
+      setError('Connection Error')
     }
   }
 
@@ -156,9 +169,47 @@ const EmployeeUserAccounts = () => {
       setIsLoading(false)
     }
   }
+  const sortColumnAscending = (column, users) => {
+    console.log('sorting asc...')
+    users.sort((a, b) => {
+      if (column === 'subdivisionPurok') {
+        return a.profile.address[column].localeCompare(b.profile.address[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else if (column !== '_id' && column !== 'username' && column !== 'dateOfCreation') {
+        // Use case-insensitive comparison
+        return a.profile[column].localeCompare(b.profile[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else {
+        // Compare directly if column is id or username
+        return a[column].localeCompare(b[column], undefined, { sensitivity: 'base' })
+      }
+    })
+  }
+
+  const sortColumnDescending = (column, users) => {
+    console.log('sorting desc...')
+    users.sort((a, b) => {
+      if (column === 'subdivisionPurok') {
+        return b.profile.address[column].localeCompare(a.profile.address[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else if (column !== '_id' && column !== 'username' && column !== 'dateOfCreation') {
+        // Use case-insensitive comparison
+        return b.profile[column].localeCompare(a.profile[column], undefined, {
+          sensitivity: 'base',
+        })
+      } else {
+        // Compare directly if column is id or username
+        return b[column].localeCompare(a[column], undefined, { sensitivity: 'base' })
+      }
+    })
+  }
 
   const handeUpdate = () => {
     getUsers()
+    getUsersCount()
     getArchivedUsers()
   }
 
@@ -170,6 +221,15 @@ const EmployeeUserAccounts = () => {
   const handleEditClose = () => {
     setSelectedUser(null)
     onEditClose()
+  }
+  const handleDeleteOpen = (user) => {
+    setSelectedUser(user)
+    onDeleteOpen()
+  }
+
+  const handleDeleteClose = () => {
+    setSelectedUser(null)
+    onDeleteClose()
   }
 
   const handleArchiveOpen = (user) => {
@@ -219,6 +279,16 @@ const EmployeeUserAccounts = () => {
           role: 'user',
         }}
       />
+      <DeleteAccountAlert
+        {...{
+          isOpen: isDeleteOpen,
+          onClose: handleDeleteClose,
+          cancelRef: cancelRef,
+          user: selectedUser,
+          onUpdate: handeUpdate,
+          role: 'user',
+        }}
+      />
       <ArchiveAccountAlert
         {...{
           isOpen: isArchiveOpen,
@@ -241,32 +311,14 @@ const EmployeeUserAccounts = () => {
       />
       <Box m={'auto'} display='flex' alignItems='center' w={'90%'}>
         <Flex flexDirection='row' gap={'10px'} mt={'15px'} mb={'15px'}>
-          <Searchbar
-            entries={entries}
-            page={page}
-            searchHandler={handleSearch}
-          />
-          <RefreshButton
-            refreshCounter={refreshCounter}
-            setRefreshCounter={setRefreshCounter}
-          />
-          <Button
-            mt={'10px'}
-            ml={'10px'}
-            colorScheme='facebook'
-            onClick={onRegisterOpen}
-          >
+          <Searchbar entries={entries} page={page} searchHandler={handleSearch} />
+          <RefreshButton refreshCounter={refreshCounter} setRefreshCounter={setRefreshCounter} />
+          <Button mt={'5px'} colorScheme='facebook' onClick={onRegisterOpen}>
             Register User
           </Button>
-          {/* <Button
-            mt={'10px'}
-            ml={'10px'}
-            colorScheme='facebook'
-            color={'white'}
-            onClick={onExportOpen}
-          >
+          <Button mt={'5px'} colorScheme='facebook' color={'white'} onClick={onExportOpen}>
             Export to PDF
-          </Button> */}
+          </Button>
         </Flex>
       </Box>
       <Divider margin={'auto'} borderColor={'brand.100'} w={'90%'} />
@@ -288,354 +340,50 @@ const EmployeeUserAccounts = () => {
           </Tab>
         </TabList>
         {error ? (
-          <Text
-            fontSize={'2xl'}
-            fontWeight={'semibold'}
-            color={'tomato'}
-            textAlign={'center'}
-          >
+          <Text fontSize={'2xl'} fontWeight={'semibold'} color={'tomato'} textAlign={'center'}>
             {error}
           </Text>
         ) : (
           ''
         )}
-        {isLoading ? (
-          <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} />
-        ) : (
-          ''
-        )}
+        {isLoading ? <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} /> : ''}
         <TabPanels>
           <TabPanel>
-            {isLoading !== true && users.length === 0 ? (
-              <Text
-                fontWeight={'semibold'}
-                fontSize={'2xl'}
-                textAlign={'center'}
-              >
-                No Users
-              </Text>
-            ) : (
-              <TableContainer
-                display={'flex'}
-                margin={'10px'}
-                alignContent={'center'}
-                justifyContent={'center'}
-                rounded='md'
-              >
-                <Table
-                  m={'auto'}
-                  w={'100%'}
-                  p={'10px'}
-                  rounded='md'
-                  bg='brand.400'
-                  variant={'simple'}
-                  style={{ borderCollapse: 'separate', tableLayout: 'fixed' }}
-                  borderColor={'gray.400'}
-                  borderWidth={'1px'}
-                >
-                  <Thead>
-                    <Tr>
-                      <Th p={'12px'} textAlign='center' w={'17%'}>
-                        User ID
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Username
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Last Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        First Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Middle Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center' w={'7%'}>
-                        Sex
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Date of Registration
-                      </Th>
-                      <Th p={'12px'} textAlign='center' w={'15%'}>
-                        Actions
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {sortedUsers.map((user) => {
-                      const profile = user.profile
-                      return (
-                        <Tr key={user._id} fontSize={'md'}>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            <Link
-                              as={rr_Link}
-                              color={'primary.500'}
-                              to={`${user._id}`}
-                            >
-                              {user._id}
-                            </Link>
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center '
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {user?.username || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.lastName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.firstName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.middleName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.sex || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {new Date(user.dateOfCreation).toLocaleDateString()}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            justifyContent={'center'}
-                            display={'flex'}
-                            gap={'10px'}
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            <Button
-                              onClick={() => handleEditOpen(user)}
-                              colorScheme='green'
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                              onClick={() => handleArchiveOpen(user)}
-                              colorScheme='orange'
-                            >
-                              Archive
-                            </Button>
-                          </Td>
-                        </Tr>
-                      )
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            )}
+            <CustomTable
+              users={users}
+              handleArchiveOpen={handleArchiveOpen}
+              handleDeleteOpen={handleDeleteOpen}
+              handleEditOpen={handleEditOpen}
+              hasEditButton={true}
+              hasArchiveButton={true}
+              sortColumnDesc={sortColumnDescending}
+              sortColumnAsc={sortColumnAscending}
+            />
+
+            <Pagination
+              numOfPages={Math.round(Math.max(activeUserCount / entries, 1))}
+              page={page}
+              setPage={setPage}
+              setEntries={setEntries}
+            />
           </TabPanel>
           <TabPanel>
-            {!isLoading && archivedUsers.length === 0 ? (
-              <Text
-                fontWeight={'semibold'}
-                fontSize={'2xl'}
-                textAlign={'center'}
-              >
-                No Archived Users
-              </Text>
-            ) : (
-              <TableContainer
-                display={'flex'}
-                margin={'10px'}
-                alignContent={'center'}
-                justifyContent={'center'}
-                rounded='md'
-              >
-                <Table
-                  w={'100%'}
-                  p={'10px'}
-                  rounded='md'
-                  bg='brand.400'
-                  variant={'simple'}
-                  style={{ borderCollapse: 'separate', tableLayout: 'fixed' }}
-                  borderColor={'gray.400'}
-                  borderWidth={'1px'}
-                >
-                  <Thead>
-                    <Tr>
-                      <Th p={'12px'} textAlign='center' w={'17%'}>
-                        User ID
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Username
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Last Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        First Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Middle Name
-                      </Th>
-                      <Th p={'12px'} textAlign='center' w={'7%'}>
-                        Sex
-                      </Th>
-                      <Th p={'12px'} textAlign='center'>
-                        Date of Registration
-                      </Th>
-                      <Th p={'12px'} textAlign='center' w={'15%'}>
-                        Actions
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {sortedArchivedUsers.map((user) => {
-                      const profile = user.profile
-                      return (
-                        <Tr key={user._id}>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            <Link
-                              as={rr_Link}
-                              color={'primary.500'}
-                              to={`${user._id}`}
-                            >
-                              {user._id}
-                            </Link>
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            fontWeight={'semibold1'}
-                            textAlign='center '
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {user?.username || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.lastName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.firstName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.middleName || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {profile?.sex || 'N/A'}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            {new Date(user.dateOfCreation).toLocaleDateString()}
-                          </Td>
-                          <Td
-                            p={'12px'}
-                            textAlign='center'
-                            justifyContent={'center'}
-                            display={'flex'}
-                            gap={'10px'}
-                            style={{
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                            }}
-                          >
-                            <Button
-                              onClick={() => handleRestoreOpen(user)}
-                              colorScheme='green'
-                            >
-                              Restore
-                            </Button>
-                          </Td>
-                        </Tr>
-                      )
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            )}
+            <CustomTable
+              users={archivedUsers}
+              handleDeleteOpen={handleDeleteOpen}
+              handleRestoreOpen={handleRestoreOpen}
+              hasRestoreButton={true}
+              hasDeleteButton={true}
+              sortColumnDesc={sortColumnDescending}
+              sortColumnAsc={sortColumnAscending}
+            />
+
+            <Pagination
+              numOfPages={Math.round(Math.max(archivedUserCount / entries, 1))}
+              page={archivedPage}
+              setPage={setArchivedPage}
+              setEntries={setEntries}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

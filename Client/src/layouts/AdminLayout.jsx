@@ -1,15 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/nav/Navbar'
 import Sidebar from '../components/nav/AdminSidebar'
-import {
-  Flex,
-  Button,
-  Grid,
-  GridItem,
-  useDisclosure,
-  Box,
-  IconButton,
-} from '@chakra-ui/react'
+import { Flex, Button, Grid, GridItem, useDisclosure, Box, IconButton } from '@chakra-ui/react'
 
 const AdminLayout = () => {
   const { isOpen, onToggle } = useDisclosure()
