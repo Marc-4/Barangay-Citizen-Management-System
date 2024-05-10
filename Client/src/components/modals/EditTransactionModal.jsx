@@ -27,9 +27,12 @@ const EditTransactionModal = ({ isOpen, onClose, transaction, onUpdate }) => {
 
   const validationSchema = object({
     transacType: string().required('Please select a transaction type.'),
-    purpose: string().required('purpose cannot be blank.'),
-    cost: number().required('cost cannot be blank.'),
-    income: number().required('income cannot be blank.'),
+    purpose: string(),
+    // .required('purpose cannot be blank.'),
+    cost: number(),
+    // .required('cost cannot be blank.'),
+    income: number(),
+    // .required('income cannot be blank.'),
   })
 
   const editTransaction = async (values) => {
