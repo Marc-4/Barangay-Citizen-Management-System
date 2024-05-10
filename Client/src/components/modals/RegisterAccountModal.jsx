@@ -17,7 +17,7 @@ import RegisterForm from '../forms/RegisterForm'
 const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-
+  const userRole = localStorage.getItem('userRole')
   const validationSchema = object({
     username: string().required('required'),
     password: string().required('required').min(8),
@@ -74,7 +74,7 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
         console.log(pair[0], pair[1])
       }
 
-      const route = `http://localhost:3000/api/admin/${role}/register`
+      const route = `http://localhost:3000/api/${userRole}/${role}/register`
       const response = await fetch(route, {
         method: 'POST',
         body: formData,

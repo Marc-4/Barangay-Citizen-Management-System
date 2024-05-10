@@ -373,7 +373,7 @@ const EmployeeUserAccounts = () => {
               handleDeleteOpen={handleDeleteOpen}
               handleRestoreOpen={handleRestoreOpen}
               hasRestoreButton={true}
-              hasDeleteButton={true}
+              hasDeleteButton={false}
               sortColumnDesc={sortColumnDescending}
               sortColumnAsc={sortColumnAscending}
             />
