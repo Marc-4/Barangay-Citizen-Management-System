@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as Employee from '../controllers/Employee/index.js'
+import * as User from '../controllers/User/index.js'
 import { authToken, authEmployee } from '../middlewares/index.js'
 import multer from 'multer'
 
@@ -23,6 +24,7 @@ router.patch('/user/profile/:id/edit', middlewares, upload.single('profilePhoto'
 router.patch('/user/:id/archive', middlewares, Employee.archiveUserController)
 router.patch('/user/:id/restore', middlewares, Employee.restoreUserController)
 
+router.post('/transaction/create', middlewares, User.createUserTransactionController)
 router.get('/transaction/:id', middlewares, Employee.getTransactionController)
 router.get('/transactions/search', middlewares, Employee.searchTransactionController)
 router.get('/transactions/', middlewares, Employee.getAllTransactionsController)

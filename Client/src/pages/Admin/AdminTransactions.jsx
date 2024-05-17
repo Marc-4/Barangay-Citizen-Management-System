@@ -25,7 +25,7 @@ const AdminTransactions = () => {
   const [page, setPage] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
   const [refreshCounter, setRefreshCounter] = useState(0)
-  const [entries, setEntries] = useState(10)
+  const [entries, setEntries] = useState(20)
   const [transactionCount, setTransactionCount] = useState()
 
   useEffect(() => {
@@ -133,6 +133,15 @@ const AdminTransactions = () => {
           <Tab onClick={() => setFilter('PENDING')}>Pending Transactions</Tab>
           <Tab onClick={() => setFilter('HISTORY')}>Transaction History</Tab>
         </TabList> */}
+      <Box paddingTop={'10px'} display={'flex'} justifyContent={'right'} mr={'5rem'}>
+        <Pagination
+          numOfPages={Math.round(Math.max(transactionCount / entries, 1))}
+          page={page}
+          setPage={setPage}
+          entries={entries}
+          setEntries={setEntries}
+        />
+      </Box>
       <Box m={'auto'} w={'90%'} pt={'10px'}>
         {error ? (
           <Text fontSize={'2xl'} fontWeight={'semibold'} color={'tomato'} textAlign={'center'}>
@@ -158,15 +167,6 @@ const AdminTransactions = () => {
           ))
         )}
       </Box>
-      <Box paddingTop={'10px'}>
-        <Pagination
-          numOfPages={Math.round(Math.max(transactionCount / entries, 1))}
-          page={page}
-          setPage={setPage}
-          setEntries={setEntries}
-        />
-      </Box>
-
       {/* </TabPanel>
           <TabPanel> */}
       {/* {!isLoading && pastTransactions.length === 0 ? (

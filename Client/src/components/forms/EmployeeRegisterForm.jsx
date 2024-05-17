@@ -9,6 +9,8 @@ import {
   Radio,
   Image,
   Select,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
@@ -122,7 +124,12 @@ const EmployeeRegisterForm = ({ onSubmit, validationSchema, initialValues }) => 
               <Input as={Field} type='text' name='citizenship' placeholder='citizenship' />
               <Text as={ErrorMessage} name='citizenship' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Phone Number</Heading>
-              <Input as={Field} type='text' name='phone_number' placeholder='Phone Number' />
+              <InputGroup>
+                <InputLeftElement pointerEvents='none' color='gray.500' fontWeight={'semibold'}>
+                  +63
+                </InputLeftElement>
+                <Input as={Field} type='text' name='phone_number' placeholder='Phone Number' />
+              </InputGroup>
               <Text as={ErrorMessage} name='phone_number' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Email</Heading>
               <Input as={Field} type='email' name='email' placeholder='email' />

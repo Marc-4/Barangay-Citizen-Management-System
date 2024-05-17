@@ -19,6 +19,7 @@ const TransactionModal = ({ isOpen, onClose, transaction, onUpdate, status }) =>
   const { id } = useParams()
   const [error, setError] = useState()
   const [success, setSuccess] = useState()
+  const role = localStorage.getItem('userRole')
   const [message, setMessage] = useState(
     status === 'ACCEPTED'
       ? `Go to the barangay hall to get your requested document(s). Prepare a sum of ${
@@ -31,7 +32,7 @@ const TransactionModal = ({ isOpen, onClose, transaction, onUpdate, status }) =>
   const editTransaction = async () => {
     setIsLoading(true)
     try {
-      const route = `http://localhost:3000/api/admin/transaction/${id}/edit`
+      const route = `http://localhost:3000/api/${role}/transaction/${id}/edit`
       const body = { status: status, message: message }
       console.log(body)
 

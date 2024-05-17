@@ -328,8 +328,18 @@ const AdminEmployeeAccounts = () => {
               </Text>
             ) : ( */}
             <>
+              <Box display={'flex'} justifyContent={'right'} mr={'.6rem'}>
+                <Pagination
+                  numOfPages={Math.round(Math.max(activeEmployeeCount / entries, 1))}
+                  setPage={setPage}
+                  page={page}
+                  entries={entries}
+                  setEntries={setEntries}
+                />
+              </Box>
               <CustomTable
                 users={employees}
+                hasUsername
                 handleArchiveOpen={handleArchiveOpen}
                 handleDeleteOpen={handleDeleteOpen}
                 handleEditOpen={handleEditOpen}
@@ -338,30 +348,29 @@ const AdminEmployeeAccounts = () => {
                 sortColumnAsc={sortColumnAscending}
                 sortColumnDesc={sortColumnDescending}
               />
-              <Pagination
-                numOfPages={Math.round(Math.max(activeEmployeeCount / entries, 1))}
-                setPage={setPage}
-                page={page}
-                setEntries={setEntries}
-              />
             </>
           </TabPanel>
           <TabPanel>
             <>
+              <Box display={'flex'} justifyContent={'right'} mr={'.6rem'}>
+                <Pagination
+                  numOfPages={Math.round(Math.max(archivedEmployeeCount / entries, 1))}
+                  page={archivedPage}
+                  setPage={setArchivedPage}
+                  entries={entries}
+                  setEntries={setEntries}
+                />
+              </Box>
+
               <CustomTable
                 users={archivedEmployees}
+                hasUsername
                 handleDeleteOpen={handleDeleteOpen}
                 handleRestoreOpen={handleRestoreOpen}
                 hasDeleteButton
                 hasRestoreButton
                 sortColumnAsc={sortColumnAscending}
                 sortColumnDesc={sortColumnDescending}
-              />
-              <Pagination
-                numOfPages={Math.round(Math.max(archivedEmployeeCount / entries, 1))}
-                page={archivedPage}
-                setPage={setArchivedPage}
-                setEntries={setEntries}
               />
             </>
           </TabPanel>

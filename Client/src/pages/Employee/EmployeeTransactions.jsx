@@ -25,7 +25,7 @@ const EmployeeTransactions = () => {
   const [filter, setFilter] = useState('PENDING')
   const [isLoading, setIsLoading] = useState(true)
   const [refreshCounter, setRefreshCounter] = useState(0)
-  const [entries, setEntries] = useState(10)
+  const [entries, setEntries] = useState(20)
   const [transactionCount, setTransactionCount] = useState()
 
   useEffect(() => {
@@ -133,11 +133,12 @@ const EmployeeTransactions = () => {
         <Tab onClick={() => setFilter('PENDING')}>Pending Transactions</Tab>
         <Tab onClick={() => setFilter('HISTORY')}>Transaction History</Tab>
       </TabList> */}
-      <Box display={'flex'} ml={'5rem'} paddingTop={'10px'}>
+      <Box display={'flex'} justifyContent={'right'} mr={'5rem'} paddingTop={'10px'}>
         <Pagination
           numOfPages={Math.round(Math.max(transactionCount / entries, 1))}
           page={page}
           setPage={setPage}
+          entries={entries}
           setEntries={setEntries}
         />
       </Box>

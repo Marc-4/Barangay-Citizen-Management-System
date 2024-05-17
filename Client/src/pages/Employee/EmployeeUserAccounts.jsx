@@ -349,6 +349,16 @@ const EmployeeUserAccounts = () => {
         {isLoading ? <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} /> : ''}
         <TabPanels>
           <TabPanel>
+            <Box display={'flex'} justifyContent={'right'} mr={'.6rem'}>
+              <Pagination
+                numOfPages={Math.round(Math.max(activeUserCount / entries, 1))}
+                page={page}
+                setPage={setPage}
+                entries={entries}
+                setEntries={setEntries}
+              />
+            </Box>
+
             <CustomTable
               users={users}
               handleArchiveOpen={handleArchiveOpen}
@@ -359,15 +369,17 @@ const EmployeeUserAccounts = () => {
               sortColumnDesc={sortColumnDescending}
               sortColumnAsc={sortColumnAscending}
             />
-
-            <Pagination
-              numOfPages={Math.round(Math.max(activeUserCount / entries, 1))}
-              page={page}
-              setPage={setPage}
-              setEntries={setEntries}
-            />
           </TabPanel>
           <TabPanel>
+            <Box display={'flex'} justifyContent={'right'} mr={'.6rem'}>
+              <Pagination
+                numOfPages={Math.round(Math.max(archivedUserCount / entries, 1))}
+                page={archivedPage}
+                setPage={setArchivedPage}
+                entries={entries}
+                setEntries={setEntries}
+              />
+            </Box>
             <CustomTable
               users={archivedUsers}
               handleDeleteOpen={handleDeleteOpen}
@@ -376,13 +388,6 @@ const EmployeeUserAccounts = () => {
               hasDeleteButton={false}
               sortColumnDesc={sortColumnDescending}
               sortColumnAsc={sortColumnAscending}
-            />
-
-            <Pagination
-              numOfPages={Math.round(Math.max(archivedUserCount / entries, 1))}
-              page={archivedPage}
-              setPage={setArchivedPage}
-              setEntries={setEntries}
             />
           </TabPanel>
         </TabPanels>

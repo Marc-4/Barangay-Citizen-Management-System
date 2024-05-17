@@ -21,8 +21,8 @@ function RegisterModal({ isOpen, onClose }) {
   const [success, setSuccess] = useState('')
 
   const validationSchema = object({
-    username: string().required('required'),
-    password: string().required('required').min(8),
+    // username: string().required('required'),
+    // password: string().required('required').min(8),
     firstName: string()
       .required('required')
       .matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols'),
@@ -164,8 +164,8 @@ function RegisterModal({ isOpen, onClose }) {
               }}
               validationSchema={validationSchema}
               initialValues={{
-                username: '',
-                password: '',
+                // username: '',
+                // password: '',
                 firstName: '',
                 middleName: '',
                 lastName: '',

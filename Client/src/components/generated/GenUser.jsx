@@ -137,7 +137,7 @@ const GenUser = () => {
                 <TransactionCard
                   key={transaction?._id}
                   data={transaction}
-                  basepath={'/admin/transactions'}
+                  basepath={`/${role}/transactions`}
                 />
               ))
             ) : (

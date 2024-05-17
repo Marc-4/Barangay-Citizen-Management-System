@@ -40,7 +40,7 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
     citizenship: string().required('required'),
     phone_number: string()
       .required('required')
-      .matches(/^09\d{9}$/, 'phone number must follow format "09xxxxxxxxx"'),
+      .matches(/^9\d{9}$/, 'phone number must follow format "9xxxxxxxxx"'),
     email: string().email(),
     address_streetName: string().required('required'),
     address_houseNumber: string().required('required'),
@@ -72,7 +72,7 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
     citizenship: string().required('required'),
     phone_number: string()
       .required('required')
-      .matches(/^09\d{9}$/, 'phone number must follow format "09xxxxxxxxx"'),
+      .matches(/^9\d{9}$/, 'phone number must follow format "9xxxxxxxxx"'),
     email: string().email(),
     address_streetName: string().required('required'),
     address_houseNumber: string().required('required'),
@@ -152,8 +152,6 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
                 }}
                 validationSchema={userValidationSchema}
                 initialValues={{
-                  username: '',
-                  password: '',
                   firstName: '',
                   middleName: '',
                   lastName: '',
@@ -179,7 +177,6 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
                 onSubmit={(values, { setSubmitting, resetForm }) => {
                   setTimeout(async () => {
                     await createUser(values, resetForm)
-                    // console.log(values)
                     setSubmitting(false)
                   }, 1000)
                 }}

@@ -41,7 +41,7 @@ router.patch('/transaction/:id/edit', middlewares, Admin.editTransactionControll
 
 //test all these
 router.post('/transaction/create', middlewares, User.createUserTransactionController)
-router.get('/transactions/', middlewares, User.getUserTransactionsController)
+// router.get('/transactions/', middlewares, User.getUserTransactionsController)
 router.get('/transaction/:id', middlewares, User.getUserTransactionController)
 router.get('/transactions/search', middlewares, User.searchUserTransactionController)
 

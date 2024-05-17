@@ -17,6 +17,7 @@ import { Link as rr_Link } from 'react-router-dom'
 import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa'
 const CustomTable = ({
   users,
+  hasUsername,
   handleArchiveOpen,
   handleDeleteOpen,
   handleEditOpen,
@@ -118,19 +119,21 @@ const CustomTable = ({
                   {renderSortingIcon('_id')}
                 </Box>
               </Th>
-              <Th p={'12px'} onClick={() => sortColumn('username')} textAlign='center'>
-                <Box
-                  userSelect={'none'}
-                  display='flex'
-                  gap={1}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  _hover={{ cursor: 'pointer' }}
-                >
-                  <span>Username</span>
-                  {renderSortingIcon('username')}
-                </Box>
-              </Th>
+              {hasUsername && (
+                <Th p={'12px'} onClick={() => sortColumn('username')} textAlign='center'>
+                  <Box
+                    userSelect={'none'}
+                    display='flex'
+                    gap={1}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    _hover={{ cursor: 'pointer' }}
+                  >
+                    <span>Username</span>
+                    {renderSortingIcon('username')}
+                  </Box>
+                </Th>
+              )}
               <Th p={'12px'} onClick={() => sortColumn('lastName')} textAlign='center'>
                 <Box
                   userSelect={'none'}
@@ -258,16 +261,18 @@ const CustomTable = ({
                         {user._id}
                       </Link>
                     </Td>
-                    <Td
-                      p={'12px'}
-                      textAlign='center '
-                      style={{
-                        whiteSpace: 'normal',
-                        wordWrap: 'break-word',
-                      }}
-                    >
-                      {user?.username || 'N/A'}
-                    </Td>
+                    {hasUsername && (
+                      <Td
+                        p={'12px'}
+                        textAlign='center '
+                        style={{
+                          whiteSpace: 'normal',
+                          wordWrap: 'break-word',
+                        }}
+                      >
+                        {user?.username || 'N/A'}
+                      </Td>
+                    )}
                     <Td
                       p={'12px'}
                       textAlign='center'

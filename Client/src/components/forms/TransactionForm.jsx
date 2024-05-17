@@ -1,6 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { Heading, Box, Text, Input, Button, Flex, Select, Textarea } from '@chakra-ui/react'
 const TransactionForm = ({ onSubmit, validationSchema, initialValues }) => {
+  const transactions = ['']
   return (
     <>
       <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={onSubmit}>
