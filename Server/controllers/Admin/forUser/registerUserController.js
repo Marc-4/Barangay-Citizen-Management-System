@@ -39,7 +39,7 @@ const registerUser = async (req, res) => {
     //   return sendError('Profile photo is missing', 400, res)
     // }
 
-    const encryptedPass = await bcrypt.hash(req.body.password, 10)
+    // const encryptedPass = await bcrypt.hash(req.body.password, 10)
 
     const profile = {
       firstName: req.body.firstName,
