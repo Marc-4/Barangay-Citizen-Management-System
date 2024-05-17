@@ -13,12 +13,43 @@ import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
 import { object, string, date, mixed, number } from 'yup'
 import RegisterForm from '../forms/RegisterForm'
+import EmployeeRegisterForm from '../forms/EmployeeRegisterForm'
 
 const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const userRole = localStorage.getItem('userRole')
-  const validationSchema = object({
+  const userValidationSchema = object({
+    firstName: string()
+      .required('required')
+      .matches(/^[A-Za-z\s.'-]+$/, 'First Name must not contain symbols'),
+    middleName: string().matches(/^[A-Za-z\s.'-]+$/, 'Middle Name must not contain symbols'),
+    lastName: string()
+      .required('required')
+      .matches(/^[A-Za-z\s.'-]+$/, 'Last Name must not contain symbols'),
+    dateOfBirth: date()
+      .required('required')
+      .max(new Date(), 'Date of Birth cannot be in the future')
+      .min(new Date('1900-01-01'), 'Date of Birth cannot be before 1900'),
+    placeOfBirth_city: string().required('required'),
+    placeOfBirth_province: string().required('required'),
+    placeOfBirth_country: string().required('required'),
+    sex: string().required('required'),
+    civilStatus: string().required('required'),
+    occupation: string().required('required'),
+    citizenship: string().required('required'),
+    phone_number: string()
+      .required('required')
+      .matches(/^09\d{9}$/, 'phone number must follow format "09xxxxxxxxx"'),
+    email: string().email(),
+    address_streetName: string().required('required'),
+    address_houseNumber: string().required('required'),
+    address_subdivisionPurok: string().required('required'),
+    address_cityMunicipality: string().required('required'),
+    profilePhoto: mixed(),
+  })
+
+  const EmployeeValidationSchema = object({
     username: string().required('required'),
     password: string().required('required').min(8),
     firstName: string()
@@ -46,6 +77,7 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
     address_streetName: string().required('required'),
     address_houseNumber: string().required('required'),
     address_subdivisionPurok: string().required('required'),
+    address_cityMunicipality: string().required('required'),
     profilePhoto: mixed(),
   })
 
@@ -109,37 +141,74 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
           <ModalCloseButton />
           <Divider m={'auto'} borderColor={'brand.100'} w={'90%'} />
           <ModalBody>
-            <RegisterForm
-              onSubmit={(values, { setSubmitting, resetForm }) => {
-                setTimeout(async () => {
-                  await createUser(values, resetForm)
-                  // console.log(values)
-                  setSubmitting(false)
-                }, 1000)
-              }}
-              validationSchema={validationSchema}
-              initialValues={{
-                username: '',
-                password: '',
-                firstName: '',
-                middleName: '',
-                lastName: '',
-                dateOfBirth: '',
-                placeOfBirth_city: '',
-                placeOfBirth_province: '',
-                placeOfBirth_country: '',
-                sex: '',
-                civilStatus: '',
-                occupation: '',
-                citizenship: '',
-                phone_number: '',
-                email: '',
-                address_streetName: '',
-                address_houseNumber: '',
-                address_subdivisionPurok: '',
-                profilePhoto: '',
-              }}
-            />
+            {role == 'user' ? (
+              <RegisterForm
+                onSubmit={(values, { setSubmitting, resetForm }) => {
+                  setTimeout(async () => {
+                    await createUser(values, resetForm)
+                    // console.log(values)
+                    setSubmitting(false)
+                  }, 1000)
+                }}
+                validationSchema={userValidationSchema}
+                initialValues={{
+                  username: '',
+                  password: '',
+                  firstName: '',
+                  middleName: '',
+                  lastName: '',
+                  dateOfBirth: '',
+                  placeOfBirth_city: '',
+                  placeOfBirth_province: '',
+                  placeOfBirth_country: '',
+                  sex: '',
+                  civilStatus: '',
+                  occupation: '',
+                  citizenship: '',
+                  phone_number: '',
+                  email: '',
+                  address_streetName: '',
+                  address_houseNumber: '',
+                  address_subdivisionPurok: '',
+                  address_cityMunicipality: '',
+                  profilePhoto: '',
+                }}
+              />
+            ) : (
+              <EmployeeRegisterForm
+                onSubmit={(values, { setSubmitting, resetForm }) => {
+                  setTimeout(async () => {
+                    await createUser(values, resetForm)
+                    // console.log(values)
+                    setSubmitting(false)
+                  }, 1000)
+                }}
+                validationSchema={EmployeeValidationSchema}
+                initialValues={{
+                  username: '',
+                  password: '',
+                  firstName: '',
+                  middleName: '',
+                  lastName: '',
+                  dateOfBirth: '',
+                  placeOfBirth_city: '',
+                  placeOfBirth_province: '',
+                  placeOfBirth_country: '',
+                  sex: '',
+                  civilStatus: '',
+                  occupation: '',
+                  citizenship: '',
+                  phone_number: '',
+                  email: '',
+                  address_streetName: '',
+                  address_houseNumber: '',
+                  address_subdivisionPurok: '',
+                  address_cityMunicipality: '',
+                  profilePhoto: '',
+                }}
+              />
+            )}
+
             <Text
               fontWeight={'semibold'}
               fontSize={'2xl'}

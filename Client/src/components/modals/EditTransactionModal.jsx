@@ -31,7 +31,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction, onUpdate }) => {
     // .required('purpose cannot be blank.'),
     cost: number(),
     // .required('cost cannot be blank.'),
-    income: number(),
+    // income: number(),
     // .required('income cannot be blank.'),
   })
 
@@ -119,9 +119,11 @@ const EditTransactionModal = ({ isOpen, onClose, transaction, onUpdate }) => {
                   <Field name='transacType'>
                     {({ field }) => (
                       <Select {...field} placeholder='Select Transaction Type'>
-                        <option value='option1'>Option1</option>
-                        <option value='option2'>Option2</option>
-                        <option value='option3'>Option3</option>
+                        <option value='Barangay Clearance'>Barangay Clearance</option>
+                        <option value='Community Tax Certificate'>Community Tax Certificate</option>
+                        <option value='Barangay Records'>Barangay Records</option>
+                        <option value='Certificate of Residency'>Certification of Residency</option>
+                        <option value='Business Clearance'>Business Clearance</option>
                       </Select>
                     )}
                   </Field>
@@ -138,7 +140,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction, onUpdate }) => {
                     )}
                   </Heading>
                   <Field as={Textarea} name='purpose' />
-                  <Heading fontSize={'xl'} display={'flex'}>
+                  {/* <Heading fontSize={'xl'} display={'flex'}>
                     Cost
                     {errors.cost && (
                       <>
@@ -148,9 +150,9 @@ const EditTransactionModal = ({ isOpen, onClose, transaction, onUpdate }) => {
                         </Text>
                       </>
                     )}
-                  </Heading>
-                  <Input as={Field} name='cost' type={'number'} />
-                  <Heading fontSize={'xl'} display={'flex'}>
+                  </Heading> */}
+                  {/* <Input as={Field} name='cost' type={'number'} /> */}
+                  {/* <Heading fontSize={'xl'} display={'flex'}>
                     Income
                     {errors.income && (
                       <>
@@ -161,7 +163,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction, onUpdate }) => {
                       </>
                     )}
                   </Heading>
-                  <Input as={Field} name='income' type={'number'} />
+                  <Input as={Field} name='income' type={'number'} /> */}
                   <div>
                     <Text
                       fontWeight={'semibold'}

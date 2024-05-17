@@ -35,20 +35,20 @@ const TransactionForm = ({ onSubmit, validationSchema, initialValues }) => {
                 <Field as={Textarea} name='purpose' w={'300px'} />
                 <Text as={ErrorMessage} name='purpose' component='div' color={'tomato'} />
               </Box>
-              <Box display={'flex'} gap={'10px'} alignItems={'center'}>
+              {/* <Box display={'flex'} gap={'10px'} alignItems={'center'}>
                 <Text mr={'70px'} fontSize={'xl'} fontWeight={'bold'}>
                   Income (₱):
                 </Text>
                 <Input as={Field} type='number' name='income' maxW={'300px'} />
                 <Text as={ErrorMessage} name='income' component='div' color={'tomato'} />
-              </Box>
-              <Box display={'flex'} gap={'10px'} alignItems={'center'}>
+              </Box> */}
+              {/* <Box display={'flex'} gap={'10px'} alignItems={'center'}>
                 <Text mr={'97px'} fontWeight={'bold'} fontSize={'xl'}>
                   Cost (₱):
                 </Text>
                 <Input as={Field} type='number' name='cost' maxW={'300px'} />
                 <Text as={ErrorMessage} name='cost' component='div' color={'tomato'} />
-              </Box>
+              </Box> */}
               <Button
                 m={'auto'}
                 w={'fit-content'}

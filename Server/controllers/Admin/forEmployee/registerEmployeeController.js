@@ -22,7 +22,8 @@ const registerEmployee = async (req, res) => {
     req.body.phone_number === undefined ||
     req.body.address_streetName === undefined ||
     req.body.address_houseNumber === undefined ||
-    req.body.address_subdivisionPurok === undefined
+    req.body.address_subdivisionPurok === undefined ||
+    req.body.address_cityMunicipality === undefined
   )
     return sendError('missing required parameters', 404, res)
 
@@ -64,6 +65,7 @@ const registerEmployee = async (req, res) => {
       streetName: req.body.address_streetName,
       houseNumber: req.body.address_houseNumber,
       subdivisionPurok: req.body.address_subdivisionPurok,
+      cityMunicipality: req.body.address_cityMunicipality,
     },
     profilePhoto: {
       data: profilePhoto?.buffer || null,

@@ -3,11 +3,10 @@ import { sendError, sendSuccess } from '../../../utils/index.js'
 import mongoose from 'mongoose'
 
 const editUser = async (req, res) => {
-  console.log('editing user...');
-  console.log(req.body);
-  console.log(req.file);
-  if (!mongoose.isValidObjectId(req.params.id))
-    return sendError('invalid user ID', 400, res)
+  console.log('editing user...')
+  console.log(req.body)
+  console.log(req.file)
+  if (!mongoose.isValidObjectId(req.params.id)) return sendError('invalid user ID', 400, res)
 
   if (
     req.body.firstName === undefined &&
@@ -24,7 +23,8 @@ const editUser = async (req, res) => {
     req.body.email === undefined &&
     req.body.address_streetName === undefined &&
     req.body.address_houseNumber === undefined &&
-    req.body.address_subdivisionPurok === undefined
+    req.body.address_subdivisionPurok === undefined &&
+    req.body.address_cityMunicipality === undefined
   )
     return sendError('Mising Required Fields', 404, res)
 
@@ -56,6 +56,7 @@ const editUser = async (req, res) => {
     address_streetName,
     address_houseNumber,
     address_subdivisionPurok,
+    address_cityMunicipality,
   } = req.body
 
   const profilePhoto = req.file
@@ -75,8 +76,9 @@ const editUser = async (req, res) => {
   if (address_streetName) user.profile.address.streetName = address_streetName
   if (address_houseNumber) user.profile.address.houseNumber = address_houseNumber
   if (address_subdivisionPurok) user.profile.address.subdivisionPurok = address_subdivisionPurok
-  if (profilePhoto?.buffer) user.profile.profilePhoto.data = profilePhoto.buffer 
-  if (profilePhoto?.originalname) user.profile.profilePhoto.fileName = profilePhoto.originalname 
+  if (address_cityMunicipality) user.profile.address.cityMunicipality = address_cityMunicipality
+  if (profilePhoto?.buffer) user.profile.profilePhoto.data = profilePhoto.buffer
+  if (profilePhoto?.originalname) user.profile.profilePhoto.fileName = profilePhoto.originalname
 
   try {
     await user.save()
@@ -85,7 +87,7 @@ const editUser = async (req, res) => {
     return sendError('Internal Server Error', 500, res)
   }
 
-  const payload = {request: user}
+  const payload = { request: user }
 
   return sendSuccess(payload, 200, res)
 }

@@ -59,7 +59,7 @@ const employeeSchema = new mongoose.Schema({
       type: String,
     },
     phone_number: {
-      type: Number
+      type: Number,
     },
     address: {
       streetName: {
@@ -69,6 +69,9 @@ const employeeSchema = new mongoose.Schema({
         type: String,
       },
       subdivisionPurok: {
+        type: String,
+      },
+      cityMunicipality: {
         type: String,
       },
     },

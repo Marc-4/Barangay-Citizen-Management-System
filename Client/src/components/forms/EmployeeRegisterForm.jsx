@@ -13,7 +13,7 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 
-const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
+const EmployeeRegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
   const [profilePhoto, setProfilePhoto] = useState()
   const role = localStorage.getItem('userRole')
   console.log(role)
@@ -22,13 +22,13 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
       <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={onSubmit}>
         {({ isSubmitting, setFieldValue }) => (
           <Form encType={'multipart/form-data'}>
-            {/* <Heading fontSize={'2xl'}>Account Data</Heading>
+            <Heading fontSize={'2xl'}>Account Data</Heading>
             <Input as={Field} type='text' name='username' placeholder='username' />
             <Text as={ErrorMessage} name='username' component='div' color={'tomato'} />
             <Input as={Field} type='password' name='password' placeholder='password' />
-            <Text as={ErrorMessage} color={'tomato'} name='password' component='div' /> */}
+            <Text as={ErrorMessage} color={'tomato'} name='password' component='div' />
             <Box>
-              {/* <Heading fontSize={'2xl'}>Profile Data</Heading> */}
+              <Heading fontSize={'2xl'}>Profile Data</Heading>
               <Box>
                 <Heading fontSize={'xl'}>Profile Photo</Heading>
                 <Image
@@ -110,7 +110,6 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
               <Field as={Select} name='civilStatus' placeholder={'Select'}>
                 <option value='single'>Single</option>
                 <option value='married'>Married</option>
-                <option value='legally separated'>Legally Separated</option>
                 <option value='divorced'>Divorced</option>
                 <option value='widowed'>Widowed</option>
               </Field>
@@ -186,4 +185,4 @@ const RegisterForm = ({ onSubmit, validationSchema, initialValues }) => {
   )
 }
 
-export default RegisterForm
+export default EmployeeRegisterForm

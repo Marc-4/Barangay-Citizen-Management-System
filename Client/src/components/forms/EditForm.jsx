@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Text, Input, Button, Heading, Select, Image } from '@chakra-ui/react'
+import {
+  Box,
+  Text,
+  Input,
+  Button,
+  Heading,
+  Select,
+  Image,
+  InputLeftElement,
+  InputGroup,
+} from '@chakra-ui/react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { Buffer } from 'buffer'
 
 const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
   const [profilePhoto, setProfilePhoto] = useState()
@@ -84,7 +93,13 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
               </Field>
               <Text as={ErrorMessage} name='sex' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Civil Status</Heading>
-              <Input as={Field} type='text' name='civilStatus' placeholder='Civil Status' />
+              <Field as={Select} name='civilStatus' placeholder={'Select'}>
+                <option value='single'>Single</option>
+                <option value='married'>Married</option>
+                <option value='legally separated'>Legally Separated</option>
+                <option value='divorced'>Divorced</option>
+                <option value='widowed'>Widowed</option>
+              </Field>
               <Text as={ErrorMessage} name='civilStatus' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Occupation</Heading>
               <Input as={Field} type='text' name='occupation' placeholder='occupation' />
@@ -93,9 +108,14 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
               <Input as={Field} type='text' name='citizenship' placeholder='citizenship' />
               <Text as={ErrorMessage} name='citizenship' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Phone Number</Heading>
-              <Input as={Field} type='text' name='phone_number' placeholder='Phone Number' />
-              <Heading fontSize={'xl'}>Email</Heading>
+              <InputGroup>
+                <InputLeftElement pointerEvents='none' color='gray.500' fontWeight={'semibold'}>
+                  +63
+                </InputLeftElement>
+                <Input as={Field} type='text' name='phone_number' placeholder='Phone Number' />
+              </InputGroup>
               <Text as={ErrorMessage} name='phone_number' component='div' color={'tomato'} />
+              <Heading fontSize={'xl'}>Email</Heading>
               <Input as={Field} type='email' name='email' placeholder='email' />
               <Text as={ErrorMessage} name='email' component='div' color={'tomato'} />
               <Heading fontSize={'xl'}>Address</Heading>
@@ -112,6 +132,18 @@ const EditForm = ({ onSubmit, validationSchema, initialValues }) => {
               <Text
                 as={ErrorMessage}
                 name='address_subdivisionPurok'
+                component='div'
+                color={'tomato'}
+              />
+              <Input
+                as={Field}
+                type='text'
+                name='address_cityMunicipality'
+                placeholder='City/Municipality'
+              />
+              <Text
+                as={ErrorMessage}
+                name='address_cityMunicipality'
                 component='div'
                 color={'tomato'}
               />

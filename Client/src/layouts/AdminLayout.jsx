@@ -14,7 +14,7 @@ const AdminLayout = () => {
           <Flex>
             <Sidebar onToggle={onToggle} isOpen={1} />
           </Flex>
-          <Flex w={'100vw'} h={'fit-content'} flexDir={'column'}>
+          <Flex ml={'17rem'} mt={'5rem'} w={'100vw'} h={'fit-content'} flexDir={'column'}>
             <Outlet />
           </Flex>
         </Flex>

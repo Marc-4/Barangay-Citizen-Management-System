@@ -30,7 +30,7 @@ const AdminSidebar = ({ onToggle, isOpen }) => {
   return (
     <>
       {/* <Slide in={isOpen} direction={'left'}> */}
-      <Box bg='background.50' h={'100%'} w={'300px'}>
+      <Box bg='background.50' h={'100vh'} mt={'4.5rem'} w={'300px'} position={'fixed'}>
         <Flex minW={'210px'} justifyContent={'space-between'} alignItems={'center'}>
           <Box display={'flex'} ml={'25px'} justifyContent={'left'} width={'100%'}></Box>
           {/* <CloseButton m={'5px'} mt={'10px'} onClick={onToggle} /> */}

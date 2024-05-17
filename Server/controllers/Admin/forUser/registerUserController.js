@@ -6,8 +6,8 @@ const registerUser = async (req, res) => {
   console.log('registering a user...')
   try {
     if (
-      req.body.username === undefined ||
-      req.body.password === undefined ||
+      // req.body.username === undefined ||
+      // req.body.password === undefined ||
       req.body.firstName === undefined ||
       req.body.lastName === undefined ||
       req.body.middleName === undefined ||
@@ -23,13 +23,14 @@ const registerUser = async (req, res) => {
       req.body.email === undefined ||
       req.body.address_streetName === undefined ||
       req.body.address_houseNumber === undefined ||
-      req.body.address_subdivisionPurok === undefined
+      req.body.address_subdivisionPurok === undefined ||
+      req.body.address_cityMunicipality === undefined
     )
       return sendError('Missing required parameters', 404, res)
 
     // Check if username exists in db
-    let user = await User.findOne({ username: req.body.username })
-    if (user) return sendError('Username Taken', 400, res)
+    // let user = await User.findOne({ username: req.body.username })
+    // if (user) return sendError('Username Taken', 400, res)
     if (await User.findOne({ 'profile.email': req.body.email }))
       return sendError('email is already taken', 403, res)
 
@@ -60,6 +61,7 @@ const registerUser = async (req, res) => {
         streetName: req.body.address_streetName,
         houseNumber: req.body.address_houseNumber,
         subdivisionPurok: req.body.address_subdivisionPurok,
+        cityMunicipality: req.body.address_cityMunicipality,
       },
       profilePhoto: {
         data: profilePhoto?.buffer || null,
@@ -67,8 +69,8 @@ const registerUser = async (req, res) => {
       },
     }
     let newUser = await User.create({
-      username: req.body.username,
-      password: encryptedPass,
+      // username: req.body.username,
+      // password: encryptedPass,
       role: 'user',
       active: true,
       dateOfCreation: Date.now(),

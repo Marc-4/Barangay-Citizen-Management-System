@@ -76,16 +76,16 @@ const TransactionContentCard = ({ title, data, profile }) => {
           </Box>
           <Box>
             
-            <Box display={'flex'} gap={'5px'}>
+            {/* <Box display={'flex'} gap={'5px'}>
               <Text fontWeight='bold'>Cost:</Text>
               <Text>{data?.cost || 'N/A'}</Text>
             </Box>
             <Box display={'flex'} gap={'5px'}>
               <Text fontWeight='bold'>Income:</Text>
               <Text>{data?.income || 'N/A'}</Text>
-            </Box>
+            </Box> */}
           </Box>
-          <Box>
+          {/* <Box>
             <Text fontWeight='bold'>Attachments:</Text>
 
             {data?.attachment ? (
@@ -105,7 +105,7 @@ const TransactionContentCard = ({ title, data, profile }) => {
             ) : (
               'No attachment'
             )}
-          </Box>
+          </Box> */}
         </Box>
       </VStack>
     </>

@@ -16,9 +16,13 @@ import { useState } from 'react'
 
 const ProfileCard = (data, onProfileOpen) => {
   const revertBase64 = (imageBuf) => {
-    let base64String = Buffer.from(imageBuf).toString('base64')
-
-    return `data:image/png;base64,${base64String}`
+    try {
+      let base64String = Buffer.from(imageBuf).toString('base64')
+      return `data:image/png;base64,${base64String}`
+    } catch (error) {
+      console.log(error)
+      return null
+    }
   }
 
   const [isEditing, setIsEditing] = useState(false)
@@ -57,19 +61,21 @@ const ProfileCard = (data, onProfileOpen) => {
             }
           />
           <Stack>
-            <Text fontSize={'3xl'} fontWeight={'semibold'}>
-              {data
-                ? data.data.profile
-                  ? `${data.data.profile?.lastName || ''}, ${data.data.profile?.firstName || ''} ${
-                      data.data.profile?.middleName || ''
-                    }`
-                  : 'N/A'
-                : 'Loading...'}
-            </Text>
-            <Text fontSize={'xl'} fontWeight={'semibold'}>
+            <Box>
+              <Text fontSize={'3xl'} fontWeight={'semibold'}>
+                {data
+                  ? data.data.profile
+                    ? `${data.data.profile?.lastName || ''}, ${
+                        data.data.profile?.firstName || ''
+                      } ${data.data.profile?.middleName || ''}`
+                    : 'N/A'
+                  : 'Loading...'}
+              </Text>
+              <Text color={'gray.400'}>#{data.data._id}</Text>
+            </Box>
+            {/* <Text fontSize={'xl'} fontWeight={'semibold'}>
               Username: {data.data.username}
-            </Text>
-            <Text color={'gray.400'}>#{data.data._id}</Text>
+            </Text> */}
             <Spacer mt={'50px'} mb={'45px'} />
             <Text fontSize={'md'}>
               Registered On: {new Date(data.data.dateOfCreation).toDateString()}
@@ -316,7 +322,7 @@ const ProfileCard = (data, onProfileOpen) => {
             </Box>
             <Box bg={'white'} p={'10px'} rounded={'10px'} shadow={'base'}>
               <Box display={'flex'} gap={'3'}>
-                <Box id='email' w={'200px'} marginBottom={'25px'}>
+                <Box id='email' minW={'200px'} marginBottom={'25px'}>
                   <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
                     Phone Number
                   </Heading>
@@ -326,11 +332,12 @@ const ProfileCard = (data, onProfileOpen) => {
                     value={data ? `${data.data.profile?.phone_number || 'N/A'}` : 'Loading...'}
                   />
                 </Box>
-                <Box id='email' w={'200px'} marginBottom={'25px'}>
+                <Box id='email' minW={'200px'} marginBottom={'25px'}>
                   <Heading fontSize={'2xl'} mb={'10px'} textColor={'facebook.800'}>
                     Email
                   </Heading>
                   <Input
+                    w={'320px'}
                     type='email'
                     readOnly
                     value={data ? `${data.data.profile?.email || 'N/A'}` : 'Loading...'}
@@ -387,6 +394,24 @@ const ProfileCard = (data, onProfileOpen) => {
                     value={
                       data
                         ? `${data.data.profile?.address.subdivisionPurok || 'N/A'}`
+                        : 'Loading...'
+                    }
+                  />
+                </div>
+                <div>
+                  <Heading
+                    fontSize={'large'}
+                    fontWeight={'semibold'}
+                    mr={'10px'}
+                    display={'inline-block'}
+                  >
+                    City/Municipality
+                  </Heading>
+                  <Input
+                    readOnly
+                    value={
+                      data
+                        ? `${data.data.profile?.address.cityMunicipality || 'N/A'}`
                         : 'Loading...'
                     }
                   />

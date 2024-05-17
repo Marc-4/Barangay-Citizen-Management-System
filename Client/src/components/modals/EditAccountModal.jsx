@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react'
 import callAPI from '../../utils/callAPI'
 import { object, string, date, mixed } from 'yup'
 import EditForm from '../forms/EditForm'
+import EmployeeEditForm from '../forms/EmployeeEditForm'
 
 const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role, editingSelf }) => {
   const [error, setError] = useState('')
@@ -42,11 +43,12 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role, editingSelf }
     citizenship: string().required('required'),
     phone_number: string()
       .required('required')
-      .matches(/^09\d{9}$/, 'phone number must follow format "09xxxxxxxxx"'),
+      .matches(/^9\d{9}$/, 'phone number must follow format "9xxxxxxxxx"'),
     email: string().email(),
     address_streetName: string().required('required'),
     address_houseNumber: string().required('required'),
     address_subdivisionPurok: string().required('required'),
+    address_cityMunicipality: string().required('required'),
     profilePhoto: mixed(),
   })
 
@@ -141,36 +143,74 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role, editingSelf }
           <ModalCloseButton />
           <Divider m={'auto'} borderColor={'brand.100'} w={'90%'} />
           <ModalBody>
-            <EditForm
-              onSubmit={(values, { setSubmitting }) => {
-                setTimeout(async () => {
-                  await editProfile(values)
-                  setSubmitting(false)
-                }, 1000)
-              }}
-              validationSchema={validationSchema}
-              initialValues={{
-                firstName: user?.profile?.firstName,
-                middleName: user?.profile?.middleName,
-                lastName: user?.profile?.lastName,
-                dateOfBirth: !isNaN(new Date(user?.profile?.dateOfBirth).getTime())
-                  ? new Date(user?.profile?.dateOfBirth).toISOString().split('T')[0]
-                  : null,
-                placeOfBirth_city: user?.profile?.placeOfBirth.city,
-                placeOfBirth_province: user?.profile?.placeOfBirth.province,
-                placeOfBirth_country: user?.profile?.placeOfBirth.country,
-                sex: user?.profile?.sex,
-                civilStatus: user?.profile?.civilStatus,
-                occupation: user?.profile?.occupation,
-                citizenship: user?.profile?.citizenship,
-                phone_number: user?.profile?.phone_number,
-                email: user?.profile?.email,
-                address_streetName: user?.profile?.address.streetName,
-                address_houseNumber: user?.profile?.address.houseNumber,
-                address_subdivisionPurok: user?.profile?.address.subdivisionPurok,
-                profilePhoto: user?.profile?.profilePhoto,
-              }}
-            />
+            {role == 'user' ? (
+              <EditForm
+                onSubmit={(values, { setSubmitting }) => {
+                  setTimeout(async () => {
+                    await editProfile(values)
+                    setSubmitting(false)
+                  }, 1000)
+                }}
+                validationSchema={validationSchema}
+                initialValues={{
+                  firstName: user?.profile?.firstName,
+                  middleName: user?.profile?.middleName,
+                  lastName: user?.profile?.lastName,
+                  dateOfBirth: !isNaN(new Date(user?.profile?.dateOfBirth).getTime())
+                    ? new Date(user?.profile?.dateOfBirth).toISOString().split('T')[0]
+                    : null,
+                  placeOfBirth_city: user?.profile?.placeOfBirth.city,
+                  placeOfBirth_province: user?.profile?.placeOfBirth.province,
+                  placeOfBirth_country: user?.profile?.placeOfBirth.country,
+                  sex: user?.profile?.sex,
+                  civilStatus: user?.profile?.civilStatus,
+                  occupation: user?.profile?.occupation,
+                  citizenship: user?.profile?.citizenship,
+                  phone_number: user?.profile?.phone_number,
+                  email: user?.profile?.email,
+                  address_streetName: user?.profile?.address.streetName,
+                  address_houseNumber: user?.profile?.address.houseNumber,
+                  address_subdivisionPurok: user?.profile?.address.subdivisionPurok,
+                  address_cityMunicipality: user?.profile?.address.cityMunicipality,
+                  profilePhoto: user?.profile?.profilePhoto,
+                }}
+              />
+            ) : (
+              <EmployeeEditForm
+                onSubmit={(values, { setSubmitting }) => {
+                  setTimeout(async () => {
+                    await editProfile(values)
+                    setSubmitting(false)
+                  }, 1000)
+                }}
+                validationSchema={validationSchema}
+                initialValues={{
+                  username: user?.username,
+                  password: '',
+                  firstName: user?.profile?.firstName,
+                  middleName: user?.profile?.middleName,
+                  lastName: user?.profile?.lastName,
+                  dateOfBirth: !isNaN(new Date(user?.profile?.dateOfBirth).getTime())
+                    ? new Date(user?.profile?.dateOfBirth).toISOString().split('T')[0]
+                    : null,
+                  placeOfBirth_city: user?.profile?.placeOfBirth.city,
+                  placeOfBirth_province: user?.profile?.placeOfBirth.province,
+                  placeOfBirth_country: user?.profile?.placeOfBirth.country,
+                  sex: user?.profile?.sex,
+                  civilStatus: user?.profile?.civilStatus,
+                  occupation: user?.profile?.occupation,
+                  citizenship: user?.profile?.citizenship,
+                  phone_number: user?.profile?.phone_number,
+                  email: user?.profile?.email,
+                  address_streetName: user?.profile?.address.streetName,
+                  address_houseNumber: user?.profile?.address.houseNumber,
+                  address_subdivisionPurok: user?.profile?.address.subdivisionPurok,
+                  address_cityMunicipality: user?.profile?.address.cityMunicipality,
+                  profilePhoto: user?.profile?.profilePhoto,
+                }}
+              />
+            )}
+
             <Text
               fontWeight={'semibold'}
               fontSize={'2xl'}

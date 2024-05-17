@@ -23,7 +23,8 @@ const editEmployee = async (req, res) => {
     (req.body.email === undefined &&
       req.body.address_streetName === undefined &&
       req.body.address_houseNumber === undefined &&
-      req.body.address_subdivisionPurok === undefined)
+      req.body.address_subdivisionPurok === undefined &&
+      req.body.address_cityMunicipality === undefined)
   )
     return sendError('Mising Required Fields', 404, res)
 
@@ -56,6 +57,7 @@ const editEmployee = async (req, res) => {
     address_streetName,
     address_houseNumber,
     address_subdivisionPurok,
+    address_cityMunicipality,
   } = req.body
 
   const profilePhoto = req.file
@@ -81,6 +83,7 @@ const editEmployee = async (req, res) => {
   if (address_streetName) employee.profile.address.streetName = address_streetName
   if (address_houseNumber) employee.profile.address.houseNumber = address_houseNumber
   if (address_subdivisionPurok) employee.profile.address.subdivisionPurok = address_subdivisionPurok
+  if (address_cityMunicipality) employee.profile.address.cityMunicipality = address_cityMunicipality
   if (profilePhoto?.buffer) employee.profile.profilePhoto.data = profilePhoto.buffer
   if (profilePhoto?.originalname) employee.profile.profilePhoto.fileName = profilePhoto.originalname
 

@@ -111,10 +111,19 @@ const Navbar = () => {
   //   }
   // }
 
-
   return (
     <>
-      <Flex as='nav' p={'20px'} pl={0} bg={'background.50'} alignItems={'center'} h={'75px'}>
+      <Flex
+        // as='nav'
+        p={'20px'}
+        pl={0}
+        bg={'background.50'}
+        alignItems={'center'}
+        h={'75px'}
+        w={'full'}
+        zIndex={10}
+        position={'fixed'}
+      >
         {/* <IconButton
           borderRadius={'50%'}
           _hover={{ bg: 'background.100' }}
