@@ -58,6 +58,9 @@ const adminSchema = new mongoose.Schema({
     citizenship: {
       type: String,
     },
+    phone_number:{
+      type: Number,
+    },
     address: {
       streetName: {
         type: String,
@@ -66,6 +69,9 @@ const adminSchema = new mongoose.Schema({
         type: String,
       },
       subdivisionPurok: {
+        type: String,
+      },
+      cityMunicipality: {
         type: String,
       },
     },

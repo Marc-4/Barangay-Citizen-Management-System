@@ -28,8 +28,9 @@ import { PDFDocument, rgb, rotateInPlace } from 'pdf-lib'
 import CustomTable from '../CustomTable'
 import RefreshButton from '../RefreshButton'
 import { drawPDF4, drawPDF5 } from '../../utils/drawPdfText'
+import Pagination from '../pagination'
 
-const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
+const ExportModal = ({ isOpen, onClose, users, userCount, onUpdate, role }) => {
   pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
 
   const pdfUrls = { ' ': '', single: '/BarangayForms-5.pdf', family: '/BarangayForms-4.pdf' }
@@ -40,6 +41,11 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
   const [pageNumber, setPageNumber] = useState(1)
   const [type, setType] = useState('')
   const toast = useToast()
+
+  const [page, setPage] = useState(1)
+  const [entries, setEntries] = useState(20)
+  const [UserCount, setUserCount] = useState()
+
   const [refreshCounter, setRefreshCounter] = useState(0)
   const [includedFields, setIncludedFields] = useState([
     'name',
@@ -56,8 +62,6 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
     setUserList(users)
   }, [users])
 
-
-
   useEffect(() => {
     setUserList(users)
     setPdfUrl('')
@@ -68,21 +72,6 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages)
   }
-
-  // const goToPreviousPage = () => {
-  //   setPageNumber((prevPage) => Math.max(prevPage - 1, 1))
-  // }
-
-  // const goToNextPage = () => {
-  //   setPageNumber((prevPage) => Math.min(prevPage + 1, numPages))
-  // }
-
-  // const handlePageInputChange = (event) => {
-  //   const newPageNumber = parseInt(event.target.value, 10)
-  //   if (!isNaN(newPageNumber) && newPageNumber >= 1 && newPageNumber <= numPages) {
-  //     setPageNumber(newPageNumber)
-  //   }
-  // }
 
   const filterTable = async (query, values, sex) => {
     const route = `http://localhost:3000/api/admin/users/search?query=${query}&params=${values}&sex=${sex}`
@@ -247,7 +236,15 @@ const ExportModal = ({ isOpen, onClose, users, onUpdate, role }) => {
               <option value='family'>Family</option>
             </Select>
           </Box>
-
+          <Box display={'flex'} justifyContent={'right'} mr={'.5rem'}>
+            <Pagination
+              numOfPages={Math.round(Math.max(userCount / entries, 1))}
+              page={page}
+              setPage={setPage}
+              entries={entries}
+              setEntries={setEntries}
+            />
+          </Box>
           <CustomTable
             forFilter
             type={type}

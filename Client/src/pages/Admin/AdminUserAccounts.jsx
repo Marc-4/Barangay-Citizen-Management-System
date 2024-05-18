@@ -33,8 +33,6 @@ import RestoreAccountAlert from '../../components/popups/RestoreAccountAlert'
 import RefreshButton from '../../components/RefreshButton'
 import Pagination from '../../components/pagination'
 import CustomTable from '../../components/CustomTable'
-// const Pagination = lazy(() => import('../../components/pagination'))
-// const CustomTable = lazy(() => import('../../components/CustomTable'))
 
 const AdminUserAccounts = () => {
   const [users, setUsers] = useState([])
@@ -42,7 +40,7 @@ const AdminUserAccounts = () => {
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
   const [archivedPage, setArchivedPage] = useState(1)
-  const [entries, setEntries] = useState(10)
+  const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -280,6 +278,7 @@ const AdminUserAccounts = () => {
           onClose: onExportClose,
           cancelRef: cancelRef,
           users: users,
+          userCount: activeUserCount,
           onUpdate: handeUpdate,
           role: 'user',
         }}

@@ -70,13 +70,15 @@ const Pagination = ({ numOfPages, page, setPage, entries, setEntries }) => {
         {renderPageButtons()}
         <Select
           w={'80px'}
-          // defaultValue={20}
-          value={entries}
+          defaultValue={entries}
+          // value={entries}
           onChange={(e) => {
             setEntries(e.target.value)
           }}
         >
-          <option value='10'>10</option>
+          {/* <option value='1'>1</option>
+          <option value='3'>3</option>
+          <option value='20'>10</option> */}
           <option value='20'>20</option>
           <option value='50'>50</option>
           <option value='100'>100</option>

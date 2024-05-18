@@ -40,7 +40,7 @@ const EmployeeUserAccounts = () => {
   const [error, setError] = useState()
   const [page, setPage] = useState(1)
   const [archivedPage, setArchivedPage] = useState(1)
-  const [entries, setEntries] = useState(10)
+  const [entries, setEntries] = useState(20)
   const [filter, setFilter] = useState('ACTIVE')
   const [selectedUser, setSelectedUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
