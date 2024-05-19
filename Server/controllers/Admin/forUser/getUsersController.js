@@ -9,8 +9,8 @@ const getUsers = async (req, res) => {
 
   if (req.query.page % 1 != 0) skip++
 
-  // console.log('page: ' + req.query.page)
-  // console.log('entries: ' + req.query.entries)
+  console.log('page: ' + req.query.page)
+  console.log('entries: ' + req.query.entries)
   // console.log('skip: ' + skip)
 
   let users = []
