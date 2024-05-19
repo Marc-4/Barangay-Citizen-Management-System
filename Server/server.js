@@ -21,11 +21,12 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(
   cors({
-    origin: 'http://localhost:5000',
+    origin: 'http://localhost',
+    // origin: 'http://localhost:5000',
     credentials: true,
   })
-  )
-  
+)
+
 //routers
 app.use('/api/admin', adminRouter)
 app.use('/api/employee', employeeRouter)
