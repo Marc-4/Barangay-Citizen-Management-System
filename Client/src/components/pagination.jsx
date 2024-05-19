@@ -1,12 +1,13 @@
 import { Box, Button, Input, Select, Text } from '@chakra-ui/react'
 import { useEffect } from 'react'
 const Pagination = ({ numOfPages, page, setPage, entries, setEntries }) => {
-  useEffect(() => {}, [page])
+  useEffect(() => {
+    console.log('page:' + page)
+    console.log('num Of Pages: ' + numOfPages)
+  }, [page])
 
   useEffect(() => {
     setPage(1)
-    console.log('page:' + page)
-    console.log('num Of Pages: ' + numOfPages)
   }, [entries])
 
   const goToPage = (page) => {
@@ -77,7 +78,7 @@ const Pagination = ({ numOfPages, page, setPage, entries, setEntries }) => {
         >
           {/* <option value='1'>1</option>
           <option value='3'>3</option>
-          <option value='10'>10</option> */}
+          <option value='20'>10</option> */}
           <option value='20'>20</option>
           <option value='50'>50</option>
           <option value='100'>100</option>
