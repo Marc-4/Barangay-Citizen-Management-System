@@ -81,7 +81,7 @@ const EmployeeUserAccounts = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/employee/users?entries=${entries}&filter=ACTIVE`
+    const route = `${import.meta.env.VITE_API_URL}/api/employee/users?entries=${entries}&filter=ACTIVE`
 
     let data
     try {
@@ -101,8 +101,8 @@ const EmployeeUserAccounts = () => {
   const getUsersCount = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/employee/users?entries=${0}&filter=ACTIVE`
-    const route2 = `http://localhost:3000/api/employee/users?entries=ARCHIVED_COUNT&filter=ARCHIVED`
+    const route = `${import.meta.env.VITE_API_URL}/api/employee/users?entries=${0}&filter=ACTIVE`
+    const route2 = `${import.meta.env.VITE_API_URL}/api/employee/users?entries=ARCHIVED_COUNT&filter=ARCHIVED`
 
     let activeCount, archivedCount
     try {
@@ -128,7 +128,7 @@ const EmployeeUserAccounts = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/employee/users?entries=${entries}&filter=ARCHIVED`
+    const route = `${import.meta.env.VITE_API_URL}/api/employee/users?entries=${entries}&filter=ARCHIVED`
 
     let data
     try {
@@ -151,7 +151,7 @@ const EmployeeUserAccounts = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/employee/users/search?query=${query}&filter=${filter}`
+    const route = `${import.meta.env.VITE_API_URL}/api/employee/users/search?query=${query}&filter=${filter}`
 
     try {
       const data = await callAPI(body, method, route)
@@ -274,9 +274,6 @@ const EmployeeUserAccounts = () => {
           isOpen: isExportOpen,
           onClose: onExportClose,
           cancelRef: cancelRef,
-          users: users,
-          onUpdate: handeUpdate,
-          role: 'user',
         }}
       />
       <DeleteAccountAlert

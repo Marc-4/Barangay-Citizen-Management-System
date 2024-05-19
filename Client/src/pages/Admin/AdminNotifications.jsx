@@ -27,7 +27,7 @@ const AdminNotifications = () => {
     setIsLoading(true)
     try {
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/notifications?entries=${entries}&filter=${filter}`
+      const route = `${import.meta.env.VITE_API_URL}/api/admin/notifications?entries=${entries}&filter=${filter}`
       const response = await callAPI(null, method, route)
 
       if (response.result === 'OK') {

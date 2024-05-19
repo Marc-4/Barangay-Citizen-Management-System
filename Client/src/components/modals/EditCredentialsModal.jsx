@@ -48,7 +48,7 @@ const EditCredentialsModal = ({ isOpen, onClose, user, onUpdate, role }) => {
       }
       console.log(body)
       let route
-      route = `http://localhost:3000/api/${accountRole}/account/credentials/edit`
+      route = `${import.meta.env.VITE_API_URL}/api/${accountRole}/account/credentials/edit`
 
       const response = await callAPI(body, 'PATCH', route)
 

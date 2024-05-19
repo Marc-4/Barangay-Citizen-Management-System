@@ -60,7 +60,7 @@ const Navbar = () => {
   }
 
   const handleLogout = async () => {
-    const route = `http://localhost:3000/api/auth/logout`
+    const route = `${import.meta.env.VITE_API_URL}/api/auth/logout`
 
     try {
       const response = await callAPI(null, 'POST', route)
@@ -80,7 +80,7 @@ const Navbar = () => {
 
   const getUser = async () => {
     try {
-      const route = `http://localhost:3000/api/${role}/account`
+      const route = `${import.meta.env.VITE_API_URL}/api/${role}/account`
       const response = await callAPI(null, 'GET', route)
 
       if (response.result === 'OK') {
@@ -96,7 +96,7 @@ const Navbar = () => {
   // const getNotifications = async () => {
   //   setIsLoading(true)
   //   try {
-  //     const route = `http://localhost:3000/api/${role}/notifications?entries=20`
+  //     const route = `${import.meta.env.VITE_API_URL}/api/${role}/notifications?entries=20`
   //     const response = await callAPI(null, 'GET', route)
 
   //     if (response.result === 'OK') {

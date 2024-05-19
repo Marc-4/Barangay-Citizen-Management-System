@@ -88,7 +88,7 @@ function RegisterModal({ isOpen, onClose }) {
       for (const pair of formData.entries()) {
         console.log(pair[0], pair[1])
       }
-      const route = 'http://localhost:3000/api/user/account/register'
+      const route = '${import.meta.env.VITE_API_URL}/api/user/account/register'
 
       const response = await fetch(route, {
         method: 'POST',
@@ -124,7 +124,7 @@ function RegisterModal({ isOpen, onClose }) {
       const response = await login(
         username,
         password,
-        'http://localhost:3000/api/auth/login/user'
+        '${import.meta.env.VITE_API_URL}/api/auth/login/user'
       )
 
       if (response.result === 'OK') {

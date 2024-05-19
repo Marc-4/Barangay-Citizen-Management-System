@@ -35,7 +35,7 @@ const GenRequest = () => {
 
   const fetchRequestData = async () => {
     try {
-      const route = `http://localhost:3000/api/${role}/request/${id}`
+      const route = `${import.meta.env.VITE_API_URL}/api/${role}/request/${id}`
       const data = await callAPI(null, 'GET', route)
       if (data && data.result === 'OK') {
         setError(null)
@@ -51,7 +51,7 @@ const GenRequest = () => {
   const fetchRequestOwner = async () => {
     try {
       if (requestData) {
-        const route = `http://localhost:3000/api/${role}/user/${requestData.accountID}`
+        const route = `${import.meta.env.VITE_API_URL}/api/${role}/user/${requestData.accountID}`
         const data = await callAPI(null, 'GET', route)
         if (data && data.result === 'OK') {
           setError(null)

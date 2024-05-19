@@ -21,7 +21,7 @@ const GenEmployee = () => {
     setIsLoading(true)
     try {
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/employee/${id}`
+      const route = `${import.meta.env.VITE_API_URL}/api/admin/employee/${id}`
       const response = await callAPI(null, method, route)
 
       if (response.result === 'OK') {

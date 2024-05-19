@@ -35,7 +35,7 @@ const AdminDashboard = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users/?entries=0`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/users/?entries=0`
     try {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/employees/?entries=0`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/employees/?entries=0`
     try {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
@@ -72,7 +72,7 @@ const AdminDashboard = () => {
   //   setIsLoading(true)
   //   const body = null
   //   const method = 'GET'
-  //   const route = `http://localhost:3000/api/admin/requests/?entries=0`
+  //   const route = `${import.meta.env.VITE_API_URL}/api/admin/requests/?entries=0`
   //   try {
   //     const data = await callAPI(body, method, route)
   //     if (data && data.result === 'OK') {
@@ -91,7 +91,7 @@ const AdminDashboard = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/transactions/?entries=-1`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/transactions/?entries=-1`
     try {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {

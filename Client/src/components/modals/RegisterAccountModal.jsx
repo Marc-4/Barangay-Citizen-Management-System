@@ -106,7 +106,7 @@ const RegisterAccountModal = ({ isOpen, onClose, onUpdate, role }) => {
         console.log(pair[0], pair[1])
       }
 
-      const route = `http://localhost:3000/api/${userRole}/${role}/register`
+      const route = `${import.meta.env.VITE_API_URL}/api/${userRole}/${role}/register`
       const response = await fetch(route, {
         method: 'POST',
         body: formData,

@@ -85,8 +85,8 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role, editingSelf }
       let route
       console.log(editingSelf)
       if (!editingSelf)
-        route = `http://localhost:3000/api/${accountRole}/${role}/profile/${user._id}/edit`
-      if (editingSelf) route = `http://localhost:3000/api/${accountRole}/account/edit`
+        route = `${import.meta.env.VITE_API_URL}/api/${accountRole}/${role}/profile/${user._id}/edit`
+      if (editingSelf) route = `${import.meta.env.VITE_API_URL}/api/${accountRole}/account/edit`
 
       console.log(route)
 
@@ -123,7 +123,7 @@ const EditAccountModal = ({ isOpen, onClose, user, onUpdate, role, editingSelf }
         linkID: request._id,
       }
 
-      const route = `http://localhost:3000/api/${role}/notification/create`
+      const route = `${import.meta.env.VITE_API_URL}/api/${role}/notification/create`
       const response = await callAPI(body, 'POST', route)
       if (response === 'OK') setError(null)
     } catch (error) {

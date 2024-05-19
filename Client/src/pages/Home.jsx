@@ -44,7 +44,11 @@ const Home = () => {
     setIsLoading(true)
 
     try {
-      const data = await login(username, password, `${process.env.API_URL}/api/auth/login/` + role)
+      const data = await login(
+        username,
+        password,
+        `${import.meta.env.VITE_API_URL}/api/auth/login/` + role
+      )
 
       if (data.result === 'OK') {
         console.log('OK')

@@ -82,8 +82,8 @@ const AdminUserAccounts = () => {
   const getUsersCount = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?entries=${0}&filter=ACTIVE`
-    const route2 = `http://localhost:3000/api/admin/users?entries=ARCHIVED_COUNT&filter=ARCHIVED`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/users?entries=${0}&filter=ACTIVE`
+    const route2 = `${import.meta.env.VITE_API_URL}/api/admin/users?entries=ARCHIVED_COUNT&filter=ARCHIVED`
 
     let activeCount, archivedCount
     try {
@@ -109,7 +109,7 @@ const AdminUserAccounts = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?page=${page}&entries=${entries}&filter=ACTIVE`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/users?page=${page}&entries=${entries}&filter=ACTIVE`
 
     let data
     try {
@@ -131,7 +131,7 @@ const AdminUserAccounts = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?page=${archivedPage}&entries=${entries}&filter=ARCHIVED`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/users?page=${archivedPage}&entries=${entries}&filter=ARCHIVED`
 
     let data
     try {
@@ -153,7 +153,7 @@ const AdminUserAccounts = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users/search?query=${query}&params=${values}&sex=${sex}&filter=${filter}`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/users/search?query=${query}&params=${values}&sex=${sex}&filter=${filter}`
     try {
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
@@ -277,10 +277,6 @@ const AdminUserAccounts = () => {
           isOpen: isExportOpen,
           onClose: onExportClose,
           cancelRef: cancelRef,
-          users: users,
-          userCount: activeUserCount,
-          onUpdate: handeUpdate,
-          role: 'user',
         }}
       />
       <DeleteAccountAlert

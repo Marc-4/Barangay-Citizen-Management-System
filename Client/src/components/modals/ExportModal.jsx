@@ -17,6 +17,7 @@ import {
   Menu,
   MenuButton,
   Flex,
+  Spinner,
 } from '@chakra-ui/react'
 
 import { useState, useEffect } from 'react'
@@ -32,7 +33,7 @@ import Pagination from '../pagination'
 import 'react-pdf/dist/Page/TextLayer.css'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 
-const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
+const ExportModal = ({ isOpen, onClose }) => {
   pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
 
   const pdfUrls = { ' ': '', single: '/BarangayForms-5.pdf', family: '/BarangayForms-4.pdf' }
@@ -43,7 +44,7 @@ const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
   const [pageNumber, setPageNumber] = useState(1)
   const [type, setType] = useState('')
   const toast = useToast()
-
+  const role = localStorage.getItem('userRole')
   const [error, setError] = useState()
   const [isLoading, setIsLoading] = useState(true)
 
@@ -75,17 +76,20 @@ const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
   }, [page, entries])
 
   useEffect(() => {
-    setUserList(userList)
+    getUsers()
     setPdfUrl('')
     setSelectedUsers([])
     setType('')
   }, [refreshCounter])
 
   const getUsersCount = async () => {
+    setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?entries=${0}&filter=ACTIVE`
-    const route2 = `http://localhost:3000/api/admin/users?entries=ARCHIVED_COUNT&filter=ARCHIVED`
+    const route = `${import.meta.env.VITE_API_URL}/api/${role}/users?entries=${0}&filter=ACTIVE`
+    const route2 = `${
+      import.meta.env.VITE_API_URL
+    }/api/${role}/users?entries=ARCHIVED_COUNT&filter=ARCHIVED`
 
     let activeCount, archivedCount
     try {
@@ -99,6 +103,8 @@ const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
     } catch (err) {
       console.log(err)
       setError('Connection Error')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -106,7 +112,9 @@ const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/users?page=${page}&entries=${entries}&filter=ACTIVE`
+    const route = `${
+      import.meta.env.VITE_API_URL
+    }/api/${role}/users?page=${page}&entries=${entries}&filter=ACTIVE`
 
     let data
     try {
@@ -129,7 +137,10 @@ const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
   }
 
   const filterTable = async (query, values, sex) => {
-    const route = `http://localhost:3000/api/admin/users/search?query=${query}&params=${values}&sex=${sex}`
+    setIsLoading(true)
+    const route = `${
+      import.meta.env.VITE_API_URL
+    }/api/${role}/users/search?query=${query}&params=${values}&sex=${sex}`
     const method = 'GET'
 
     try {
@@ -157,6 +168,8 @@ const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
         isClosable: 'true',
         position: 'bottom-right',
       })
+    } finally {
+      setIsLoading(false)
     }
   }
   // render data to pdf try using react-pdf
@@ -300,6 +313,8 @@ const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
               setEntries={setEntries}
             />
           </Box>
+          {isLoading ? <Spinner display={'flex'} m={'auto'} size={'xl'} mt={'25px'} /> : ''}
+
           <CustomTable
             forFilter
             type={type}

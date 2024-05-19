@@ -38,7 +38,7 @@ const UserProfile = () => {
     setLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/user/account/`
+    const route = `${import.meta.env.VITE_API_URL}/api/user/account/`
 
     let data
     try {

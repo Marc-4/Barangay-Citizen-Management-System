@@ -20,7 +20,7 @@ const DeleteAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role }
   const deleteAccount = async () => {
     try {
       setSubmitting(true)
-      const route = `http://localhost:3000/api/${userRole}/${role}/${user._id}/delete`
+      const route = `${import.meta.env.VITE_API_URL}/api/${userRole}/${role}/${user._id}/delete`
       const response = await callAPI(null, 'DELETE', route)
 
       if (response.result === 'OK') {

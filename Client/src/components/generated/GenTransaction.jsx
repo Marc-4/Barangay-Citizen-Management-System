@@ -26,7 +26,7 @@ const GenTransaction = () => {
   const fetchTransactionData = async () => {
     try {
       let route
-      route = `http://localhost:3000/api/${role}/transaction/${id}?filter=FORMDATA`
+      route = `${import.meta.env.VITE_API_URL}/api/${role}/transaction/${id}?filter=FORMDATA`
       const data = await callAPI(null, 'GET', route)
 
       if (data && data.result === 'OK') {

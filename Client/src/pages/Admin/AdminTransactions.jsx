@@ -44,7 +44,7 @@ const AdminTransactions = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/transactions?page=${page}&entries=${entries}&filter=PENDING`
+      const route = `${import.meta.env.VITE_API_URL}/api/admin/transactions?page=${page}&entries=${entries}&filter=PENDING`
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
         setError(null)
@@ -60,7 +60,7 @@ const AdminTransactions = () => {
   const getTransactionsCount = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/transactions?entries=${0}&filter=PENDING`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/transactions?entries=${0}&filter=PENDING`
 
     try {
       let result = await callAPI(body, method, route)
@@ -81,7 +81,7 @@ const AdminTransactions = () => {
   //   try {
   //     const body = null
   //     const method = 'GET'
-  //     const route = `http://localhost:3000/api/admin/transactions?entries=20&filter=HISTORY`
+  //     const route = `${import.meta.env.VITE_API_URL}/api/admin/transactions?entries=20&filter=HISTORY`
   //     const data = await callAPI(body, method, route)
   //     if (data && data.result === 'OK') {
   //       setError(null)
@@ -100,7 +100,7 @@ const AdminTransactions = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/transactions/search?query=${query}&filter=${filter}`
+      const route = `${import.meta.env.VITE_API_URL}/api/admin/transactions/search?query=${query}&filter=${filter}`
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
         console.log(data.payload)

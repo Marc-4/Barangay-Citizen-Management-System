@@ -37,7 +37,7 @@ const EditTransactionModal = ({ isOpen, onClose, transaction, onUpdate }) => {
 
   const editTransaction = async (values) => {
     try {
-      const route = `http://localhost:3000/api/${accountRole}//transaction/${transaction._id}/edit`
+      const route = `${import.meta.env.VITE_API_URL}/api/${accountRole}//transaction/${transaction._id}/edit`
 
       console.log(values)
 

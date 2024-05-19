@@ -13,7 +13,7 @@ const NotificationCard = ({ data, account_type, onNotificationClick }) => {
 
   const readNotification = async () => {
     try {
-      const route = `http://localhost:3000/api/${role}/notification/${data._id}/edit`
+      const route = `${import.meta.env.VITE_API_URL}/api/${role}/notification/${data._id}/edit`
       onNotificationClick()
       await callAPI(null, 'PATCH', route)
     } catch (error) {

@@ -28,7 +28,7 @@ const EmployeeProfile = () => {
   const getProfile = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/employee/account/`
+    const route = `${import.meta.env.VITE_API_URL}/api/employee/account/`
 
     let data
     try {

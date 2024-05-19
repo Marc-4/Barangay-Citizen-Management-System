@@ -32,7 +32,7 @@ const TransactionModal = ({ isOpen, onClose, transaction, onUpdate, status }) =>
   const editTransaction = async () => {
     setIsLoading(true)
     try {
-      const route = `http://localhost:3000/api/${role}/transaction/${id}/edit`
+      const route = `${import.meta.env.VITE_API_URL}/api/${role}/transaction/${id}/edit`
       const body = { status: status, message: message }
       console.log(body)
 
@@ -72,7 +72,7 @@ const TransactionModal = ({ isOpen, onClose, transaction, onUpdate, status }) =>
         linkID: transaction._id,
         recipient: transaction.accountID,
       }
-      const route = `http://localhost:3000/api/admin/notification/create`
+      const route = `${import.meta.env.VITE_API_URL}/api/admin/notification/create`
       const response = await callAPI(body, 'POST', route)
       if (response === 'OK') setError(null)
     } catch (error) {

@@ -30,7 +30,7 @@ const AddTransactionModal = ({ isOpen, onClose, onUpdate }) => {
 
   const createTransaction = async (values, resetForm) => {
     try {
-      const route = `http://localhost:3000/api/${role}/transaction/create`
+      const route = `${import.meta.env.VITE_API_URL}/api/${role}/transaction/create`
       const body = {
         ID: id,
         transacType: values.transacType,

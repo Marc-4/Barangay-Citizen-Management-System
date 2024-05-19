@@ -34,7 +34,7 @@ const EmployeeDashboard = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/employee/users/?entries=0`
+    const route = `${import.meta.env.VITE_API_URL}/api/employee/users/?entries=0`
     try {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
@@ -53,7 +53,7 @@ const EmployeeDashboard = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/employee/requests/?entries=0`
+    const route = `${import.meta.env.VITE_API_URL}/api/employee/requests/?entries=0`
     try {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
@@ -71,7 +71,7 @@ const EmployeeDashboard = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/employee/transactions/?entries=0`
+    const route = `${import.meta.env.VITE_API_URL}/api/employee/transactions/?entries=0`
     try {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
@@ -90,7 +90,7 @@ const EmployeeDashboard = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/employee/transactions/?entries=-1`
+    const route = `${import.meta.env.VITE_API_URL}/api/employee/transactions/?entries=-1`
     try {
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {

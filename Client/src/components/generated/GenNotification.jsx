@@ -24,7 +24,7 @@
 //   const getNotification = async () => {
 //     try {
 //       const method = 'GET'
-//       const route = `http://localhost:3000/api/admin/notification/${id}`
+//       const route = `${import.meta.env.VITE_API_URL}/api/admin/notification/${id}`
 //       const response = await callAPI(null, method, route)
 
 //       console.log(response)

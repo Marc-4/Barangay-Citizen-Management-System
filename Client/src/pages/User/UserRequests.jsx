@@ -16,7 +16,7 @@ const UserTransactions = () => {
   const getTransactions = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/user/transactions?entries=20`
+    const route = `${import.meta.env.VITE_API_URL}/api/user/transactions?entries=20`
     try {
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {

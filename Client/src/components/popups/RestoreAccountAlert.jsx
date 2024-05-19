@@ -18,7 +18,7 @@ const RestoreAccountAlert = ({ isOpen, onClose, user, cancelRef, onUpdate, role 
   const restoreAccount = async () => {
     try {
       setSubmitting(true)
-      const route = `http://localhost:3000/api/${userRole}/${role}/${user._id}/restore`
+      const route = `${import.meta.env.VITE_API_URL}/api/${userRole}/${role}/${user._id}/restore`
       const response = await callAPI(null, 'PATCH', route)
 
       if (response.result === 'OK') {

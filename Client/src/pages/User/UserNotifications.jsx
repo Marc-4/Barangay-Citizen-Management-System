@@ -30,7 +30,7 @@ const UserNotifications = () => {
     setLoading(true)
     try {
       const method = 'GET'
-      const route = `http://localhost:3000/api/user/notifications?entries=${entries}&filter=${filter}`
+      const route = `${import.meta.env.VITE_API_URL}/api/user/notifications?entries=${entries}&filter=${filter}`
       const response = await callAPI(null, method, route)
 
       if (response.result === 'OK') {

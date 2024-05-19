@@ -31,7 +31,7 @@ const CommunityTaxCertificate = () => {
   const createTransaction = async () => {
     setLoading(true)
     try {
-      const route = `http://localhost:3000/api/user/transaction/create`
+      const route = `${import.meta.env.VITE_API_URL}/api/user/transaction/create`
       const body = {
         transacType: 'COM_TAX_CERT',
         purpose: purpose,
@@ -63,7 +63,7 @@ const CommunityTaxCertificate = () => {
     setLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/user/account/`
+    const route = `${import.meta.env.VITE_API_URL}/api/user/account/`
 
     let data
     try {
@@ -90,7 +90,7 @@ const CommunityTaxCertificate = () => {
         linkID: transaction._id,
       }
 
-      const route = `http://localhost:3000/api/user/notification/create`
+      const route = `${import.meta.env.VITE_API_URL}/api/user/notification/create`
       const response = await callAPI(body, 'POST', route)
       if (response === 'OK') setError(null)
     } catch (error) {

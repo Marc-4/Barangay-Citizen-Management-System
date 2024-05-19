@@ -24,7 +24,7 @@ const AdminProfile = () => {
   const getProfile = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/account/`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/account/`
 
     let data
     try {

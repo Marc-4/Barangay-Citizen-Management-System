@@ -22,7 +22,7 @@ const createUsers = async () => {
         address_subdivisionPurok: faker.number.int({min: 1, max: 3})
     }
 
-      const route = `http://localhost:3000/api/admin/${role}/register`
+      const route = `${import.meta.env.VITE_API_URL}/api/admin/${role}/register`
       const response = await fetch(route, {
         method: 'POST',
         body: formData,

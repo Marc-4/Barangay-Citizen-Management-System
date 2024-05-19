@@ -77,8 +77,8 @@ const AdminEmployeeAccounts = () => {
   const getEmployeesCount = async () => {
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/employees?entries=0&filter=ACTIVE`
-    const route2 = `http://localhost:3000/api/admin/employees?entries=ARCHIVED_COUNT&filter=ARCHIVED`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/employees?entries=0&filter=ACTIVE`
+    const route2 = `${import.meta.env.VITE_API_URL}/api/admin/employees?entries=ARCHIVED_COUNT&filter=ARCHIVED`
 
     let activeCount, archivedCount
     try {
@@ -105,7 +105,7 @@ const AdminEmployeeAccounts = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/employees?page=${page}&entries=${entries}&filter=ACTIVE`
+      const route = `${import.meta.env.VITE_API_URL}/api/admin/employees?page=${page}&entries=${entries}&filter=ACTIVE`
 
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
@@ -127,7 +127,7 @@ const AdminEmployeeAccounts = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/admin/employees?page=${archivedPage}&entries=${entries}&filter=ARCHIVED`
+      const route = `${import.meta.env.VITE_API_URL}/api/admin/employees?page=${archivedPage}&entries=${entries}&filter=ARCHIVED`
 
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
@@ -146,7 +146,7 @@ const AdminEmployeeAccounts = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/admin/employees/search?query=${query}&params=${values}&sex=${sex}&filter=${filter}`
+    const route = `${import.meta.env.VITE_API_URL}/api/admin/employees/search?query=${query}&params=${values}&sex=${sex}&filter=${filter}`
 
     try {
       const data = await callAPI(body, method, route)

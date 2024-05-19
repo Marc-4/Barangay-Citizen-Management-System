@@ -51,7 +51,7 @@ const UserTransactions = () => {
     setIsLoading(true)
     const body = null
     const method = 'GET'
-    const route = `http://localhost:3000/api/user/transactions?entries=20&filter=PENDING`
+    const route = `${import.meta.env.VITE_API_URL}/api/user/transactions?entries=20&filter=PENDING`
     try {
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
@@ -70,7 +70,7 @@ const UserTransactions = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/user/transactions?entries=20&filter=HISTORY`
+      const route = `${import.meta.env.VITE_API_URL}/api/user/transactions?entries=20&filter=HISTORY`
       const data = await callAPI(body, method, route)
       if (data && data.result === 'OK') {
         setError(null)
@@ -89,7 +89,7 @@ const UserTransactions = () => {
     try {
       const body = null
       const method = 'GET'
-      const route = `http://localhost:3000/api/user/transactions/search?query=${query}&filter=${filter}`
+      const route = `${import.meta.env.VITE_API_URL}/api/user/transactions/search?query=${query}&filter=${filter}`
       const data = await callAPI(body, method, route)
       if (data.result === 'OK') {
         if (filter === 'PENDING') setTransactions(data.payload)
