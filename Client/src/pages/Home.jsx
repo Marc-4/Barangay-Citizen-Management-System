@@ -44,7 +44,7 @@ const Home = () => {
     setIsLoading(true)
 
     try {
-      const data = await login(username, password, 'http://localhost:3000/api/auth/login/' + role)
+      const data = await login(username, password, `${process.env.API_URL}/api/auth/login/` + role)
 
       if (data.result === 'OK') {
         console.log('OK')

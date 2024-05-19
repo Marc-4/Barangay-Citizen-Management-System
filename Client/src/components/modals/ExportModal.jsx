@@ -29,6 +29,8 @@ import CustomTable from '../CustomTable'
 import RefreshButton from '../RefreshButton'
 import { drawPDF4, drawPDF5 } from '../../utils/drawPdfText'
 import Pagination from '../pagination'
+import 'react-pdf/dist/Page/TextLayer.css'
+import 'react-pdf/dist/Page/AnnotationLayer.css'
 
 const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
   pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`

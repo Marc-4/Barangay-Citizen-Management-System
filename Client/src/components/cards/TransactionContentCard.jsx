@@ -1,8 +1,7 @@
 import { VStack, Box, Heading, Divider, Text, Input, Textarea, Button } from '@chakra-ui/react'
 import { Buffer } from 'buffer'
 import { Document, Page, pdfjs } from 'react-pdf'
-import 'react-pdf/dist/Page/TextLayer.css'
-import 'react-pdf/dist/Page/AnnotationLayer.css'
+
 
 const TransactionContentCard = ({ title, data, profile }) => {
   pdfjs.GlobalWorkerOptions.workerSrc = new URL(
