@@ -30,21 +30,24 @@ import RefreshButton from '../RefreshButton'
 import { drawPDF4, drawPDF5 } from '../../utils/drawPdfText'
 import Pagination from '../pagination'
 
-const ExportModal = ({ isOpen, onClose, users, userCount, onUpdate, role }) => {
+const ExportModal = ({ isOpen, onClose, onUpdate, role }) => {
   pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
 
   const pdfUrls = { ' ': '', single: '/BarangayForms-5.pdf', family: '/BarangayForms-4.pdf' }
   const [pdfUrl, setPdfUrl] = useState('')
   const [numPages, setNumPages] = useState(null)
-  const [userList, setUserList] = useState(users)
+  const [userList, setUserList] = useState()
   const [selectedUsers, setSelectedUsers] = useState([])
   const [pageNumber, setPageNumber] = useState(1)
   const [type, setType] = useState('')
   const toast = useToast()
 
+  const [error, setError] = useState()
+  const [isLoading, setIsLoading] = useState(true)
+
   const [page, setPage] = useState(1)
   const [entries, setEntries] = useState(20)
-  const [UserCount, setUserCount] = useState()
+  const [userCount, setUserCount] = useState()
 
   const [refreshCounter, setRefreshCounter] = useState(0)
   const [includedFields, setIncludedFields] = useState([
@@ -58,16 +61,66 @@ const ExportModal = ({ isOpen, onClose, users, userCount, onUpdate, role }) => {
     'address',
   ])
 
-  useEffect(() => {
-    setUserList(users)
-  }, [users])
+  // useEffect(() => {
+  //   setUserList(users)
+  // }, [users])
 
   useEffect(() => {
-    setUserList(users)
+    getUsers()
+    getUsersCount()
+    console.log('active user count: ' + userCount)
+    console.log(userList)
+  }, [page, entries])
+
+  useEffect(() => {
+    setUserList(userList)
     setPdfUrl('')
     setSelectedUsers([])
     setType('')
   }, [refreshCounter])
+
+  const getUsersCount = async () => {
+    const body = null
+    const method = 'GET'
+    const route = `http://localhost:3000/api/admin/users?entries=${0}&filter=ACTIVE`
+    const route2 = `http://localhost:3000/api/admin/users?entries=ARCHIVED_COUNT&filter=ARCHIVED`
+
+    let activeCount, archivedCount
+    try {
+      activeCount = await callAPI(body, method, route)
+      // archivedCount = await callAPI(body, method, route2)
+
+      if (activeCount.result === 'OK') {
+        setUserCount(activeCount.payload)
+        setError(null)
+      } else setError(data.payload.err)
+    } catch (err) {
+      console.log(err)
+      setError('Connection Error')
+    }
+  }
+
+  const getUsers = async () => {
+    setIsLoading(true)
+    const body = null
+    const method = 'GET'
+    const route = `http://localhost:3000/api/admin/users?page=${page}&entries=${entries}&filter=ACTIVE`
+
+    let data
+    try {
+      data = await callAPI(body, method, route)
+      if (data.result === 'OK') {
+        const payload = data.payload
+        setUserList(payload)
+        setError(null)
+      } else setError(data.payload.err)
+    } catch (err) {
+      console.log(err)
+      setError('Connection Error')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages)
@@ -219,7 +272,7 @@ const ExportModal = ({ isOpen, onClose, users, userCount, onUpdate, role }) => {
           Export to PDF
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody px={'5rem'} pb={'3rem'}>
           <Box display={'flex'} gap={'25px'}>
             <Searchbar forFilter searchHandler={filterTable} />
             <RefreshButton refreshCounter={refreshCounter} setRefreshCounter={setRefreshCounter} />
